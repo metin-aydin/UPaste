@@ -51,6 +51,7 @@ export const api = {
   takeOver: () => bridge.invoke(IPC.integrationTakeOver),
   restore: () => bridge.invoke(IPC.integrationRestore),
   logout: () => bridge.invoke(IPC.integrationLogout),
+  requestAccess: () => bridge.invoke(IPC.integrationRequestAccess),
   setShortcut: (accel: string) => bridge.invoke(IPC.integrationSetShortcut, accel),
   pauseShortcut: (paused: boolean) => bridge.invoke(IPC.integrationPauseShortcut, paused),
   onIntegration: (cb: (s: IntegrationState) => void) =>

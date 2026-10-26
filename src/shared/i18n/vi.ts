@@ -23,7 +23,7 @@ export const vi: Messages = {
   'notify.copiedTitle': 'Đã sao chép vào bảng nhớ tạm',
   'notify.relogin':
     'Tiện ích mở rộng GNOME của UPaste đã được cập nhật. Đăng xuất rồi đăng nhập lại để hoàn tất.',
-  'notify.copiedBody': 'Nhấn Ctrl+V để dán. Hoàn tất thiết lập UPaste để tự động dán.',
+  'notify.copiedBody': 'Nhấn {paste} để dán. Hoàn tất thiết lập UPaste để tự động dán.',
 
   'tray.settings': 'Cài đặt',
   'tray.quit': 'Thoát',
@@ -104,6 +104,17 @@ export const vi: Messages = {
   'setup.shortcutRecording': 'Nhấn phím tắt mới…',
   'setup.shortcutReset': 'Đặt lại',
   'setup.shortcutInvalid': 'Dùng Super, Ctrl hoặc Alt cùng với một chữ cái, chữ số hoặc phím F.',
+  'setup.descriptionWindows': 'Chọn phím tắt mở lịch sử bảng nhớ tạm của bạn.',
+  'setup.descriptionMac':
+    'Cho phép UPaste hoạt động với các ứng dụng khác và chọn phím tắt mở lịch sử bảng nhớ tạm của bạn.',
+  'setup.shortcutHintWindows':
+    'Win+V mở UPaste thay vì lịch sử bảng nhớ tạm của Windows. Chọn phím tắt khác để trả Win+V lại cho Windows.',
+  'setup.shortcutInUse': 'Một ứng dụng khác đang dùng phím tắt này',
+  'setup.accessibility': 'Quyền truy cập trợ năng',
+  'setup.accessibilityHint': 'Cho phép UPaste mở lịch sử tại con trỏ văn bản và dán mục bạn chọn.',
+  'setup.statusAllowed': 'Đã cho phép',
+  'setup.statusNotAllowed': 'Chưa cho phép',
+  'setup.openAccessibility': 'Mở cài đặt quyền riêng tư',
   'setup.messageTray': 'Danh sách thông báo',
 
   'updates.description': 'UPaste tự cập nhật từ GitHub Releases.',

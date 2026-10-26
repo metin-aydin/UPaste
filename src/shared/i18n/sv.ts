@@ -23,7 +23,7 @@ export const sv: Messages = {
   'notify.copiedTitle': 'Kopierat till urklipp',
   'notify.relogin': 'UPastes GNOME-tillägg har uppdaterats. Logga ut och in igen för att slutföra.',
   'notify.copiedBody':
-    'Tryck på Ctrl+V för att klistra in. Slutför konfigurationen av UPaste för att klistra in automatiskt.',
+    'Tryck på {paste} för att klistra in. Slutför konfigurationen av UPaste för att klistra in automatiskt.',
 
   'tray.settings': 'Inställningar',
   'tray.quit': 'Avsluta',
@@ -104,6 +104,18 @@ export const sv: Messages = {
   'setup.shortcutReset': 'Återställ',
   'setup.shortcutInvalid':
     'Använd Super, Ctrl eller Alt tillsammans med en bokstav, en siffra eller en F-tangent.',
+  'setup.descriptionWindows': 'Välj kortkommandot som öppnar urklippshistoriken.',
+  'setup.descriptionMac':
+    'Tillåt UPaste att fungera med andra appar och välj kortkommandot som öppnar urklippshistoriken.',
+  'setup.shortcutHintWindows':
+    'Win+V öppnar UPaste i stället för urklippshistoriken i Windows. Välj ett annat kortkommando för att ge tillbaka Win+V till Windows.',
+  'setup.shortcutInUse': 'En annan app använder det här kortkommandot',
+  'setup.accessibility': 'Åtkomst till hjälpmedel',
+  'setup.accessibilityHint':
+    'Låter UPaste öppna historiken vid textmarkören och klistra in objektet du väljer.',
+  'setup.statusAllowed': 'Tillåtet',
+  'setup.statusNotAllowed': 'Inte tillåtet',
+  'setup.openAccessibility': 'Öppna integritetsinställningar',
   'setup.messageTray': 'Aviseringslista',
 
   'updates.description': 'UPaste uppdaterar sig självt från GitHub Releases.',

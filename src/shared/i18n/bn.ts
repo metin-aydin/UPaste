@@ -23,7 +23,7 @@ export const bn: Messages = {
   'notify.copiedTitle': 'ক্লিপবোর্ডে কপি হয়েছে',
   'notify.relogin': 'UPaste-এর GNOME এক্সটেনশন আপডেট হয়েছে। শেষ করতে লগ আউট করে আবার লগ ইন করুন।',
   'notify.copiedBody':
-    'পেস্ট করতে Ctrl+V চাপুন। স্বয়ংক্রিয়ভাবে পেস্ট করতে UPaste-এর সেটআপ সম্পূর্ণ করুন।',
+    'পেস্ট করতে {paste} চাপুন। স্বয়ংক্রিয়ভাবে পেস্ট করতে UPaste-এর সেটআপ সম্পূর্ণ করুন।',
 
   'tray.settings': 'সেটিংস',
   'tray.quit': 'প্রস্থান',
@@ -104,6 +104,18 @@ export const bn: Messages = {
   'setup.shortcutRecording': 'নতুন শর্টকাট চাপুন…',
   'setup.shortcutReset': 'রিসেট করুন',
   'setup.shortcutInvalid': 'Super, Ctrl বা Alt-এর সাথে একটি অক্ষর, সংখ্যা বা F কী ব্যবহার করুন।',
+  'setup.descriptionWindows': 'ক্লিপবোর্ড ইতিহাস খোলার শর্টকাট বেছে নিন।',
+  'setup.descriptionMac':
+    'UPaste-কে অন্যান্য অ্যাপের সাথে কাজ করার অনুমতি দিন এবং ক্লিপবোর্ড ইতিহাস খোলার শর্টকাট বেছে নিন।',
+  'setup.shortcutHintWindows':
+    'Win+V চাপলে Windows-এর ক্লিপবোর্ড ইতিহাসের বদলে UPaste খোলে। Win+V আবার Windows-কে ফিরিয়ে দিতে অন্য একটি শর্টকাট বেছে নিন।',
+  'setup.shortcutInUse': 'অন্য একটি অ্যাপ এই শর্টকাট ব্যবহার করছে',
+  'setup.accessibility': 'অ্যাক্সেসিবিলিটি অনুমতি',
+  'setup.accessibilityHint':
+    'UPaste-কে আপনার টেক্সট কার্সরের কাছে ইতিহাস খুলতে এবং আপনার বেছে নেওয়া আইটেম পেস্ট করতে দেয়।',
+  'setup.statusAllowed': 'অনুমতি দেওয়া হয়েছে',
+  'setup.statusNotAllowed': 'অনুমতি দেওয়া হয়নি',
+  'setup.openAccessibility': 'গোপনীয়তা সেটিংস খুলুন',
   'setup.messageTray': 'বিজ্ঞপ্তি তালিকা',
 
   'updates.description': 'UPaste নিজেকে GitHub Releases থেকে আপডেট করে।',

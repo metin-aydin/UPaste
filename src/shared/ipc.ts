@@ -1,3 +1,4 @@
+import type { DesktopPlatform } from './accelerator'
 import type { PopupMode } from './types'
 
 // Ana süreç ile pencereler arasındaki kanallar. Ön yükleme betiği yalnız bu listedeki kanallara izin verir.
@@ -31,6 +32,7 @@ export const IPC = {
   integrationTakeOver: 'integration:take-over',
   integrationRestore: 'integration:restore',
   integrationLogout: 'integration:logout',
+  integrationRequestAccess: 'integration:request-access',
   integrationSetShortcut: 'integration:set-shortcut',
   integrationPauseShortcut: 'integration:pause-shortcut',
   integrationChanged: 'integration:changed',
@@ -54,6 +56,8 @@ export interface UiInfo {
   systemLocale: string
   dark: boolean
   version: string
+  /** İşletim sistemi: kısayol etiketleri ve Kurulum bölümü buna göre gösterilir. */
+  platform: DesktopPlatform
 }
 
 export type SettingsSection = 'general' | 'history' | 'setup' | 'updates' | 'about'

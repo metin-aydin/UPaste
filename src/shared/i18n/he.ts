@@ -23,7 +23,7 @@ export const he: Messages = {
   'notify.copiedTitle': 'הועתק ללוח',
   'notify.relogin': 'התוסף של UPaste ל־GNOME עודכן. כדי לסיים, התנתקו והתחברו מחדש.',
   'notify.copiedBody':
-    'יש להקיש Ctrl+V כדי להדביק. להדבקה אוטומטית, יש להשלים את ההגדרה הראשונית של UPaste.',
+    'יש להקיש {paste} כדי להדביק. להדבקה אוטומטית, יש להשלים את ההגדרה הראשונית של UPaste.',
 
   'tray.settings': 'הגדרות',
   'tray.quit': 'יציאה',
@@ -103,6 +103,18 @@ export const he: Messages = {
   'setup.shortcutRecording': 'יש להקיש את קיצור המקשים החדש…',
   'setup.shortcutReset': 'איפוס',
   'setup.shortcutInvalid': 'יש להשתמש ב-Super, ב-Ctrl או ב-Alt יחד עם אות, ספרה או מקש F.',
+  'setup.descriptionWindows': 'יש לבחור את קיצור המקשים שפותח את היסטוריית הלוח.',
+  'setup.descriptionMac':
+    'יש לאפשר ל-UPaste לעבוד עם אפליקציות אחרות ולבחור את קיצור המקשים שפותח את היסטוריית הלוח.',
+  'setup.shortcutHintWindows':
+    'Win+V פותח את UPaste במקום את היסטוריית הלוח של Windows. כדי להחזיר את Win+V ל-Windows, יש לבחור קיצור מקשים אחר.',
+  'setup.shortcutInUse': 'אפליקציה אחרת משתמשת בקיצור המקשים הזה',
+  'setup.accessibility': 'הרשאת נגישות',
+  'setup.accessibilityHint':
+    'מאפשרת ל-UPaste לפתוח את ההיסטוריה ליד סמן הטקסט ולהדביק את הפריט שבחרת.',
+  'setup.statusAllowed': 'ניתנה הרשאה',
+  'setup.statusNotAllowed': 'לא ניתנה הרשאה',
+  'setup.openAccessibility': 'פתיחת הגדרות הפרטיות',
   'setup.messageTray': 'רשימת ההתראות',
 
   'updates.description': 'UPaste מתעדכן בעצמו מ-GitHub Releases.',

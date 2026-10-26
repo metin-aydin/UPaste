@@ -24,7 +24,7 @@ export const de: Messages = {
   'notify.relogin':
     'Die GNOME-Erweiterung von UPaste wurde aktualisiert. Melden Sie sich ab und wieder an, um den Vorgang abzuschließen.',
   'notify.copiedBody':
-    'Drücken Sie Ctrl+V zum Einfügen. Schließen Sie die Einrichtung von UPaste ab, um automatisch einzufügen.',
+    'Drücken Sie {paste} zum Einfügen. Schließen Sie die Einrichtung von UPaste ab, um automatisch einzufügen.',
 
   'tray.settings': 'Einstellungen',
   'tray.quit': 'Beenden',
@@ -109,6 +109,19 @@ export const de: Messages = {
   'setup.shortcutReset': 'Zurücksetzen',
   'setup.shortcutInvalid':
     'Verwenden Sie Super, Ctrl oder Alt zusammen mit einem Buchstaben, einer Ziffer oder einer F-Taste.',
+  'setup.descriptionWindows':
+    'Wählen Sie das Tastenkürzel, das Ihren Zwischenablageverlauf öffnet.',
+  'setup.descriptionMac':
+    'Erlauben Sie UPaste, mit anderen Apps zusammenzuarbeiten, und wählen Sie das Tastenkürzel, das Ihren Zwischenablageverlauf öffnet.',
+  'setup.shortcutHintWindows':
+    'Win+V öffnet UPaste statt des Windows-Zwischenablageverlaufs. Wählen Sie ein anderes Tastenkürzel, um Win+V an Windows zurückzugeben.',
+  'setup.shortcutInUse': 'Eine andere App verwendet dieses Tastenkürzel',
+  'setup.accessibility': 'Zugriff auf Bedienungshilfen',
+  'setup.accessibilityHint':
+    'Ermöglicht UPaste, den Verlauf an Ihrem Textcursor zu öffnen und das gewählte Element einzufügen.',
+  'setup.statusAllowed': 'Erlaubt',
+  'setup.statusNotAllowed': 'Nicht erlaubt',
+  'setup.openAccessibility': 'Datenschutzeinstellungen öffnen',
   'setup.messageTray': 'Benachrichtigungsliste',
 
   'updates.description': 'UPaste aktualisiert sich selbst über GitHub Releases.',

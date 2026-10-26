@@ -24,7 +24,7 @@ export const fa: Messages = {
   'notify.relogin':
     'افزونهٔ GNOME برنامهٔ UPaste به‌روز شد. برای تکمیل، از نشست خارج شوید و دوباره وارد شوید.',
   'notify.copiedBody':
-    'برای جای‌گذاری Ctrl+V را فشار دهید. برای جای‌گذاری خودکار، راه‌اندازی UPaste را کامل کنید.',
+    'برای جای‌گذاری {paste} را فشار دهید. برای جای‌گذاری خودکار، راه‌اندازی UPaste را کامل کنید.',
 
   'tray.settings': 'تنظیمات',
   'tray.quit': 'خروج',
@@ -106,6 +106,18 @@ export const fa: Messages = {
   'setup.shortcutRecording': 'میان‌بر جدید را فشار دهید…',
   'setup.shortcutReset': 'بازنشانی',
   'setup.shortcutInvalid': 'از Super، Ctrl یا Alt همراه با یک حرف، عدد یا کلید F استفاده کنید.',
+  'setup.descriptionWindows': 'میان‌بری را که تاریخچه کلیپ‌بورد را باز می‌کند انتخاب کنید.',
+  'setup.descriptionMac':
+    'به UPaste اجازه دهید با برنامه‌های دیگر کار کند و میان‌بری را که تاریخچه کلیپ‌بورد را باز می‌کند انتخاب کنید.',
+  'setup.shortcutHintWindows':
+    'Win+V به‌جای تاریخچه کلیپ‌بورد Windows، UPaste را باز می‌کند. برای بازگرداندن Win+V به Windows، میان‌بر دیگری انتخاب کنید.',
+  'setup.shortcutInUse': 'برنامه دیگری از این میان‌بر استفاده می‌کند',
+  'setup.accessibility': 'مجوز دسترس‌پذیری',
+  'setup.accessibilityHint':
+    'به UPaste امکان می‌دهد تاریخچه را کنار مکان‌نمای متن شما باز کند و مورد انتخابی شما را جای‌گذاری کند.',
+  'setup.statusAllowed': 'مجاز',
+  'setup.statusNotAllowed': 'غیرمجاز',
+  'setup.openAccessibility': 'باز کردن تنظیمات حریم خصوصی',
   'setup.messageTray': 'فهرست اعلان‌ها',
 
   'updates.description': 'UPaste خودش را از طریق انتشارهای GitHub به‌روزرسانی می‌کند.',

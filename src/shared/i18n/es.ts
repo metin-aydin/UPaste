@@ -24,7 +24,7 @@ export const es: Messages = {
   'notify.relogin':
     'Se actualizó la extensión de GNOME de UPaste. Cierra la sesión y vuelve a iniciarla para terminar.',
   'notify.copiedBody':
-    'Pulsa Ctrl+V para pegar. Completa la instalación de UPaste para pegar automáticamente.',
+    'Pulsa {paste} para pegar. Completa la instalación de UPaste para pegar automáticamente.',
 
   'tray.settings': 'Configuración',
   'tray.quit': 'Salir',
@@ -108,6 +108,18 @@ export const es: Messages = {
   'setup.shortcutRecording': 'Pulsa el nuevo atajo…',
   'setup.shortcutReset': 'Restablecer',
   'setup.shortcutInvalid': 'Usa Super, Ctrl o Alt junto con una letra, un número o una tecla F.',
+  'setup.descriptionWindows': 'Elige el atajo que abre el historial del portapapeles.',
+  'setup.descriptionMac':
+    'Permite que UPaste funcione con otras aplicaciones y elige el atajo que abre el historial del portapapeles.',
+  'setup.shortcutHintWindows':
+    'Win+V abre UPaste en lugar del historial del portapapeles de Windows. Elige otro atajo para devolverle Win+V a Windows.',
+  'setup.shortcutInUse': 'Otra aplicación usa este atajo',
+  'setup.accessibility': 'Permiso de accesibilidad',
+  'setup.accessibilityHint':
+    'Permite que UPaste abra el historial junto al cursor de texto y pegue el elemento que elijas.',
+  'setup.statusAllowed': 'Permitido',
+  'setup.statusNotAllowed': 'No permitido',
+  'setup.openAccessibility': 'Abrir ajustes de privacidad',
   'setup.messageTray': 'Lista de notificaciones',
 
   'updates.description': 'UPaste se actualiza solo desde GitHub Releases.',

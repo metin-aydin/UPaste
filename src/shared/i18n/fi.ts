@@ -24,7 +24,7 @@ export const fi: Messages = {
   'notify.relogin':
     'UPasten GNOME-laajennus päivitettiin. Viimeistele kirjautumalla ulos ja takaisin sisään.',
   'notify.copiedBody':
-    'Liitä painamalla Ctrl+V. Viimeistele UPasten käyttöönotto, niin liittäminen tapahtuu automaattisesti.',
+    'Liitä painamalla {paste}. Viimeistele UPasten käyttöönotto, niin liittäminen tapahtuu automaattisesti.',
 
   'tray.settings': 'Asetukset',
   'tray.quit': 'Lopeta',
@@ -107,6 +107,18 @@ export const fi: Messages = {
   'setup.shortcutReset': 'Palauta oletus',
   'setup.shortcutInvalid':
     'Käytä Super-, Ctrl- tai Alt-näppäintä yhdessä kirjaimen, numeron tai F-näppäimen kanssa.',
+  'setup.descriptionWindows': 'Valitse pikanäppäin, joka avaa leikepöydän historian.',
+  'setup.descriptionMac':
+    'Salli UPasten toimia muiden sovellusten kanssa ja valitse pikanäppäin, joka avaa leikepöydän historian.',
+  'setup.shortcutHintWindows':
+    'Win+V avaa UPasten Windowsin leikepöydän historian sijaan. Valitse toinen pikanäppäin, jos haluat palauttaa Win+V:n Windowsille.',
+  'setup.shortcutInUse': 'Toinen sovellus käyttää tätä pikanäppäintä',
+  'setup.accessibility': 'Käyttöapuoikeus',
+  'setup.accessibilityHint':
+    'Antaa UPasten avata historian tekstikohdistimen kohdalle ja liittää valitsemasi kohteen.',
+  'setup.statusAllowed': 'Sallittu',
+  'setup.statusNotAllowed': 'Ei sallittu',
+  'setup.openAccessibility': 'Avaa yksityisyysasetukset',
   'setup.messageTray': 'Ilmoitusluettelo',
 
   'updates.description': 'UPaste päivittää itsensä GitHubin julkaisuista.',

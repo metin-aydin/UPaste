@@ -24,7 +24,7 @@ export const hi: Messages = {
   'notify.relogin':
     'UPaste का GNOME एक्सटेंशन अपडेट हो गया है। पूरा करने के लिए लॉग आउट करके फिर से लॉग इन करें।',
   'notify.copiedBody':
-    'पेस्ट करने के लिए Ctrl+V दबाएँ। अपने-आप पेस्ट करने के लिए UPaste का सेटअप पूरा करें।',
+    'पेस्ट करने के लिए {paste} दबाएँ। अपने-आप पेस्ट करने के लिए UPaste का सेटअप पूरा करें।',
 
   'tray.settings': 'सेटिंग्स',
   'tray.quit': 'बाहर निकलें',
@@ -104,6 +104,18 @@ export const hi: Messages = {
   'setup.shortcutRecording': 'नया शॉर्टकट दबाएँ…',
   'setup.shortcutReset': 'रीसेट करें',
   'setup.shortcutInvalid': 'Super, Ctrl या Alt के साथ कोई अक्षर, संख्या या F कुंजी का उपयोग करें।',
+  'setup.descriptionWindows': 'वह शॉर्टकट चुनें जो क्लिपबोर्ड इतिहास खोलता है।',
+  'setup.descriptionMac':
+    'UPaste को दूसरे ऐप्स के साथ काम करने की अनुमति दें और वह शॉर्टकट चुनें जो क्लिपबोर्ड इतिहास खोलता है।',
+  'setup.shortcutHintWindows':
+    'Win+V, Windows के क्लिपबोर्ड इतिहास के बजाय UPaste खोलता है। Win+V को Windows को वापस देने के लिए कोई दूसरा शॉर्टकट चुनें।',
+  'setup.shortcutInUse': 'कोई दूसरा ऐप इस शॉर्टकट का उपयोग कर रहा है',
+  'setup.accessibility': 'ऐक्सेसिबिलिटी अनुमति',
+  'setup.accessibilityHint':
+    'UPaste को आपके टेक्स्ट कर्सर पर इतिहास खोलने और आपका चुना हुआ आइटम पेस्ट करने देता है।',
+  'setup.statusAllowed': 'अनुमति है',
+  'setup.statusNotAllowed': 'अनुमति नहीं है',
+  'setup.openAccessibility': 'गोपनीयता सेटिंग्स खोलें',
   'setup.messageTray': 'सूचना सूची',
 
   'updates.description': 'UPaste GitHub Releases से खुद को अपडेट करता है।',

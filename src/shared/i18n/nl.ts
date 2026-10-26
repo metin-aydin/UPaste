@@ -24,7 +24,7 @@ export const nl: Messages = {
   'notify.relogin':
     'De GNOME-extensie van UPaste is bijgewerkt. Meld je af en weer aan om dit af te ronden.',
   'notify.copiedBody':
-    'Druk op Ctrl+V om te plakken. Rond de installatie van UPaste af om automatisch te plakken.',
+    'Druk op {paste} om te plakken. Rond de installatie van UPaste af om automatisch te plakken.',
 
   'tray.settings': 'Instellingen',
   'tray.quit': 'Afsluiten',
@@ -106,6 +106,18 @@ export const nl: Messages = {
   'setup.shortcutRecording': 'Druk op de nieuwe sneltoets…',
   'setup.shortcutReset': 'Standaard herstellen',
   'setup.shortcutInvalid': 'Gebruik Super, Ctrl of Alt samen met een letter, cijfer of F-toets.',
+  'setup.descriptionWindows': 'Kies de sneltoets die je klembordgeschiedenis opent.',
+  'setup.descriptionMac':
+    'Geef UPaste toestemming om met andere apps te werken en kies de sneltoets die je klembordgeschiedenis opent.',
+  'setup.shortcutHintWindows':
+    'Win+V opent UPaste in plaats van de klembordgeschiedenis van Windows. Kies een andere sneltoets om Win+V terug te geven aan Windows.',
+  'setup.shortcutInUse': 'Een andere app gebruikt deze sneltoets',
+  'setup.accessibility': 'Toegang tot toegankelijkheid',
+  'setup.accessibilityHint':
+    'Hiermee kan UPaste de geschiedenis bij je tekstcursor openen en het gekozen item plakken.',
+  'setup.statusAllowed': 'Toegestaan',
+  'setup.statusNotAllowed': 'Niet toegestaan',
+  'setup.openAccessibility': 'Privacyinstellingen openen',
   'setup.messageTray': 'Meldingenlijst',
 
   'updates.description': 'UPaste werkt zichzelf bij via GitHub Releases.',

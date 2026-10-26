@@ -24,7 +24,7 @@ export const nb: Messages = {
   'notify.relogin':
     'GNOME-utvidelsen til UPaste er oppdatert. Logg ut og inn igjen for å fullføre.',
   'notify.copiedBody':
-    'Trykk Ctrl+V for å lime inn. Fullfør oppsettet av UPaste for å lime inn automatisk.',
+    'Trykk {paste} for å lime inn. Fullfør oppsettet av UPaste for å lime inn automatisk.',
 
   'tray.settings': 'Innstillinger',
   'tray.quit': 'Avslutt',
@@ -106,6 +106,18 @@ export const nb: Messages = {
   'setup.shortcutReset': 'Tilbakestill',
   'setup.shortcutInvalid':
     'Bruk Super, Ctrl eller Alt sammen med en bokstav, et tall eller en F-tast.',
+  'setup.descriptionWindows': 'Velg hurtigtasten som åpner utklippshistorikken.',
+  'setup.descriptionMac':
+    'Gi UPaste tillatelse til å samarbeide med andre apper, og velg hurtigtasten som åpner utklippshistorikken.',
+  'setup.shortcutHintWindows':
+    'Win+V åpner UPaste i stedet for utklippshistorikken i Windows. Velg en annen hurtigtast for å gi Win+V tilbake til Windows.',
+  'setup.shortcutInUse': 'En annen app bruker denne hurtigtasten',
+  'setup.accessibility': 'Tilgang til tilgjengelighet',
+  'setup.accessibilityHint':
+    'Lar UPaste åpne historikken ved tekstmarkøren og lime inn elementet du velger.',
+  'setup.statusAllowed': 'Tillatt',
+  'setup.statusNotAllowed': 'Ikke tillatt',
+  'setup.openAccessibility': 'Åpne personverninnstillinger',
   'setup.messageTray': 'Varslingsliste',
 
   'updates.description': 'UPaste oppdaterer seg selv fra GitHub Releases.',

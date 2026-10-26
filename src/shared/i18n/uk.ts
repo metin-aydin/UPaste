@@ -24,7 +24,7 @@ export const uk: Messages = {
   'notify.relogin':
     'Розширення GNOME для UPaste оновлено. Щоб завершити, вийдіть із сеансу й увійдіть знову.',
   'notify.copiedBody':
-    'Натисніть Ctrl+V, щоб вставити. Завершіть встановлення UPaste, щоб вставляти автоматично.',
+    'Натисніть {paste}, щоб вставити. Завершіть встановлення UPaste, щоб вставляти автоматично.',
 
   'tray.settings': 'Налаштування',
   'tray.quit': 'Вийти',
@@ -107,6 +107,18 @@ export const uk: Messages = {
   'setup.shortcutReset': 'Скинути',
   'setup.shortcutInvalid':
     'Використовуйте Super, Ctrl або Alt разом із літерою, цифрою чи клавішею F.',
+  'setup.descriptionWindows': 'Виберіть комбінацію клавіш, яка відкриває історію буфера обміну.',
+  'setup.descriptionMac':
+    'Дозвольте UPaste працювати з іншими програмами й виберіть комбінацію клавіш, яка відкриває історію буфера обміну.',
+  'setup.shortcutHintWindows':
+    'Win+V відкриває UPaste замість історії буфера обміну Windows. Виберіть іншу комбінацію клавіш, щоб повернути Win+V системі Windows.',
+  'setup.shortcutInUse': 'Цю комбінацію використовує інша програма',
+  'setup.accessibility': 'Дозвіл «Доступність»',
+  'setup.accessibilityHint':
+    'Дає змогу UPaste відкривати історію біля текстового курсора та вставляти вибраний елемент.',
+  'setup.statusAllowed': 'Дозволено',
+  'setup.statusNotAllowed': 'Не дозволено',
+  'setup.openAccessibility': 'Відкрити параметри приватності',
   'setup.messageTray': 'Список сповіщень',
 
   'updates.description': 'UPaste оновлюється самостійно з GitHub Releases.',

@@ -3,7 +3,6 @@
 import { build } from 'esbuild'
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
 
 const root = path.resolve(import.meta.dirname, '..')
@@ -12,7 +11,10 @@ const files = fs
   .readdirSync(path.join(root, 'dev/tests'))
   .filter((f) => f.endsWith('.test.ts') && f.includes(filter))
   .sort()
-const out = fs.mkdtempSync(path.join(os.tmpdir(), 'upaste-unit-'))
+// Paketlenen testler depo içinde durur: dışarıda bırakılan yerel modüller (koffi) node_modules'tan bulunur.
+const cache = path.join(root, 'node_modules/.cache')
+fs.mkdirSync(cache, { recursive: true })
+const out = fs.mkdtempSync(path.join(cache, 'upaste-unit-'))
 let failed = 0
 for (const file of files) {
   const outfile = path.join(out, file.replace(/\.ts$/, '.mjs'))
@@ -24,7 +26,7 @@ for (const file of files) {
     format: 'esm',
     target: 'node22',
     alias: { '@shared': path.join(root, 'src/shared') },
-    external: ['electron'],
+    external: ['electron', 'koffi'],
     logLevel: 'error'
   })
   const res = spawnSync(process.execPath, [outfile], { stdio: 'inherit', cwd: root })

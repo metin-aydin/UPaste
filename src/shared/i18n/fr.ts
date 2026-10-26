@@ -24,7 +24,7 @@ export const fr: Messages = {
   'notify.relogin':
     'L’extension GNOME d’UPaste a été mise à jour. Déconnectez-vous puis reconnectez-vous pour terminer.',
   'notify.copiedBody':
-    'Appuyez sur Ctrl+V pour coller. Terminez la configuration d’UPaste pour coller automatiquement.',
+    'Appuyez sur {paste} pour coller. Terminez la configuration d’UPaste pour coller automatiquement.',
 
   'tray.settings': 'Paramètres',
   'tray.quit': 'Quitter',
@@ -110,6 +110,18 @@ export const fr: Messages = {
   'setup.shortcutReset': 'Réinitialiser',
   'setup.shortcutInvalid':
     'Utilisez Super, Ctrl ou Alt avec une lettre, un chiffre ou une touche F.',
+  'setup.descriptionWindows': 'Choisissez le raccourci qui ouvre l’historique du presse-papiers.',
+  'setup.descriptionMac':
+    'Autorisez UPaste à fonctionner avec d’autres applications et choisissez le raccourci qui ouvre l’historique du presse-papiers.',
+  'setup.shortcutHintWindows':
+    'Win+V ouvre UPaste au lieu de l’historique du presse-papiers de Windows. Choisissez un autre raccourci pour rendre Win+V à Windows.',
+  'setup.shortcutInUse': 'Une autre application utilise ce raccourci',
+  'setup.accessibility': 'Autorisation d’accessibilité',
+  'setup.accessibilityHint':
+    'Permet à UPaste d’ouvrir l’historique au niveau de votre curseur de texte et de coller l’élément choisi.',
+  'setup.statusAllowed': 'Autorisé',
+  'setup.statusNotAllowed': 'Non autorisé',
+  'setup.openAccessibility': 'Ouvrir les réglages de confidentialité',
   'setup.messageTray': 'Liste des notifications',
 
   'updates.description': 'UPaste se met à jour lui-même depuis GitHub Releases.',

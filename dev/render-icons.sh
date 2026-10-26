@@ -1,5 +1,5 @@
 #!/bin/sh
-# build/icon.svg ve resources/tray/tray.svg'den PNG simgeleri üretir (Electron ile çizilir).
+# build/icon.svg ve resources/tray/*.svg'den PNG simgeleri üretir (Electron ile çizilir).
 set -eu
 cd "$(dirname "$0")/.."
 E=./node_modules/.bin/electron
@@ -10,5 +10,9 @@ for s in 512 256 128 96 64 48 32 24 16; do cp "$OUT/icon-$s.png" "build/icons/${
 $E dev/render-svg.cjs resources/tray/tray.svg "$OUT/tray" 22,44 --ozone-platform=x11 >/dev/null 2>&1
 cp "$OUT/tray-22.png" resources/tray/tray.png
 cp "$OUT/tray-44.png" resources/tray/tray@2x.png
+# macOS menü çubuğu: siyah şablon simgesi (sistem açık/koyu menü çubuğuna göre renklendirir).
+$E dev/render-svg.cjs resources/tray/trayTemplate.svg "$OUT/template" 18,36 --ozone-platform=x11 >/dev/null 2>&1
+cp "$OUT/template-18.png" resources/tray/trayTemplate.png
+cp "$OUT/template-36.png" resources/tray/trayTemplate@2x.png
 rm -rf "$OUT"
 echo "simgeler üretildi"

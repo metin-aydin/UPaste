@@ -19,7 +19,11 @@ const TIMESTAMP = 'electron application/osclipboard;format="TIMESTAMP"'
 const SECRET_FORMATS = [
   /passwordmanagerhint/i,
   /x-kde-passwordmanagerhint/i,
-  /application\/x-secret/i
+  /application\/x-secret/i,
+  // Windows: parola yöneticileri pano izleyicilerine bu biçimle "kaydetme" der.
+  /ExcludeClipboardContentFromMonitorProcessing/i,
+  // macOS: nspasteboard.org kuralı (gizli ya da geçici içerik).
+  /org\.nspasteboard\.(Concealed|Transient)Type/i
 ]
 
 const sha1 = (data: string | Buffer): string => createHash('sha1').update(data).digest('hex')

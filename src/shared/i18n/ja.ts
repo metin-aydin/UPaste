@@ -24,7 +24,7 @@ export const ja: Messages = {
   'notify.relogin':
     'UPaste の GNOME 拡張機能を更新しました。完了するには、いったんログアウトして再度ログインしてください。',
   'notify.copiedBody':
-    'Ctrl+V を押して貼り付けてください。UPaste のセットアップを完了すると、自動で貼り付けられます。',
+    '{paste} を押して貼り付けてください。UPaste のセットアップを完了すると、自動で貼り付けられます。',
 
   'tray.settings': '設定',
   'tray.quit': '終了',
@@ -106,6 +106,18 @@ export const ja: Messages = {
   'setup.shortcutReset': 'リセット',
   'setup.shortcutInvalid':
     'Super、Ctrl、Alt のいずれかと、文字、数字、F キーを組み合わせてください。',
+  'setup.descriptionWindows': 'クリップボード履歴を開くショートカットを選択してください。',
+  'setup.descriptionMac':
+    'UPaste がほかのアプリと連携できるよう許可し、クリップボード履歴を開くショートカットを選択してください。',
+  'setup.shortcutHintWindows':
+    'Win+V を押すと、Windows のクリップボード履歴ではなく UPaste が開きます。Win+V を Windows に戻すには、別のショートカットを選択してください。',
+  'setup.shortcutInUse': 'ほかのアプリがこのショートカットを使用しています',
+  'setup.accessibility': 'アクセシビリティのアクセス権',
+  'setup.accessibilityHint':
+    'UPaste がテキストカーソルの位置で履歴を開き、選択した項目を貼り付けられるようにします。',
+  'setup.statusAllowed': '許可済み',
+  'setup.statusNotAllowed': '未許可',
+  'setup.openAccessibility': 'プライバシー設定を開く',
   'setup.messageTray': '通知一覧',
 
   'updates.description': 'UPaste は GitHub Releases から自動的にアップデートされます。',

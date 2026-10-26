@@ -24,7 +24,7 @@ export const el: Messages = {
   'notify.relogin':
     'Η επέκταση GNOME του UPaste ενημερώθηκε. Αποσυνδεθείτε και συνδεθείτε ξανά για να ολοκληρωθεί.',
   'notify.copiedBody':
-    'Πατήστε Ctrl+V για επικόλληση. Ολοκληρώστε τη διαμόρφωση του UPaste για αυτόματη επικόλληση.',
+    'Πατήστε {paste} για επικόλληση. Ολοκληρώστε τη διαμόρφωση του UPaste για αυτόματη επικόλληση.',
 
   'tray.settings': 'Ρυθμίσεις',
   'tray.quit': 'Έξοδος',
@@ -111,6 +111,18 @@ export const el: Messages = {
   'setup.shortcutReset': 'Επαναφορά',
   'setup.shortcutInvalid':
     'Χρησιμοποιήστε Super, Ctrl ή Alt μαζί με ένα γράμμα, έναν αριθμό ή ένα πλήκτρο F.',
+  'setup.descriptionWindows': 'Επιλέξτε τη συντόμευση που ανοίγει το ιστορικό προχείρου.',
+  'setup.descriptionMac':
+    'Επιτρέψτε στο UPaste να συνεργάζεται με άλλες εφαρμογές και επιλέξτε τη συντόμευση που ανοίγει το ιστορικό προχείρου.',
+  'setup.shortcutHintWindows':
+    'Το Win+V ανοίγει το UPaste αντί για το ιστορικό προχείρου των Windows. Επιλέξτε άλλη συντόμευση για να επιστρέψετε το Win+V στα Windows.',
+  'setup.shortcutInUse': 'Μια άλλη εφαρμογή χρησιμοποιεί αυτή τη συντόμευση',
+  'setup.accessibility': 'Άδεια προσβασιμότητας',
+  'setup.accessibilityHint':
+    'Επιτρέπει στο UPaste να ανοίγει το ιστορικό στον δρομέα κειμένου και να επικολλά το στοιχείο που επιλέγετε.',
+  'setup.statusAllowed': 'Επιτρέπεται',
+  'setup.statusNotAllowed': 'Δεν επιτρέπεται',
+  'setup.openAccessibility': 'Άνοιγμα ρυθμίσεων απορρήτου',
   'setup.messageTray': 'Λίστα ειδοποιήσεων',
 
   'updates.description': 'Το UPaste ενημερώνεται αυτόματα από τα GitHub Releases.',

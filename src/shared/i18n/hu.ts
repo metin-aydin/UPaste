@@ -24,7 +24,7 @@ export const hu: Messages = {
   'notify.relogin':
     'Az UPaste GNOME-bővítménye frissült. A befejezéshez jelentkezzen ki, majd be újra.',
   'notify.copiedBody':
-    'A beillesztéshez nyomja meg a Ctrl+V billentyűket. Az automatikus beillesztéshez fejezze be a UPaste telepítését.',
+    'A beillesztéshez nyomja meg a {paste} billentyűket. Az automatikus beillesztéshez fejezze be a UPaste telepítését.',
 
   'tray.settings': 'Beállítások',
   'tray.quit': 'Kilépés',
@@ -108,6 +108,18 @@ export const hu: Messages = {
   'setup.shortcutReset': 'Visszaállítás',
   'setup.shortcutInvalid':
     'Használja a Super, Ctrl vagy Alt billentyűt egy betűvel, számmal vagy F billentyűvel együtt.',
+  'setup.descriptionWindows': 'Válassza ki a vágólap előzményeit megnyitó gyorsbillentyűt.',
+  'setup.descriptionMac':
+    'Engedélyezze, hogy a UPaste együttműködjön más alkalmazásokkal, és válassza ki a vágólap előzményeit megnyitó gyorsbillentyűt.',
+  'setup.shortcutHintWindows':
+    'A Win+V a Windows vágólap-előzményei helyett a UPaste alkalmazást nyitja meg. Ha vissza szeretné adni a Win+V-t a Windowsnak, válasszon másik gyorsbillentyűt.',
+  'setup.shortcutInUse': 'Ezt a gyorsbillentyűt egy másik alkalmazás használja',
+  'setup.accessibility': 'Hozzáférés a kisegítő lehetőségekhez',
+  'setup.accessibilityHint':
+    'Lehetővé teszi, hogy a UPaste a szövegkurzornál nyissa meg az előzményeket, és beillessze a kiválasztott elemet.',
+  'setup.statusAllowed': 'Engedélyezve',
+  'setup.statusNotAllowed': 'Nincs engedélyezve',
+  'setup.openAccessibility': 'Adatvédelmi beállítások megnyitása',
   'setup.messageTray': 'Értesítési lista',
 
   'updates.description': 'A UPaste a GitHub Releases oldalról frissíti magát.',

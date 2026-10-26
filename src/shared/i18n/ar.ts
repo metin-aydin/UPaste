@@ -23,7 +23,7 @@ export const ar: Messages = {
   'notify.copiedTitle': 'تم النسخ إلى الحافظة',
   'notify.relogin':
     'تم تحديث إضافة GNOME الخاصة بـ UPaste. سجّل الخروج ثم ادخل مجددًا لإكمال التحديث.',
-  'notify.copiedBody': 'اضغط Ctrl+V للصق. أكمل إعداد UPaste ليتم اللصق تلقائيًا.',
+  'notify.copiedBody': 'اضغط {paste} للصق. أكمل إعداد UPaste ليتم اللصق تلقائيًا.',
 
   'tray.settings': 'الإعدادات',
   'tray.quit': 'إنهاء',
@@ -103,6 +103,17 @@ export const ar: Messages = {
   'setup.shortcutRecording': 'اضغط الاختصار الجديد…',
   'setup.shortcutReset': 'إعادة تعيين',
   'setup.shortcutInvalid': 'استخدم Super أو Ctrl أو Alt مع حرف أو رقم أو مفتاح F.',
+  'setup.descriptionWindows': 'اختر الاختصار الذي يفتح سجل الحافظة.',
+  'setup.descriptionMac':
+    'اسمح لـ UPaste بالعمل مع التطبيقات الأخرى، واختر الاختصار الذي يفتح سجل الحافظة.',
+  'setup.shortcutHintWindows':
+    'يفتح Win+V تطبيق UPaste بدلًا من سجل الحافظة في Windows. اختر اختصارًا آخر لإعادة Win+V إلى Windows.',
+  'setup.shortcutInUse': 'يستخدم تطبيق آخر هذا الاختصار',
+  'setup.accessibility': 'إذن تسهيلات الاستخدام',
+  'setup.accessibilityHint': 'يتيح لـ UPaste فتح السجل عند مؤشر الكتابة ولصق العنصر الذي تختاره.',
+  'setup.statusAllowed': 'مسموح به',
+  'setup.statusNotAllowed': 'غير مسموح به',
+  'setup.openAccessibility': 'فتح إعدادات الخصوصية',
   'setup.messageTray': 'قائمة الإشعارات',
 
   'updates.description': 'يحدّث UPaste نفسه من إصدارات GitHub.',

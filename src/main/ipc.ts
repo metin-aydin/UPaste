@@ -9,6 +9,7 @@ import { openSettings, retitleSettings } from './settings-window'
 import { store } from './store'
 import { refreshTray } from './tray'
 import { applyAutostart } from './autostart'
+import { platform } from './shortcut'
 import {
   checkForUpdates,
   downloadUpdate,
@@ -16,15 +17,7 @@ import {
   setAutoCheck,
   updateState
 } from './updater'
-import {
-  changeShortcut,
-  installExtension,
-  integrationState,
-  logout,
-  pauseShortcut,
-  restoreShortcut,
-  takeOverShortcut
-} from './gnome'
+import { integration } from './platform'
 
 const FILTERS: PopupFilter[] = ['all', 'text', 'image', 'pinned']
 const SECTIONS: SettingsSection[] = ['general', 'history', 'setup', 'updates', 'about']
@@ -40,7 +33,8 @@ export const uiInfo = (): UiInfo => ({
   locale: currentLocale(),
   systemLocale: systemLocale(),
   dark: dark(),
-  version: app.getVersion()
+  version: app.getVersion(),
+  platform
 })
 
 export function broadcast(channel: string, ...args: unknown[]): void {
@@ -50,8 +44,8 @@ export function broadcast(channel: string, ...args: unknown[]): void {
 
 export const broadcastUi = (): void => broadcast(IPC.uiChanged, uiInfo())
 
-async function broadcastIntegration(): Promise<void> {
-  broadcast(IPC.integrationChanged, await integrationState())
+export async function broadcastIntegration(): Promise<void> {
+  broadcast(IPC.integrationChanged, await integration.state())
 }
 
 export function registerIpc(): void {
@@ -103,28 +97,33 @@ export function registerIpc(): void {
     return history.stats()
   })
 
-  ipcMain.handle(IPC.integrationGet, () => integrationState())
+  ipcMain.handle(IPC.integrationGet, () => integration.state())
   ipcMain.handle(IPC.integrationInstall, async () => {
-    await installExtension()
+    await integration.install()
     await broadcastIntegration()
   })
   ipcMain.handle(IPC.integrationTakeOver, async () => {
-    await takeOverShortcut()
+    await integration.takeOver()
     await broadcastIntegration()
   })
   ipcMain.handle(IPC.integrationRestore, async () => {
-    await restoreShortcut()
+    await integration.restore()
     await broadcastIntegration()
   })
-  ipcMain.handle(IPC.integrationLogout, () => logout())
+  ipcMain.handle(IPC.integrationLogout, () => integration.logout())
+  ipcMain.handle(IPC.integrationRequestAccess, async () => {
+    await integration.requestAccess()
+    await broadcastIntegration()
+  })
   ipcMain.handle(IPC.integrationSetShortcut, async (_e, accel: unknown) => {
     const a = str(accel, 100)
-    if (/^(<[A-Za-z0-9]+>)+[A-Za-z0-9_]+$/.test(a)) await changeShortcut(a)
+    if (/^(<[A-Za-z0-9]+>)+[A-Za-z0-9_]+$/.test(a)) await integration.setShortcut(a)
     await broadcastIntegration()
   })
   ipcMain.handle(IPC.integrationPauseShortcut, (_e, paused: unknown) =>
-    pauseShortcut(paused === true)
+    integration.pauseShortcut(paused === true)
   )
+  integration.on('changed', () => void broadcastIntegration())
 
   ipcMain.handle(IPC.updateGet, () => updateState())
   ipcMain.handle(IPC.updateCheck, () => checkForUpdates())

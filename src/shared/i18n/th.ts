@@ -23,7 +23,7 @@ export const th: Messages = {
   'notify.copiedTitle': 'คัดลอกไปยังคลิปบอร์ดแล้ว',
   'notify.relogin':
     'อัปเดตส่วนขยาย GNOME ของ UPaste แล้ว ออกจากระบบแล้วเข้าสู่ระบบอีกครั้งเพื่อให้เสร็จสมบูรณ์',
-  'notify.copiedBody': 'กด Ctrl+V เพื่อวาง ตั้งค่า UPaste ให้เสร็จเพื่อให้วางได้โดยอัตโนมัติ',
+  'notify.copiedBody': 'กด {paste} เพื่อวาง ตั้งค่า UPaste ให้เสร็จเพื่อให้วางได้โดยอัตโนมัติ',
 
   'tray.settings': 'การตั้งค่า',
   'tray.quit': 'ออก',
@@ -103,6 +103,18 @@ export const th: Messages = {
   'setup.shortcutRecording': 'กดปุ่มลัดใหม่…',
   'setup.shortcutReset': 'รีเซ็ต',
   'setup.shortcutInvalid': 'ใช้ Super, Ctrl หรือ Alt ร่วมกับตัวอักษร ตัวเลข หรือปุ่ม F',
+  'setup.descriptionWindows': 'เลือกปุ่มลัดที่ใช้เปิดประวัติคลิปบอร์ด',
+  'setup.descriptionMac':
+    'อนุญาตให้ UPaste ทำงานร่วมกับแอปอื่น และเลือกปุ่มลัดที่ใช้เปิดประวัติคลิปบอร์ด',
+  'setup.shortcutHintWindows':
+    'Win+V จะเปิด UPaste แทนประวัติคลิปบอร์ดของ Windows เลือกปุ่มลัดอื่นเพื่อคืน Win+V ให้ Windows',
+  'setup.shortcutInUse': 'แอปอื่นใช้ปุ่มลัดนี้อยู่',
+  'setup.accessibility': 'สิทธิ์การช่วยการเข้าถึง',
+  'setup.accessibilityHint':
+    'ให้ UPaste เปิดประวัติที่เคอร์เซอร์ข้อความของคุณ และวางรายการที่คุณเลือก',
+  'setup.statusAllowed': 'อนุญาตแล้ว',
+  'setup.statusNotAllowed': 'ไม่ได้อนุญาต',
+  'setup.openAccessibility': 'เปิดการตั้งค่าความเป็นส่วนตัว',
   'setup.messageTray': 'รายการการแจ้งเตือน',
 
   'updates.description': 'UPaste อัปเดตตัวเองจาก GitHub Releases',

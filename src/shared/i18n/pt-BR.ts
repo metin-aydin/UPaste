@@ -24,7 +24,7 @@ export const ptBR: Messages = {
   'notify.relogin':
     'A extensão do GNOME do UPaste foi atualizada. Saia e entre novamente na sessão para concluir.',
   'notify.copiedBody':
-    'Pressione Ctrl+V para colar. Conclua a configuração do UPaste para colar automaticamente.',
+    'Pressione {paste} para colar. Conclua a configuração do UPaste para colar automaticamente.',
 
   'tray.settings': 'Configurações',
   'tray.quit': 'Sair',
@@ -109,6 +109,18 @@ export const ptBR: Messages = {
   'setup.shortcutRecording': 'Pressione o novo atalho…',
   'setup.shortcutReset': 'Redefinir',
   'setup.shortcutInvalid': 'Use Super, Ctrl ou Alt junto com uma letra, um número ou uma tecla F.',
+  'setup.descriptionWindows': 'Escolha o atalho que abre o histórico da área de transferência.',
+  'setup.descriptionMac':
+    'Permita que o UPaste funcione com outros apps e escolha o atalho que abre o histórico da área de transferência.',
+  'setup.shortcutHintWindows':
+    'Win+V abre o UPaste em vez do histórico da área de transferência do Windows. Escolha outro atalho para devolver o Win+V ao Windows.',
+  'setup.shortcutInUse': 'Outro app usa este atalho',
+  'setup.accessibility': 'Permissão de acessibilidade',
+  'setup.accessibilityHint':
+    'Permite que o UPaste abra o histórico junto ao cursor de texto e cole o item escolhido.',
+  'setup.statusAllowed': 'Permitido',
+  'setup.statusNotAllowed': 'Não permitido',
+  'setup.openAccessibility': 'Abrir ajustes de privacidade',
   'setup.messageTray': 'Lista de notificações',
 
   'updates.description': 'O UPaste se atualiza sozinho pelo GitHub Releases.',

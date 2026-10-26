@@ -13,7 +13,8 @@ import { areaFor, insideFrame, knownCaret, placePopup, type Rect } from '@shared
 import type { PopupFilter, PopupItem, PopupMode } from '@shared/types'
 import { history } from './history'
 import { watcher } from './clipboard'
-import { shell, type CapturedKey, type FocusInfo, type PasteKeys } from './shell'
+import type { CapturedKey, FocusInfo, PasteKeys } from './shell'
+import { desktop } from './platform'
 import { store } from './store'
 import { mt } from './i18n'
 import { debug } from './log'
@@ -82,8 +83,11 @@ function createWindow(asOverlay: boolean): void {
     skipTaskbar: true,
     alwaysOnTop: true,
     // Odaksız pencere Linux'ta pencere yöneticisinin dışında kalır ve kabuk çubuklarının üstünde çizilir. Yönetilen
-    // pencere araç çubuğu türündedir: pencere yöneticisi onu açılışta odaklamaz ve "hazır" bildirimi göstermez.
-    ...(asOverlay ? { focusable: false } : { type: 'toolbar' }),
+    // pencere araç çubuğu türündedir: pencere yöneticisi onu açılışta odaklamaz ve "hazır" bildirimi göstermez;
+    // Windows'ta görev çubuğunda ve Alt+Tab'da görünmez. macOS'ta panel türü tam ekran uygulamaların da üstünde açılır.
+    ...(asOverlay
+      ? { focusable: false }
+      : { type: process.platform === 'darwin' ? 'panel' : 'toolbar' }),
     title: POPUP_TITLE,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -95,7 +99,7 @@ function createWindow(asOverlay: boolean): void {
   })
   win = created
   created.setAlwaysOnTop(true, 'pop-up-menu')
-  created.setVisibleOnAllWorkspaces(true)
+  created.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   created.on('page-title-updated', (e) => e.preventDefault())
   created.on('blur', () => {
     if (focusMode && Date.now() - shownAt > BLUR_GRACE_MS) hidePopup()
@@ -107,7 +111,7 @@ function createWindow(asOverlay: boolean): void {
     shownAt = Date.now()
     if (capturing) {
       capturing = false
-      void shell.captureKeys(false).catch(() => {})
+      void desktop.captureKeys(false).catch(() => {})
     }
     created.webContents.send(IPC.popupFocus)
   })
@@ -122,7 +126,7 @@ function createWindow(asOverlay: boolean): void {
 
 /** Pencereyi eklentinin yeteneğine uygun türde hazırlar (eklenti sürümü değişince yeniden oluşturulur). */
 export function ensurePopup(): void {
-  const wanted = shell.canType
+  const wanted = desktop.canType
   if (win && !win.isDestroyed() && overlay === wanted) return
   if (win && !win.isDestroyed()) {
     hidePopup()
@@ -206,9 +210,9 @@ function visibleArea(bounds: Rect, mode: PopupMode): Rect {
 
 /** Görünen alanın dışına yapılan tıklama eklentiden `clicked-outside` olarak gelir; `null` izlemeyi bitirir. */
 function watchOutsideClicks(bounds: Rect | null, mode: PopupMode = 'popup'): void {
-  if (!shell.canWatchClicks) return
+  if (!desktop.canWatchClicks) return
   watchingClicks = bounds !== null
-  void shell.watchClicks(bounds && visibleArea(bounds, mode)).catch(() => {})
+  void desktop.watchClicks(bounds && visibleArea(bounds, mode)).catch(() => {})
 }
 
 /**
@@ -260,7 +264,7 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
     const placed =
       mode === 'popup' ? placeCard(anchor, areas) : { bounds: sheetBounds(focus), above: false }
     // Odakta pencere olmasa da (masaüstü) tuşlar yakalanır; yapıştırılacak pencere yoksa öğe yalnız panoya yazılır.
-    const capture = shell.canCapture && info !== null
+    const capture = desktop.canCapture && info !== null
     focusMode = !capture && !overlay
     typing = false
     debug(
@@ -287,13 +291,16 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
       win.showInactive()
       if (capture) {
         capturing = true
-        await shell.captureKeys(true).catch((err) => console.error('Tuşlar yakalanamadı:', err))
+        await desktop.captureKeys(true).catch((err) => console.error('Tuşlar yakalanamadı:', err))
       }
       watchOutsideClicks(placed.bounds, mode)
     } else {
+      // macOS'ta menü çubuğu uygulaması klavyeyi ancak etkinleşince alır; yapıştırırken hedef uygulama yeniden öne
+      // alınır.
+      if (process.platform === 'darwin') app.focus({ steal: true })
       win.show()
       win.focus()
-      if (shell.active) await shell.focusOwnWindow(POPUP_TITLE).catch(() => false)
+      if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
     }
     startTracking()
   } finally {
@@ -313,7 +320,7 @@ export async function startSearch(replay?: { keycode: number; modifiers: number 
     typing = true
     capturing = false
     win.webContents.send(IPC.popupTyping, true)
-    await shell
+    await desktop
       .startTyping(replay?.keycode ?? 0, replay?.modifiers ?? 0, target?.mode === 'sheet')
       .catch((err) => console.error('Arama başlatılamadı:', err))
     return
@@ -326,15 +333,15 @@ async function enterFocusMode(replay?: { keycode: number; modifiers: number }): 
   focusMode = true
   if (capturing) {
     capturing = false
-    await shell.captureKeys(false).catch(() => {})
+    await desktop.captureKeys(false).catch(() => {})
   }
   shownAt = Date.now()
   win.focus()
-  if (shell.active) await shell.focusOwnWindow(POPUP_TITLE).catch(() => false)
+  if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
   win.webContents.send(IPC.popupFocus)
   if (replay) {
     await new Promise((r) => setTimeout(r, 30))
-    await shell.replayKey(replay.keycode, replay.modifiers).catch(() => {})
+    await desktop.replayKey(replay.keycode, replay.modifiers).catch(() => {})
   }
 }
 
@@ -365,11 +372,11 @@ export function hidePopup(restoreFocus = true): void {
   if (watchingClicks) watchOutsideClicks(null)
   if (capturing) {
     capturing = false
-    void shell.captureKeys(false).catch(() => {})
+    void desktop.captureKeys(false).catch(() => {})
   }
   if (typing) {
     typing = false
-    void shell.stopTyping(restoreFocus).catch(() => {})
+    void desktop.stopTyping(restoreFocus).catch(() => {})
   }
   focusMode = false
   if (win?.isVisible()) win.hide()
@@ -382,13 +389,13 @@ export function hidePopup(restoreFocus = true): void {
 function startTracking(): void {
   stopTracking()
   const t = target
-  if (t?.windowId === undefined || !shell.active) return
+  if (t?.windowId === undefined || !desktop.active) return
   let busy = false
   trackTimer = setInterval(async () => {
     if (busy || !win?.isVisible()) return
     busy = true
     try {
-      const info = await shell.windowInfo(t.windowId!)
+      const info = await desktop.windowInfo(t.windowId!)
       if (!info?.frame) {
         debug('hide', 'target window gone')
         hidePopup(false)
@@ -448,10 +455,10 @@ export async function pasteItem(id: string, plain: boolean): Promise<boolean> {
   history.touch(id)
   const t = target
   hidePopup(false)
-  if (t?.windowId !== undefined && shell.active) {
+  if (t?.windowId !== undefined && desktop.active) {
     const keys: PasteKeys = t.textInput ? 'shift+insert' : 'ctrl+v'
     try {
-      if (await shell.paste(t.windowId, keys)) return true
+      if (await desktop.paste(t.windowId, keys)) return true
     } catch (err) {
       console.error('Yapıştırılamadı:', err)
     }
@@ -459,7 +466,7 @@ export async function pasteItem(id: string, plain: boolean): Promise<boolean> {
   if (Notification.isSupported() && process.env['UPASTE_TEST'] !== '1') {
     new Notification({
       title: mt('notify.copiedTitle'),
-      body: mt('notify.copiedBody'),
+      body: mt('notify.copiedBody', { paste: process.platform === 'darwin' ? '⌘V' : 'Ctrl+V' }),
       silent: true
     }).show()
   }

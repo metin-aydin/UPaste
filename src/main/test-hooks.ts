@@ -5,7 +5,8 @@ import { history } from './history'
 import { watcher } from './clipboard'
 import { hidePopup, popupVisible, popupWindow, togglePopup } from './popup'
 import { openSettings, settingsWindow } from './settings-window'
-import { parseFocusInfo, shell } from './shell'
+import { parseFocusInfo } from './shell'
+import { desktop } from './platform'
 import { store } from './store'
 import { trayMenuTemplate } from './tray'
 import { Variant } from './dbus/wire'
@@ -69,6 +70,6 @@ export function installTestHooks(): void {
       const item = trayMenuTemplate()[index]
       ;(item?.click as (() => void) | undefined)?.()
     },
-    shellActive: () => shell.active
+    shellActive: () => desktop.active
   }
 }

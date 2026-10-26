@@ -24,7 +24,7 @@ export const ro: Messages = {
   'notify.relogin':
     'Extensia GNOME a UPaste a fost actualizată. Deconectați-vă și reconectați-vă pentru a finaliza.',
   'notify.copiedBody':
-    'Apăsați Ctrl+V pentru a lipi. Finalizați configurarea UPaste pentru lipire automată.',
+    'Apăsați {paste} pentru a lipi. Finalizați configurarea UPaste pentru lipire automată.',
 
   'tray.settings': 'Setări',
   'tray.quit': 'Ieșire',
@@ -109,6 +109,18 @@ export const ro: Messages = {
   'setup.shortcutReset': 'Resetează',
   'setup.shortcutInvalid':
     'Folosiți Super, Ctrl sau Alt împreună cu o literă, o cifră sau o tastă F.',
+  'setup.descriptionWindows': 'Alegeți scurtătura care deschide istoricul clipboardului.',
+  'setup.descriptionMac':
+    'Permiteți-i lui UPaste să funcționeze cu alte aplicații și alegeți scurtătura care deschide istoricul clipboardului.',
+  'setup.shortcutHintWindows':
+    'Win+V deschide UPaste în locul istoricului clipboardului din Windows. Alegeți altă scurtătură pentru a-i reda lui Windows combinația Win+V.',
+  'setup.shortcutInUse': 'Altă aplicație folosește această scurtătură',
+  'setup.accessibility': 'Permisiune de accesibilitate',
+  'setup.accessibilityHint':
+    'Permite ca UPaste să deschidă istoricul la cursorul de text și să lipească elementul ales.',
+  'setup.statusAllowed': 'Permis',
+  'setup.statusNotAllowed': 'Nepermis',
+  'setup.openAccessibility': 'Deschide setările de confidențialitate',
   'setup.messageTray': 'Lista de notificări',
 
   'updates.description': 'UPaste se actualizează singur din GitHub Releases.',

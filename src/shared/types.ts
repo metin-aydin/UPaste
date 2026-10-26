@@ -1,3 +1,4 @@
+import type { DesktopPlatform } from './accelerator'
 import type { Range } from './search'
 
 export type ItemKind = 'text' | 'image'
@@ -81,7 +82,9 @@ export interface ShortcutConflict {
 }
 
 export interface IntegrationState {
-  /** Masaüstü GNOME Shell mi. */
+  /** İşletim sistemi: Kurulum bölümü buna göre çizilir. */
+  platform: DesktopPlatform
+  /** Masaüstü GNOME Shell mi (Linux). */
   gnome: boolean
   session: 'wayland' | 'x11' | 'unknown'
   extension: ExtensionStatus
@@ -94,4 +97,8 @@ export interface IntegrationState {
   tookOver: boolean
   /** Eklenti kısayolu tutuyor ve geçmiş açılabiliyor. */
   ready: boolean
+  /** macOS: UPaste'e Erişilebilirlik izni verildi (imleç konumu ve yapıştırma için gerekir). */
+  accessibility?: boolean
+  /** Windows, macOS: kısayol kaydedilemedi, başka bir uygulama tutuyor. */
+  shortcutInUse?: boolean
 }

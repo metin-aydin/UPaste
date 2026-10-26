@@ -16,6 +16,8 @@ import { homedir } from 'os'
 import { join } from 'path'
 import { promisify } from 'util'
 import type { ExtensionStatus, IntegrationState, ShortcutConflict } from '@shared/types'
+import { defaultShortcut } from '@shared/accelerator'
+import { currentShortcut } from './shortcut'
 import { EXTENSION_API, shell } from './shell'
 import { store, writeJsonAtomic, type SavedBinding } from './store'
 import { mt } from './i18n'
@@ -25,10 +27,10 @@ import { debug } from './log'
 const run = promisify(execFile)
 
 export const EXTENSION_UUID = 'upaste@metin-aydin.github.io'
-export const DEFAULT_SHORTCUT = '<Super>v'
+export const DEFAULT_SHORTCUT = defaultShortcut('linux')
 
 /** Kullanıcının seçtiği kısayol (GTK hızlandırıcı biçiminde). */
-export const currentShortcut = (): string => store.integration.shortcut || DEFAULT_SHORTCUT
+export { currentShortcut }
 const CUSTOM_SCHEMA = 'org.gnome.settings-daemon.plugins.media-keys.custom-keybinding'
 const MEDIA_KEYS = 'org.gnome.settings-daemon.plugins.media-keys'
 const KEYBINDING_SCHEMAS = [
@@ -393,6 +395,7 @@ export async function integrationState(): Promise<IntegrationState> {
   const gnome = isGnome()
   if (!gnome) {
     return {
+      platform: 'linux',
       gnome,
       session: sessionType(),
       extension: 'not-installed',
@@ -425,6 +428,7 @@ export async function integrationState(): Promise<IntegrationState> {
   }
   const conflicts = await shortcutConflicts()
   return {
+    platform: 'linux',
     gnome,
     session: sessionType(),
     extension,

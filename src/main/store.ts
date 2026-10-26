@@ -5,6 +5,7 @@ import { EventEmitter } from 'events'
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { DEFAULT_SETTINGS, type Settings } from '@shared/types'
+import { defaultShortcut, type DesktopPlatform } from '@shared/accelerator'
 
 export function readJson<T>(file: string, fallback: T): T {
   try {
@@ -46,7 +47,7 @@ class Store extends EventEmitter {
   settings: Settings = { ...DEFAULT_SETTINGS }
   integration: IntegrationData = {
     savedBindings: [],
-    shortcut: '<Super>v',
+    shortcut: defaultShortcut(process.platform as DesktopPlatform),
     shortcutEnabled: true,
     setupShown: false
   }

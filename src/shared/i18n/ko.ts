@@ -24,7 +24,7 @@ export const ko: Messages = {
   'notify.relogin':
     'UPaste의 GNOME 확장이 업데이트되었습니다. 마치려면 로그아웃했다가 다시 로그인하세요.',
   'notify.copiedBody':
-    'Ctrl+V를 눌러 붙여넣으세요. UPaste 초기 설정을 완료하면 자동으로 붙여넣습니다.',
+    '{paste}를 눌러 붙여넣으세요. UPaste 초기 설정을 완료하면 자동으로 붙여넣습니다.',
 
   'tray.settings': '설정',
   'tray.quit': '종료',
@@ -105,6 +105,18 @@ export const ko: Messages = {
   'setup.shortcutRecording': '새 단축키를 누르세요…',
   'setup.shortcutReset': '초기화',
   'setup.shortcutInvalid': 'Super, Ctrl 또는 Alt를 문자, 숫자 또는 F 키와 함께 사용하세요.',
+  'setup.descriptionWindows': '클립보드 기록을 여는 단축키를 선택하세요.',
+  'setup.descriptionMac':
+    'UPaste가 다른 앱과 함께 작동하도록 허용하고 클립보드 기록을 여는 단축키를 선택하세요.',
+  'setup.shortcutHintWindows':
+    'Win+V를 누르면 Windows 클립보드 기록 대신 UPaste가 열립니다. Win+V를 Windows에 돌려주려면 다른 단축키를 선택하세요.',
+  'setup.shortcutInUse': '다른 앱에서 이 단축키를 사용 중',
+  'setup.accessibility': '손쉬운 사용 접근 권한',
+  'setup.accessibilityHint':
+    'UPaste가 텍스트 커서 위치에서 기록을 열고 선택한 항목을 붙여넣을 수 있게 합니다.',
+  'setup.statusAllowed': '허용됨',
+  'setup.statusNotAllowed': '허용되지 않음',
+  'setup.openAccessibility': '개인정보 보호 설정 열기',
   'setup.messageTray': '알림 목록',
 
   'updates.description': 'UPaste는 GitHub Releases에서 자동으로 업데이트됩니다.',

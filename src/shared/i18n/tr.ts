@@ -24,7 +24,7 @@ export const tr: Messages = {
   'notify.relogin':
     "UPaste'in GNOME eklentisi güncellendi. Tamamlamak için oturumu kapatıp yeniden açın.",
   'notify.copiedBody':
-    'Yapıştırmak için Ctrl+V tuşlarına basın. Kendiliğinden yapıştırma için UPaste kurulumunu tamamlayın.',
+    'Yapıştırmak için {paste} tuşlarına basın. Kendiliğinden yapıştırma için UPaste kurulumunu tamamlayın.',
 
   'tray.settings': 'Ayarlar',
   'tray.quit': 'Kapat',
@@ -106,6 +106,18 @@ export const tr: Messages = {
   'setup.shortcutReset': 'Sıfırla',
   'setup.shortcutInvalid':
     'Super, Ctrl ya da Alt ile birlikte bir harf, rakam veya F tuşu kullanın.',
+  'setup.descriptionWindows': 'Pano geçmişini açan kısayolu seçin.',
+  'setup.descriptionMac':
+    'UPaste’in diğer uygulamalarla çalışmasına izin verin ve pano geçmişini açan kısayolu seçin.',
+  'setup.shortcutHintWindows':
+    'Win+V, Windows pano geçmişi yerine UPaste’i açar. Win+V’yi Windows’a geri vermek için başka bir kısayol seçin.',
+  'setup.shortcutInUse': 'Bu kısayolu başka bir uygulama kullanıyor',
+  'setup.accessibility': 'Erişilebilirlik İzni',
+  'setup.accessibilityHint':
+    'UPaste’in geçmişi metin imlecinizin yanında açmasını ve seçtiğiniz öğeyi yapıştırmasını sağlar.',
+  'setup.statusAllowed': 'İzin verildi',
+  'setup.statusNotAllowed': 'İzin verilmedi',
+  'setup.openAccessibility': 'Gizlilik Ayarlarını Aç',
   'setup.messageTray': 'Bildirim listesi',
 
   'updates.description': 'UPaste kendini GitHub sürümlerinden günceller.',

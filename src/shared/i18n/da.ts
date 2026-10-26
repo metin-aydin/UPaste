@@ -24,7 +24,7 @@ export const da: Messages = {
   'notify.relogin':
     'UPastes GNOME-udvidelse er opdateret. Log ud og ind igen for at gøre det færdigt.',
   'notify.copiedBody':
-    'Tryk på Ctrl+V for at indsætte. Fuldfør opsætningen af UPaste for at indsætte automatisk.',
+    'Tryk på {paste} for at indsætte. Fuldfør opsætningen af UPaste for at indsætte automatisk.',
 
   'tray.settings': 'Indstillinger',
   'tray.quit': 'Afslut',
@@ -105,6 +105,18 @@ export const da: Messages = {
   'setup.shortcutReset': 'Nulstil',
   'setup.shortcutInvalid':
     'Brug Super, Ctrl eller Alt sammen med et bogstav, et tal eller en F-tast.',
+  'setup.descriptionWindows': 'Vælg den genvej, der åbner udklipsholderens historik.',
+  'setup.descriptionMac':
+    'Giv UPaste tilladelse til at arbejde sammen med andre apps, og vælg den genvej, der åbner udklipsholderens historik.',
+  'setup.shortcutHintWindows':
+    'Win+V åbner UPaste i stedet for udklipsholderens historik i Windows. Vælg en anden genvej for at give Win+V tilbage til Windows.',
+  'setup.shortcutInUse': 'En anden app bruger denne genvej',
+  'setup.accessibility': 'Adgang til tilgængelighed',
+  'setup.accessibilityHint':
+    'Lader UPaste åbne historikken ved din tekstmarkør og indsætte det element, du vælger.',
+  'setup.statusAllowed': 'Tilladt',
+  'setup.statusNotAllowed': 'Ikke tilladt',
+  'setup.openAccessibility': 'Åbn anonymitetsindstillinger',
   'setup.messageTray': 'Notifikationsliste',
 
   'updates.description': 'UPaste opdaterer sig selv fra GitHub Releases.',

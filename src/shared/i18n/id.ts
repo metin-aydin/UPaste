@@ -24,7 +24,7 @@ export const id: Messages = {
   'notify.relogin':
     'Ekstensi GNOME UPaste telah diperbarui. Keluar lalu masuk kembali untuk menyelesaikannya.',
   'notify.copiedBody':
-    'Tekan Ctrl+V untuk menempel. Selesaikan penyiapan UPaste agar dapat menempel secara otomatis.',
+    'Tekan {paste} untuk menempel. Selesaikan penyiapan UPaste agar dapat menempel secara otomatis.',
 
   'tray.settings': 'Pengaturan',
   'tray.quit': 'Keluar',
@@ -105,6 +105,18 @@ export const id: Messages = {
   'setup.shortcutRecording': 'Tekan pintasan baru…',
   'setup.shortcutReset': 'Atur ulang',
   'setup.shortcutInvalid': 'Gunakan Super, Ctrl, atau Alt bersama huruf, angka, atau tombol F.',
+  'setup.descriptionWindows': 'Pilih pintasan yang membuka riwayat papan klip Anda.',
+  'setup.descriptionMac':
+    'Izinkan UPaste bekerja dengan aplikasi lain dan pilih pintasan yang membuka riwayat papan klip Anda.',
+  'setup.shortcutHintWindows':
+    'Win+V membuka UPaste, bukan riwayat papan klip Windows. Pilih pintasan lain untuk mengembalikan Win+V ke Windows.',
+  'setup.shortcutInUse': 'Aplikasi lain menggunakan pintasan ini',
+  'setup.accessibility': 'Izin aksesibilitas',
+  'setup.accessibilityHint':
+    'Memungkinkan UPaste membuka riwayat di kursor teks Anda dan menempelkan item yang Anda pilih.',
+  'setup.statusAllowed': 'Diizinkan',
+  'setup.statusNotAllowed': 'Tidak diizinkan',
+  'setup.openAccessibility': 'Buka pengaturan privasi',
   'setup.messageTray': 'Daftar notifikasi',
 
   'updates.description': 'UPaste memperbarui dirinya sendiri dari GitHub Releases.',

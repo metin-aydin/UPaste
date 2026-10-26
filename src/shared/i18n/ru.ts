@@ -24,7 +24,7 @@ export const ru: Messages = {
   'notify.relogin':
     'Расширение GNOME для UPaste обновлено. Чтобы завершить, выйдите из сеанса и войдите снова.',
   'notify.copiedBody':
-    'Нажмите Ctrl+V, чтобы вставить. Завершите установку UPaste, чтобы вставлять автоматически.',
+    'Нажмите {paste}, чтобы вставить. Завершите установку UPaste, чтобы вставлять автоматически.',
 
   'tray.settings': 'Настройки',
   'tray.quit': 'Выйти',
@@ -107,6 +107,18 @@ export const ru: Messages = {
   'setup.shortcutReset': 'Сбросить',
   'setup.shortcutInvalid':
     'Используйте Super, Ctrl или Alt вместе с буквой, цифрой или клавишей F.',
+  'setup.descriptionWindows': 'Выберите сочетание клавиш, которое открывает журнал буфера обмена.',
+  'setup.descriptionMac':
+    'Разрешите UPaste работать с другими приложениями и выберите сочетание клавиш, которое открывает журнал буфера обмена.',
+  'setup.shortcutHintWindows':
+    'Win+V открывает UPaste вместо журнала буфера обмена Windows. Выберите другое сочетание клавиш, чтобы вернуть Win+V системе Windows.',
+  'setup.shortcutInUse': 'Это сочетание использует другое приложение',
+  'setup.accessibility': 'Разрешение «Универсальный доступ»',
+  'setup.accessibilityHint':
+    'Позволяет UPaste открывать журнал у текстового курсора и вставлять выбранный элемент.',
+  'setup.statusAllowed': 'Разрешено',
+  'setup.statusNotAllowed': 'Не разрешено',
+  'setup.openAccessibility': 'Открыть настройки конфиденциальности',
   'setup.messageTray': 'Список уведомлений',
 
   'updates.description': 'UPaste обновляется сам через GitHub Releases.',

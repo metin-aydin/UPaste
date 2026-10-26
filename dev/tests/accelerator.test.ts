@@ -1,4 +1,10 @@
-import { acceleratorFromEvent, acceleratorLabel } from '../../src/shared/accelerator'
+import {
+  acceleratorFromEvent,
+  acceleratorLabel,
+  defaultShortcut,
+  electronAccelerator,
+  windowsVirtualKey
+} from '../../src/shared/accelerator'
 import { eq, run, test } from './harness'
 
 const ev = (
@@ -25,6 +31,31 @@ test('F tuşu ve rakam', () => {
 test('okunur etiket', () => {
   eq(acceleratorLabel('<Super>v'), 'Super+V')
   eq(acceleratorLabel('<Shift><Control>v'), 'Ctrl+Shift+V')
+})
+
+test('işletim sistemine göre etiket', () => {
+  eq(acceleratorLabel('<Super>v', 'win32'), 'Win+V')
+  eq(acceleratorLabel('<Super><Shift>v', 'darwin'), '⇧⌘V')
+  eq(acceleratorLabel('<Control><Alt>v', 'darwin'), '⌃⌥V')
+})
+test('varsayılan kısayol', () => {
+  eq(defaultShortcut('linux'), '<Super>v')
+  eq(defaultShortcut('win32'), '<Super>v')
+  eq(defaultShortcut('darwin'), '<Super><Shift>v')
+})
+test('Electron hızlandırıcısı', () => {
+  eq(electronAccelerator('<Super><Shift>v'), 'Super+Shift+V')
+  eq(electronAccelerator('<Shift><Control>Page_Up'), 'Control+Shift+PageUp')
+  eq(electronAccelerator('<Alt>F9'), 'Alt+F9')
+  eq(electronAccelerator('v'), null)
+})
+test('Windows sanal tuş kodu', () => {
+  eq(windowsVirtualKey('v'), 0x56)
+  eq(windowsVirtualKey('3'), 0x33)
+  eq(windowsVirtualKey('F1'), 0x70)
+  eq(windowsVirtualKey('F12'), 0x7b)
+  eq(windowsVirtualKey('Insert'), 0x2d)
+  eq(windowsVirtualKey('bilinmeyen'), null)
 })
 
 void run('accelerator')

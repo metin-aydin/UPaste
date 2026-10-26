@@ -2,7 +2,13 @@ import { app, net, type BrowserWindow } from 'electron'
 import { spawn } from 'child_process'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { basename, dirname, join } from 'path'
-import { AppImageUpdater, DebUpdater, type AppUpdater } from 'electron-updater'
+import {
+  AppImageUpdater,
+  DebUpdater,
+  MacUpdater,
+  NsisUpdater,
+  type AppUpdater
+} from 'electron-updater'
 import { EventEmitter } from 'events'
 import { IPC } from '@shared/ipc'
 import { compareVersions, type UpdateInstaller, type UpdateState } from '@shared/update'
@@ -51,13 +57,17 @@ const message = (err: unknown): string =>
   (err instanceof Error ? err.message : String(err)).split('\n')[0].trim()
 
 /**
- * Uygulamanın kendini güncelleyebildiği kurulum türü: AppImage ya da .deb paketi. Geliştirme sürümünde (test adresi
+ * Uygulamanın kendini güncelleyebildiği kurulum türü: Windows'ta NSIS kurulumu, macOS'ta güncelleme dosyası
+ * (app-update.yml) bulunan imzalı paket, Linux'ta AppImage ya da .deb paketi. Geliştirme sürümünde (test adresi
  * verilmedikçe) yoktur. .deb hedefi `resources/package-type` yazar ve AppImage aynı klasörden üretildiği için o dosya
  * AppImage'da da bulunur; bu yüzden önce APPIMAGE denetlenir.
  */
 function detectInstaller(): UpdateInstaller | null {
   if (!app.isPackaged && !testFeed) return null
   if (testFeed && process.env['UPASTE_UPDATE_INSTALLER'] === 'deb') return 'deb'
+  if (process.platform === 'win32') return 'nsis'
+  if (process.platform === 'darwin')
+    return existsSync(join(process.resourcesPath, 'app-update.yml')) ? 'mac' : null
   if (process.platform !== 'linux') return null
   if (process.env['APPIMAGE']) return 'appimage'
   try {
@@ -69,7 +79,14 @@ function detectInstaller(): UpdateInstaller | null {
 }
 
 function createUpdater(kind: UpdateInstaller): AppUpdater {
-  const u = kind === 'deb' ? new DebUpdater() : new AppImageUpdater()
+  const u =
+    kind === 'nsis'
+      ? new NsisUpdater()
+      : kind === 'mac'
+        ? new MacUpdater()
+        : kind === 'deb'
+          ? new DebUpdater()
+          : new AppImageUpdater()
   u.autoDownload = false
   u.autoInstallOnAppQuit = false
   if (testFeed) {

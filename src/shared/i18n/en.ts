@@ -22,7 +22,7 @@ export const en = {
 
   'notify.copiedTitle': 'Copied to the clipboard',
   'notify.relogin': "UPaste's GNOME extension was updated. Log out and back in to finish.",
-  'notify.copiedBody': 'Press Ctrl+V to paste. Finish the UPaste setup to paste automatically.',
+  'notify.copiedBody': 'Press {paste} to paste. Finish the UPaste setup to paste automatically.',
 
   'tray.settings': 'Settings',
   'tray.quit': 'Quit',
@@ -103,6 +103,18 @@ export const en = {
   'setup.shortcutRecording': 'Press the new shortcut…',
   'setup.shortcutReset': 'Reset',
   'setup.shortcutInvalid': 'Use Super, Ctrl or Alt together with a letter, number or F key.',
+  'setup.descriptionWindows': 'Choose the shortcut that opens your clipboard history.',
+  'setup.descriptionMac':
+    'Allow UPaste to work with other apps and choose the shortcut that opens your clipboard history.',
+  'setup.shortcutHintWindows':
+    'Win+V opens UPaste instead of the Windows clipboard history. Choose another shortcut to give Win+V back to Windows.',
+  'setup.shortcutInUse': 'Another app uses this shortcut',
+  'setup.accessibility': 'Accessibility Access',
+  'setup.accessibilityHint':
+    'Lets UPaste open the history at your text cursor and paste the item you choose.',
+  'setup.statusAllowed': 'Allowed',
+  'setup.statusNotAllowed': 'Not allowed',
+  'setup.openAccessibility': 'Open Privacy Settings',
   'setup.messageTray': 'Notification list',
 
   'updates.description': 'UPaste updates itself from GitHub Releases.',

@@ -24,7 +24,7 @@ export const it: Messages = {
   'notify.relogin':
     'L’estensione GNOME di UPaste è stata aggiornata. Esci e accedi di nuovo per completare.',
   'notify.copiedBody':
-    'Premi Ctrl+V per incollare. Completa la configurazione di UPaste per incollare automaticamente.',
+    'Premi {paste} per incollare. Completa la configurazione di UPaste per incollare automaticamente.',
 
   'tray.settings': 'Impostazioni',
   'tray.quit': 'Esci',
@@ -108,6 +108,18 @@ export const it: Messages = {
   'setup.shortcutRecording': 'Premi la nuova scorciatoia…',
   'setup.shortcutReset': 'Reimposta',
   'setup.shortcutInvalid': 'Usa Super, Ctrl o Alt insieme a una lettera, un numero o un tasto F.',
+  'setup.descriptionWindows': 'Scegli la scorciatoia che apre la cronologia degli appunti.',
+  'setup.descriptionMac':
+    'Consenti a UPaste di funzionare con le altre app e scegli la scorciatoia che apre la cronologia degli appunti.',
+  'setup.shortcutHintWindows':
+    'Win+V apre UPaste al posto della cronologia degli appunti di Windows. Scegli un’altra scorciatoia per restituire Win+V a Windows.',
+  'setup.shortcutInUse': 'Un’altra app usa questa scorciatoia',
+  'setup.accessibility': 'Permesso di accessibilità',
+  'setup.accessibilityHint':
+    'Consente a UPaste di aprire la cronologia in corrispondenza del cursore di testo e di incollare l’elemento scelto.',
+  'setup.statusAllowed': 'Consentito',
+  'setup.statusNotAllowed': 'Non consentito',
+  'setup.openAccessibility': 'Apri impostazioni privacy',
   'setup.messageTray': 'Elenco delle notifiche',
 
   'updates.description': 'UPaste si aggiorna da solo tramite GitHub Releases.',

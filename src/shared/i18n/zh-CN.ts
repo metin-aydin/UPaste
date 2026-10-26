@@ -22,7 +22,7 @@ export const zhCN: Messages = {
 
   'notify.copiedTitle': '已复制到剪贴板',
   'notify.relogin': 'UPaste 的 GNOME 扩展已更新。请注销并重新登录以完成更新。',
-  'notify.copiedBody': '按 Ctrl+V 粘贴。完成 UPaste 配置后即可自动粘贴。',
+  'notify.copiedBody': '按 {paste} 粘贴。完成 UPaste 配置后即可自动粘贴。',
 
   'tray.settings': '设置',
   'tray.quit': '退出',
@@ -99,6 +99,16 @@ export const zhCN: Messages = {
   'setup.shortcutRecording': '请按下新的快捷键…',
   'setup.shortcutReset': '重置',
   'setup.shortcutInvalid': '请将 Super、Ctrl 或 Alt 与字母、数字或 F 键组合使用。',
+  'setup.descriptionWindows': '选择用于打开剪贴板历史记录的快捷键。',
+  'setup.descriptionMac': '允许 UPaste 与其他应用协同工作，并选择用于打开剪贴板历史记录的快捷键。',
+  'setup.shortcutHintWindows':
+    'Win+V 会打开 UPaste，而不是 Windows 剪贴板历史记录。若要将 Win+V 还给 Windows，请选择其他快捷键。',
+  'setup.shortcutInUse': '其他应用正在使用此快捷键',
+  'setup.accessibility': '辅助功能权限',
+  'setup.accessibilityHint': '允许 UPaste 在文本光标处打开历史记录，并粘贴您选择的项目。',
+  'setup.statusAllowed': '已允许',
+  'setup.statusNotAllowed': '未允许',
+  'setup.openAccessibility': '打开隐私设置',
   'setup.messageTray': '通知列表',
 
   'updates.description': 'UPaste 通过 GitHub Releases 自动更新。',

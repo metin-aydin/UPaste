@@ -1,5 +1,6 @@
-// Oturum açılınca başlatma: ~/.config/autostart/upaste.desktop. Yalnız paketlenmiş uygulamada yazılır; AppImage
-// için dosyanın kendisi, .deb için kurulu başlatıcı çalıştırılır. Uygulama tepside gizli açılır (`--hidden`).
+// Oturum açılınca başlatma. Linux'ta ~/.config/autostart/upaste.desktop (yalnız paketlenmiş uygulamada; AppImage için
+// dosyanın kendisi, .deb için kurulu başlatıcı çalıştırılır), Windows'ta ve macOS'ta sistemin oturum öğesi. Uygulama
+// tepside gizli açılır (`--hidden`; macOS'ta oturum öğesi argüman almaz, açılış biçimi sistemden okunur).
 import { app } from 'electron'
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs'
 import { homedir } from 'os'
@@ -18,8 +19,16 @@ function launcher(): string | null {
 
 const quote = (s: string): string => `"${s.replace(/(["`$\\])/g, '\\$1')}"`
 
+/** macOS'ta uygulama oturum açılışında başlatıldı (Windows ve Linux'ta bunu `--hidden` argümanı söyler). */
+export const openedAtLogin = (): boolean =>
+  process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAtLogin
+
 export function applyAutostart(enabled: boolean): void {
   if (process.env['UPASTE_TEST'] === '1' && process.env['UPASTE_TEST_AUTOSTART'] !== '1') return
+  if (process.platform === 'win32' || process.platform === 'darwin') {
+    if (app.isPackaged) app.setLoginItemSettings({ openAtLogin: enabled, args: ['--hidden'] })
+    return
+  }
   const file = autostartFile()
   const exec = launcher()
   if (!enabled || !exec) {

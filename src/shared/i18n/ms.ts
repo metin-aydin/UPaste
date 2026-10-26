@@ -24,7 +24,7 @@ export const ms: Messages = {
   'notify.relogin':
     'Sambungan GNOME UPaste telah dikemas kini. Log keluar dan log masuk semula untuk selesai.',
   'notify.copiedBody':
-    'Tekan Ctrl+V untuk menampal. Lengkapkan persediaan UPaste untuk menampal secara automatik.',
+    'Tekan {paste} untuk menampal. Lengkapkan persediaan UPaste untuk menampal secara automatik.',
 
   'tray.settings': 'Tetapan',
   'tray.quit': 'Keluar',
@@ -107,6 +107,18 @@ export const ms: Messages = {
   'setup.shortcutRecording': 'Tekan pintasan baharu…',
   'setup.shortcutReset': 'Tetap semula',
   'setup.shortcutInvalid': 'Gunakan Super, Ctrl atau Alt bersama huruf, nombor atau kekunci F.',
+  'setup.descriptionWindows': 'Pilih pintasan yang membuka sejarah papan keratan anda.',
+  'setup.descriptionMac':
+    'Benarkan UPaste berfungsi dengan aplikasi lain dan pilih pintasan yang membuka sejarah papan keratan anda.',
+  'setup.shortcutHintWindows':
+    'Win+V membuka UPaste dan bukannya sejarah papan keratan Windows. Pilih pintasan lain untuk mengembalikan Win+V kepada Windows.',
+  'setup.shortcutInUse': 'Aplikasi lain menggunakan pintasan ini',
+  'setup.accessibility': 'Akses kebolehcapaian',
+  'setup.accessibilityHint':
+    'Membolehkan UPaste membuka sejarah pada kursor teks anda dan menampal item yang anda pilih.',
+  'setup.statusAllowed': 'Dibenarkan',
+  'setup.statusNotAllowed': 'Tidak dibenarkan',
+  'setup.openAccessibility': 'Buka tetapan privasi',
   'setup.messageTray': 'Senarai pemberitahuan',
 
   'updates.description': 'UPaste mengemas kini dirinya daripada GitHub Releases.',

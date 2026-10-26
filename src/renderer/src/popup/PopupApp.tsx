@@ -38,7 +38,7 @@ function domKey(e: React.KeyboardEvent): string | null {
 }
 
 export function PopupApp(): React.ReactNode {
-  const { t, locale } = useUi()
+  const { t, locale, platform } = useUi()
   const [items, setItems] = useState<PopupItem[]>([])
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<PopupFilter>('all')
@@ -335,7 +335,7 @@ export function PopupApp(): React.ReactNode {
             {t('popup.paste')}
           </span>
           <span className="flex items-center gap-1">
-            <Kbd>Ctrl P</Kbd>
+            <Kbd>{platform === 'darwin' ? '⌘P' : 'Ctrl P'}</Kbd>
             {t('popup.pin')}
           </span>
           <span className="ms-auto flex items-center gap-1">

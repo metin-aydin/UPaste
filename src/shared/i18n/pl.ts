@@ -24,7 +24,7 @@ export const pl: Messages = {
   'notify.relogin':
     'Rozszerzenie GNOME aplikacji UPaste zostało zaktualizowane. Aby dokończyć, wyloguj się i zaloguj ponownie.',
   'notify.copiedBody':
-    'Naciśnij Ctrl+V, aby wkleić. Dokończ konfigurację UPaste, aby wklejać automatycznie.',
+    'Naciśnij {paste}, aby wkleić. Dokończ konfigurację UPaste, aby wklejać automatycznie.',
 
   'tray.settings': 'Ustawienia',
   'tray.quit': 'Zakończ',
@@ -108,6 +108,18 @@ export const pl: Messages = {
   'setup.shortcutRecording': 'Naciśnij nowy skrót…',
   'setup.shortcutReset': 'Resetuj',
   'setup.shortcutInvalid': 'Użyj Super, Ctrl lub Alt razem z literą, cyfrą lub klawiszem F.',
+  'setup.descriptionWindows': 'Wybierz skrót, który otwiera historię schowka.',
+  'setup.descriptionMac':
+    'Zezwól UPaste na współpracę z innymi aplikacjami i wybierz skrót, który otwiera historię schowka.',
+  'setup.shortcutHintWindows':
+    'Win+V otwiera UPaste zamiast historii schowka systemu Windows. Wybierz inny skrót, aby oddać Win+V systemowi Windows.',
+  'setup.shortcutInUse': 'Inna aplikacja używa tego skrótu',
+  'setup.accessibility': 'Uprawnienia dostępności',
+  'setup.accessibilityHint':
+    'Pozwala UPaste otwierać historię przy kursorze tekstowym i wklejać wybrany element.',
+  'setup.statusAllowed': 'Dozwolone',
+  'setup.statusNotAllowed': 'Niedozwolone',
+  'setup.openAccessibility': 'Otwórz ustawienia prywatności',
   'setup.messageTray': 'Lista powiadomień',
 
   'updates.description': 'UPaste aktualizuje się samodzielnie z GitHub Releases.',

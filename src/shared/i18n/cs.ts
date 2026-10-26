@@ -24,7 +24,7 @@ export const cs: Messages = {
   'notify.relogin':
     'Rozšíření GNOME pro UPaste bylo aktualizováno. Dokončete to odhlášením a opětovným přihlášením.',
   'notify.copiedBody':
-    'Vložte stisknutím Ctrl+V. Pro automatické vkládání dokončete instalaci UPaste.',
+    'Vložte stisknutím {paste}. Pro automatické vkládání dokončete instalaci UPaste.',
 
   'tray.settings': 'Nastavení',
   'tray.quit': 'Ukončit',
@@ -107,6 +107,18 @@ export const cs: Messages = {
   'setup.shortcutReset': 'Obnovit výchozí',
   'setup.shortcutInvalid':
     'Použijte Super, Ctrl nebo Alt spolu s písmenem, číslicí nebo klávesou F.',
+  'setup.descriptionWindows': 'Vyberte klávesovou zkratku, která otevírá historii schránky.',
+  'setup.descriptionMac':
+    'Povolte UPaste spolupracovat s ostatními aplikacemi a vyberte klávesovou zkratku, která otevírá historii schránky.',
+  'setup.shortcutHintWindows':
+    'Win+V otevírá UPaste místo historie schránky Windows. Chcete-li Win+V vrátit systému Windows, vyberte jinou klávesovou zkratku.',
+  'setup.shortcutInUse': 'Tuto zkratku používá jiná aplikace',
+  'setup.accessibility': 'Oprávnění pro zpřístupnění',
+  'setup.accessibilityHint':
+    'Umožňuje UPaste otevírat historii u textového kurzoru a vkládat vybranou položku.',
+  'setup.statusAllowed': 'Povoleno',
+  'setup.statusNotAllowed': 'Nepovoleno',
+  'setup.openAccessibility': 'Otevřít nastavení soukromí',
   'setup.messageTray': 'Seznam oznámení',
 
   'updates.description': 'UPaste se aktualizuje automaticky z GitHub Releases.',

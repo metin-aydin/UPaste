@@ -22,7 +22,7 @@ export const zhTW: Messages = {
 
   'notify.copiedTitle': '已複製到剪貼簿',
   'notify.relogin': 'UPaste 的 GNOME 擴充功能已更新。請登出後再重新登入以完成更新。',
-  'notify.copiedBody': '按 Ctrl+V 即可貼上。完成 UPaste 初始設定後即可自動貼上。',
+  'notify.copiedBody': '按 {paste} 即可貼上。完成 UPaste 初始設定後即可自動貼上。',
 
   'tray.settings': '設定',
   'tray.quit': '結束',
@@ -99,6 +99,16 @@ export const zhTW: Messages = {
   'setup.shortcutRecording': '請按下新的快速鍵…',
   'setup.shortcutReset': '重設',
   'setup.shortcutInvalid': '請將 Super、Ctrl 或 Alt 與字母、數字或 F 鍵搭配使用。',
+  'setup.descriptionWindows': '選擇用來開啟剪貼簿記錄的快速鍵。',
+  'setup.descriptionMac': '允許 UPaste 與其他應用程式搭配運作，並選擇用來開啟剪貼簿記錄的快速鍵。',
+  'setup.shortcutHintWindows':
+    'Win+V 會開啟 UPaste，而不是 Windows 剪貼簿記錄。若要將 Win+V 還給 Windows，請選擇其他快速鍵。',
+  'setup.shortcutInUse': '其他應用程式正在使用此快速鍵',
+  'setup.accessibility': '輔助使用權限',
+  'setup.accessibilityHint': '讓 UPaste 在文字游標處開啟記錄，並貼上您選擇的項目。',
+  'setup.statusAllowed': '已允許',
+  'setup.statusNotAllowed': '未允許',
+  'setup.openAccessibility': '開啟隱私權設定',
   'setup.messageTray': '通知清單',
 
   'updates.description': 'UPaste 會透過 GitHub Releases 自動更新。',

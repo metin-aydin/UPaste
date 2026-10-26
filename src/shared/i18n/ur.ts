@@ -24,7 +24,7 @@ export const ur: Messages = {
   'notify.relogin':
     'UPaste کی GNOME ایکسٹینشن اپ ڈیٹ ہو گئی ہے۔ مکمل کرنے کے لیے لاگ آؤٹ کر کے دوبارہ لاگ اِن کریں۔',
   'notify.copiedBody':
-    'پیسٹ کرنے کے لیے Ctrl+V دبائیں۔ خودکار پیسٹ کے لیے UPaste کا سیٹ اپ مکمل کریں۔',
+    'پیسٹ کرنے کے لیے {paste} دبائیں۔ خودکار پیسٹ کے لیے UPaste کا سیٹ اپ مکمل کریں۔',
 
   'tray.settings': 'ترتیبات',
   'tray.quit': 'باہر نکلیں',
@@ -106,6 +106,18 @@ export const ur: Messages = {
   'setup.shortcutRecording': 'نیا شارٹ کٹ دبائیں…',
   'setup.shortcutReset': 'ری سیٹ کریں',
   'setup.shortcutInvalid': 'Super، Ctrl یا Alt کے ساتھ کوئی حرف، نمبر یا F کلید استعمال کریں۔',
+  'setup.descriptionWindows': 'وہ شارٹ کٹ منتخب کریں جو کلپ بورڈ سرگزشت کھولتا ہے۔',
+  'setup.descriptionMac':
+    'UPaste کو دوسری ایپس کے ساتھ کام کرنے کی اجازت دیں اور وہ شارٹ کٹ منتخب کریں جو کلپ بورڈ سرگزشت کھولتا ہے۔',
+  'setup.shortcutHintWindows':
+    'Win+V، Windows کی کلپ بورڈ سرگزشت کے بجائے UPaste کھولتا ہے۔ Win+V واپس Windows کو دینے کے لیے کوئی دوسرا شارٹ کٹ منتخب کریں۔',
+  'setup.shortcutInUse': 'کوئی دوسری ایپ یہ شارٹ کٹ استعمال کر رہی ہے',
+  'setup.accessibility': 'رسائی پذیری کی اجازت',
+  'setup.accessibilityHint':
+    'UPaste کو آپ کے ٹیکسٹ کرسر پر سرگزشت کھولنے اور آپ کا منتخب کردہ آئٹم پیسٹ کرنے دیتا ہے۔',
+  'setup.statusAllowed': 'اجازت ہے',
+  'setup.statusNotAllowed': 'اجازت نہیں ہے',
+  'setup.openAccessibility': 'رازداری کی ترتیبات کھولیں',
   'setup.messageTray': 'اطلاعات کی فہرست',
 
   'updates.description': 'UPaste خود کو GitHub Releases سے اپ ڈیٹ کرتا ہے۔',

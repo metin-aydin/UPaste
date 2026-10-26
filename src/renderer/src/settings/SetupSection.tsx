@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
+  AccessibilityIcon,
   AlertTriangleIcon,
   CheckCircle2Icon,
   KeyboardIcon,
@@ -8,15 +9,19 @@ import {
   PuzzleIcon,
   RotateCcwIcon
 } from 'lucide-react'
-import { acceleratorFromEvent, acceleratorLabel, acceleratorParts } from '@shared/accelerator'
+import {
+  acceleratorFromEvent,
+  acceleratorLabel,
+  acceleratorParts,
+  defaultShortcut,
+  type DesktopPlatform
+} from '@shared/accelerator'
 import type { IntegrationState } from '@shared/types'
 import { api } from '@/lib/api'
 import { useUi } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, Row, Section, StatusDot } from './parts'
-
-const DEFAULT_SHORTCUT = '<Super>v'
 
 function Keycap({
   children,
@@ -37,12 +42,20 @@ function Keycap({
   )
 }
 
-function Keys({ accel, small }: { accel: string; small?: boolean }): React.ReactNode {
+function Keys({
+  accel,
+  platform,
+  small
+}: {
+  accel: string
+  platform: DesktopPlatform
+  small?: boolean
+}): React.ReactNode {
   return (
     <span className="flex items-center gap-1.5" dir="ltr">
-      {acceleratorParts(accel).map((part, i) => (
+      {acceleratorParts(accel, platform).map((part, i) => (
         <span key={i} className="flex items-center gap-1.5">
-          {i > 0 && <span className="text-muted-foreground">+</span>}
+          {i > 0 && platform !== 'darwin' && <span className="text-muted-foreground">+</span>}
           <Keycap small={small}>{part}</Keycap>
         </span>
       ))}
@@ -68,12 +81,15 @@ function Status({
 /** Kısayol kaydedici: "Değiştir"e basınca bir sonraki tuş birleşimini yeni kısayol olarak alır. */
 function ShortcutRecorder({
   current,
+  platform,
   onDone
 }: {
   current: string
+  platform: DesktopPlatform
   onDone: () => void
 }): React.ReactNode {
   const { t } = useUi()
+  const fallback = defaultShortcut(platform)
   const [recording, setRecording] = useState(false)
   const [invalid, setInvalid] = useState(false)
 
@@ -114,7 +130,7 @@ function ShortcutRecorder({
             {t('setup.shortcutRecording')}
           </span>
         ) : (
-          current && <Keys accel={current} small />
+          current && <Keys accel={current} platform={platform} small />
         )}
         {recording ? (
           <Button variant="ghost" size="sm" onClick={() => setRecording(false)}>
@@ -134,11 +150,11 @@ function ShortcutRecorder({
             {t('setup.shortcutChange')}
           </Button>
         )}
-        {!recording && current !== DEFAULT_SHORTCUT && (
+        {!recording && current !== fallback && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => void api.setShortcut(DEFAULT_SHORTCUT).then(onDone)}
+            onClick={() => void api.setShortcut(fallback).then(onDone)}
           >
             <RotateCcwIcon />
             {t('setup.shortcutReset')}
@@ -182,8 +198,15 @@ export function SetupSection(): React.ReactNode {
   if (!state) return null
   const ext = state.extension
   const working = ext === 'active' || ext === 'outdated'
-  const shortcut = state.shortcut || DEFAULT_SHORTCUT
-  const shortcutText = acceleratorLabel(shortcut)
+  const platform = state.platform
+  const shortcut = state.shortcut || defaultShortcut(platform)
+  const shortcutText = acceleratorLabel(shortcut, platform)
+  const description =
+    platform === 'win32'
+      ? t('setup.descriptionWindows')
+      : platform === 'darwin'
+        ? t('setup.descriptionMac')
+        : t('setup.description')
   const extStatus: Record<
     IntegrationState['extension'],
     [React.ComponentProps<typeof StatusDot>['tone'], string]
@@ -200,7 +223,7 @@ export function SetupSection(): React.ReactNode {
     busy === name ? <Loader2Icon className="animate-spin" /> : null
 
   return (
-    <Section title={t('nav.setup')} description={t('setup.description')}>
+    <Section title={t('nav.setup')} description={description}>
       <div
         data-testid="setup-banner"
         className={cn(
@@ -208,7 +231,7 @@ export function SetupSection(): React.ReactNode {
           state.ready ? 'border-primary/40 bg-primary/8' : 'border-warning/30 bg-warning/8'
         )}
       >
-        <Keys accel={shortcut} />
+        <Keys accel={shortcut} platform={platform} />
         <div className="flex min-w-0 flex-1 items-start gap-2 text-sm">
           {state.ready ? (
             <CheckCircle2Icon className="mt-0.5 size-4 shrink-0 text-brand" />
@@ -216,7 +239,7 @@ export function SetupSection(): React.ReactNode {
             <AlertTriangleIcon className="mt-0.5 size-4 shrink-0 text-warning" />
           )}
           <span>
-            {!state.gnome
+            {platform === 'linux' && !state.gnome
               ? t('setup.notGnome')
               : state.ready
                 ? t('setup.ready', { shortcut: shortcutText })
@@ -225,7 +248,7 @@ export function SetupSection(): React.ReactNode {
         </div>
       </div>
 
-      {state.gnome && (
+      {platform === 'linux' && state.gnome && (
         <Card>
           <Row
             title={
@@ -318,7 +341,58 @@ export function SetupSection(): React.ReactNode {
               </>
             }
           >
-            <ShortcutRecorder current={state.shortcut} onDone={reload} />
+            <ShortcutRecorder current={state.shortcut} platform={platform} onDone={reload} />
+          </Row>
+        </Card>
+      )}
+
+      {platform !== 'linux' && (
+        <Card>
+          {platform === 'darwin' && (
+            <Row
+              title={
+                <span className="flex items-center gap-2">
+                  <AccessibilityIcon className="size-4 text-muted-foreground" />
+                  {t('setup.accessibility')}
+                </span>
+              }
+              hint={t('setup.accessibilityHint')}
+            >
+              <Status tone={state.accessibility ? 'ok' : 'warn'}>
+                {state.accessibility ? t('setup.statusAllowed') : t('setup.statusNotAllowed')}
+              </Status>
+              {!state.accessibility && (
+                <Button
+                  data-testid="request-access"
+                  disabled={!!busy}
+                  onClick={() => void run('access', api.requestAccess)}
+                >
+                  {spinner('access')}
+                  {t('setup.openAccessibility')}
+                </Button>
+              )}
+            </Row>
+          )}
+          <Row
+            title={t('setup.shortcut')}
+            hint={
+              <>
+                <span>
+                  {platform === 'win32' && /<super>/i.test(shortcut)
+                    ? t('setup.shortcutHintWindows')
+                    : t('setup.shortcutHint')}
+                </span>
+                <span className="mt-1.5 flex flex-wrap items-center gap-2">
+                  {state.shortcutInUse ? (
+                    <Status tone="warn">{t('setup.shortcutInUse')}</Status>
+                  ) : state.shortcut ? (
+                    <Status tone="ok">{t('setup.shortcutReady')}</Status>
+                  ) : null}
+                </span>
+              </>
+            }
+          >
+            <ShortcutRecorder current={state.shortcut} platform={platform} onDone={reload} />
           </Row>
         </Card>
       )}
