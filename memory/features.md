@@ -240,3 +240,7 @@ Ek (testte bulundu): pencere, uygulamanın imleci son bildirmesinden sonra taş�
 Eklenti artık bildirim anındaki pencere konumunu saklar ve imleci pencerenin kaydığı kadar kaydırır (`_followWindow`;
 Wayland `_cursorRect` nesnesi aynı bildirimle eşleştirilir). Başsız: imleç (145,516) → pencere (+400,−100) → (545,416). ✓
 Eklenti v9, uygulama 0.1.10.
+16:17 kullanıcı 0.1.10'u kurdu; 0.1.9 süreci açıktı, Claude kapatıp 0.1.10'u debug kipinde başlattı; core-9 canlı.
+16:17:38 0.1.10 masaüstü kısayolundan yeniden başlatıldı (kullanıcı ya da eklenti); Claude'un debug örneği kapandı.
+Günlükte electron-updater `GitHubProvider.getLatestVersion` hatası: depoda henüz sürüm (release) yok; ilk sürüm
+yayımlanınca kaybolur.
