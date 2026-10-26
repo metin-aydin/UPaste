@@ -35,6 +35,8 @@ export interface FocusInfo {
   textInput?: boolean
   /** Metin imlecinin ekran konumu. */
   caret?: Rect
+  /** Kısayolda istenen taze imleç konumu geldi (gelmediyse `caret` uygulamanın son bildirdiğidir). */
+  caretFresh?: boolean
   /** Mutter'ın monitörleri: ekran dikdörtgeni ve paneller/rıhtım düşülmüş çalışma alanı. */
   monitors?: { bounds: Rect; work: Rect }[]
   /** O an klavye odağındaki pencere (GetWindowInfo, API 5; `id` 0: hiçbir pencere). */
@@ -63,6 +65,7 @@ export function parseFocusInfo(raw: unknown): FocusInfo {
     focused: d['focused'] === true,
     textInput: d['textInput'] === true,
     caret: toRect(d['caret']),
+    caretFresh: d['caretFresh'] === undefined ? undefined : d['caretFresh'] === true,
     monitors: Array.isArray(d['monitors'])
       ? (d['monitors'] as number[][])
           .filter((m) => Array.isArray(m) && m.length === 8)

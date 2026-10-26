@@ -207,3 +207,15 @@ erişilebilirlik desteği de yok). Başka imleç kaynağı yok. Çözüm (4. tur
 `knownCaret` (shared/placement.ts) yüksekliği 0 olan ya da pencere dışındaki imleci bilinmiyor sayar; metin alanı
 olsa da imleç bilinmiyorsa alt panel açılır. Yapıştırma Shift+Insert (Sublime'ın Linux tuş haritasında var).
 Birim testleri: 3 yeni imleç testi. Sürüm 0.1.7.
+15:53 kullanıcı 0.1.7'yi kurdu; çalışan 0.1.6 süreci Claude tarafından kapatılıp 0.1.7 debug kipinde başlatıldı
+(günlük geçici klasörde). Sublime'da alt panel denemesi bekleniyor.
+
+### 13. tur (2026-10-26, 15:54–16:00): Sublime'da küçük pencere imleci tam tutturamıyor
+0.1.7 günlüğü: Sublime aslında imleç bildiriyor (`caret` 2×23) ama **eski** konumu: ekran görüntüsündeki gerçek imleç
+2. satırda, bildirilen 1. satırın sonunda (kullanıcının en son yazdığı yer; imleç sonra büyük olasılıkla fareyle
+taşındı). Sublime imleci yalnız tuş işlerken bildiriyor. Çözüm: X11'deki Shift dokunuşu Wayland uygulamalarına da
+uygulandı; Wayland'da yeni konum `Main.inputMethod._cursorRect` nesnesinin değişmesinden anlaşılır (IBus'u beklemeden),
+en çok 60 ms beklenir (X11: 120 ms). GTK4 uygulamaları konumu zaten her değişimde bildirdiği için Shift'e yanıt vermez
+(başsız: `caretFresh:false`, konum doğru) → en çok 60 ms gecikme. Odak bilgisine `caretFresh` eklendi (günlükte
+görünür). Eklenti v7 (API 5 aynı). 0.1.8 paketlendi. Sublime'ın Shift'e yanıt verip vermediği kullanıcının denemesiyle
+anlaşılacak; vermezse Sublime için imleç güvenilmez sayılıp alt panel açılabilir.

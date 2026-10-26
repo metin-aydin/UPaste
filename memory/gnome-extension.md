@@ -54,3 +54,8 @@ yolu, `dbus-update-activation-environment` ile veri yolu hizmetleri iç içe ekr
 yalnız iç içe kabukta güvensiz kipi açar (Eval + Screenshot) ve açılış genel görünümünü kapatır.
 Eval'de `imports.gi.*` çalışır; `ui/main.js` için `import('resource:///org/gnome/shell/ui/main.js')` ile global'e alınır.
 Uygulama iç içe kabukta: `UPASTE_TEST=1 UPASTE_NESTED=1` (gsettings/eklenti adımları yalıtılmış dconf'ta çalışır).
+
+**Taze imleç (v7):** kısayolda odaktaki pencere metin odağındaysa (X11: IBus focus-in; Wayland: `inputMethod.currentFocus`)
+Shift dokunuşu. X11: IBus `set-cursor-location` sayacı (≤120 ms), Wayland: `Main.inputMethod._cursorRect` nesnesi
+değişti mi (≤60 ms; kabuk `vfunc_set_cursor_location`'da nesneyi yeniden oluşturur). Sonuç `caretFresh` olarak
+ShortcutPressed bilgisine eklenir. GTK4 Shift'e yanıt vermez (konumu zaten günceldir).
