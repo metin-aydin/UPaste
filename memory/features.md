@@ -283,3 +283,8 @@ genel git ayarına dokunulmadı), PR #1 açıldı (development → main, sürüm
 bağlandı. Depo açıklaması ve 15 konu etiketi `gh repo edit` ile ayarlandı. CI'ın PR paketleme işine
 `upload-artifact` eklendi: Windows/macOS paketleri yayımlanmadan PR'dan indirilip denenebilir (macOS PR paketi
 imzasız → Gatekeeper uyarır).
+Kullanıcıya verilen gizli değer komutları (imza klasörü `~/Documents/apple-signing`: DeveloperID.p12,
+developerID_application.cer): `base64 -w0 …/DeveloperID.p12 | gh secret set CSC_LINK -R metin-aydin/UPaste`, diğer 4'ü
+`gh secret set <AD> -R metin-aydin/UPaste` (değeri kullanıcı yapıştırır). Team ID: `openssl x509 -inform der -in
+…/developerID_application.cer -noout -subject` (OU). Bekleyen: gizli değerler, PR #1 CI'ı, PR paketleriyle
+Windows/Mac denemesi, birleştirme (= v0.2.0 yayını).
