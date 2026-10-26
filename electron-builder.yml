@@ -17,6 +17,37 @@ files:
 asarUnpack:
   - resources/**
 afterPack: build/after-pack.cjs
+afterSign: build/notarize.cjs
+win:
+  executableName: upaste
+  icon: build/icon.png
+  target:
+    - nsis
+nsis:
+  artifactName: ${productName}-${version}-Setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+# macOS: Apple Silicon ve Intel için dmg (kurulum) ve zip (uygulama içi güncelleme, Squirrel.Mac). Developer ID
+# sertifikası CSC_LINK/CSC_KEY_PASSWORD ortam değişkenlerinden gelir. Apple onayını (notarization) ve damgalamayı
+# build/notarize.cjs yapar (APPLE_ID/APPLE_APP_SPECIFIC_PASSWORD/APPLE_TEAM_ID); electron-builder'ın kendi onayı kapalı.
+# Değerler verilmezse imza ve onay atlanır (yalnız derlemeyi denemek için). Uygulama menü çubuğunda çalışır, Dock'ta
+# görünmez (LSUIElement).
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+  category: public.app-category.utilities
+  icon: build/icon.png
+  hardenedRuntime: true
+  entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
+  extendInfo:
+    LSUIElement: true
+dmg:
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
 linux:
   target:
     - AppImage

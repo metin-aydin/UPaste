@@ -1,7 +1,8 @@
 # main dalına her birleştirmede yeni sürüm yayımlanır: sürüm numarası dev/next-version.mjs ile hesaplanır, Linux
-# paketleri (AppImage, deb) taslak sürüme yüklenir, hepsi bitince sürüm yayımlanır.
+# (AppImage, deb), Windows (kurulum) ve macOS (Apple Silicon ve Intel dmg, zip) paketleri taslak sürüme yüklenir, hepsi
+# bitince sürüm yayımlanır.
 # Sürüm notu birleştirilen PR'ın açıklamasıdır; açıklama boşsa son sürümden bu yana commit başlıkları yazılır.
-# Uygulama içi güncelleme yayımlanmış sürümlerdeki latest-linux.yml dosyasını okur.
+# Uygulama içi güncelleme yayımlanmış sürümlerdeki latest*.yml dosyalarını okur.
 name: Release
 
 on:
@@ -67,7 +68,16 @@ jobs:
 
   build:
     needs: prepare
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: --linux --x64
+          - os: windows-latest
+            platform: --win --x64
+          - os: macos-latest
+            platform: --mac
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -75,13 +85,41 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # koffi yalnız çalıştığı mimarinin yerel modülünü kurar; macOS paketi iki mimari için üretildiği için ikisi de
+      # kurulur.
+      - name: Native modules for both Mac architectures
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          v=$(node -p "require('./node_modules/koffi/package.json').version")
+          npm install --no-save --force "@koromix/koffi-darwin-x64@$v" "@koromix/koffi-darwin-arm64@$v"
       - name: Set version
         run: npm version "${{ needs.prepare.outputs.version }}" --no-git-tag-version --allow-same-version
       - run: npm run build
       - name: Package and upload
+        if: runner.os != 'macOS'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: npx electron-builder --linux --x64 --publish always
+        run: npx electron-builder ${{ matrix.platform }} --publish always
+      # macOS paketi Developer ID ile imzalanır ve Apple onayından geçer; gizli değerler yoksa yayın durur (imzasız
+      # uygulama Gatekeeper'a takılır ve kendini güncelleyemez).
+      - name: Package, sign, notarize and upload (macOS)
+        if: runner.os == 'macOS'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          for name in CSC_LINK CSC_KEY_PASSWORD APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository secret $name is missing; the macOS build cannot be signed."
+              exit 1
+            fi
+          done
+          npx electron-builder ${{ matrix.platform }} --publish always
 
   publish:
     needs: [prepare, build]
