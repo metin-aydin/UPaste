@@ -197,3 +197,13 @@ ayarlar penceresini açtırıp çıkar.
 Başsız kabukta ekran görüntüsüyle doğrulandı (1400x1000; `dev/nested-shell.sh` 3. argümanı monitör boyutu). Bu
 boyutta gerçek DING de çalıştı: masaüstü penceresi odaktayken alt panel 2 sn sonra açık (düzeltme gerçek DING'le de ✓).
 Sürüm 0.1.6 paketlendi.
+15:45 kullanıcı 0.1.6'yı kurdu; kurulum sırasında 0.1.5 debug örneği kapandı, 15:46'da 0.1.6 (debug'sız) başladı
+(kullanıcı ya da Super+V ile eklenti başlattı). 0.1.6'da eklenti değişmedi (v6). Kullanıcının denemesi bekleniyor.
+
+### 12. tur (2026-10-26, 15:49): Sublime Text'te küçük pencere fare imlecinde açılıyor
+Neden: Sublime Text (GTK3, Wayland) metin odağını bildiriyor (`textInput: true`) ama imleç konumunu hiç bildirmiyor;
+giriş yöntemine her zaman pencerenin sol üst köşesinde 0×0 dikdörtgen geliyor (Sublime'ın Linux'ta bilinen eksiği;
+erişilebilirlik desteği de yok). Başka imleç kaynağı yok. Çözüm (4. turdaki "imleç yoksa alt panel" isteğine uygun):
+`knownCaret` (shared/placement.ts) yüksekliği 0 olan ya da pencere dışındaki imleci bilinmiyor sayar; metin alanı
+olsa da imleç bilinmiyorsa alt panel açılır. Yapıştırma Shift+Insert (Sublime'ın Linux tuş haritasında var).
+Birim testleri: 3 yeni imleç testi. Sürüm 0.1.7.

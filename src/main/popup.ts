@@ -9,7 +9,7 @@ import { app, BrowserWindow, Notification, screen } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { IPC, type PopupShown } from '@shared/ipc'
-import { areaFor, insideFrame, placePopup, type Rect } from '@shared/placement'
+import { areaFor, insideFrame, knownCaret, placePopup, type Rect } from '@shared/placement'
 import type { PopupFilter, PopupItem, PopupMode } from '@shared/types'
 import { history } from './history'
 import { watcher } from './clipboard'
@@ -150,7 +150,8 @@ const caretAnchor = (caret: Rect): Rect => ({
  */
 export function anchorFor(info: FocusInfo): Rect {
   const frame = info.frame
-  if (info.caret && (!frame || insideFrame(info.caret, frame))) return caretAnchor(info.caret)
+  const caret = knownCaret(info.caret, frame)
+  if (caret) return caretAnchor(caret)
   const [px, py] = info.pointer
   if (!frame || insideFrame({ x: px, y: py, width: 1, height: 1 }, frame, 0))
     return { x: px, y: py - CARET_LINE / 2, width: 1, height: CARET_LINE }
@@ -240,7 +241,11 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
     const pointer = screen.getCursorScreenPoint()
     const focus: FocusInfo = info ?? { pointer: [pointer.x, pointer.y] }
     const textInput = focus.textInput === true
-    const mode: PopupMode = store.settings.layout === 'sheet' || !textInput ? 'sheet' : 'popup'
+    // Küçük pencere yalnız imlecin yeri biliniyorsa açılır; aksi hâlde (metin alanı yok ya da uygulama imleci
+    // bildirmiyor) ekranın altındaki panel açılır.
+    const caretKnown = knownCaret(focus.caret, focus.frame) !== null
+    const mode: PopupMode =
+      store.settings.layout === 'sheet' || !textInput || !caretKnown ? 'sheet' : 'popup'
     const anchor = anchorFor(focus)
     const areas = focus.monitors?.length ? focus.monitors.map((m) => m.work) : electronAreas()
     target = {
@@ -402,9 +407,10 @@ function startTracking(): void {
       }
       if (t.mode === 'sheet') return
       let anchor = t.anchor
-      if (info.caret && !sameRect(info.caret, t.caret) && insideFrame(info.caret, info.frame)) {
-        t.caret = info.caret
-        anchor = caretAnchor(info.caret)
+      const caret = knownCaret(info.caret, info.frame)
+      if (caret && !sameRect(caret, t.caret)) {
+        t.caret = caret
+        anchor = caretAnchor(caret)
       } else if (t.frame && (info.frame.x !== t.frame.x || info.frame.y !== t.frame.y)) {
         const dx = info.frame.x - t.frame.x
         const dy = info.frame.y - t.frame.y

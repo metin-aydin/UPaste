@@ -72,3 +72,5 @@ metadata:
   `set_content(CLIPBOARD, 'image/png', GLib.Bytes)` (makinede wl-copy/xclip yok).
 - **Panel her açılışta yeniden kurulmamalı** (`key` değiştirmek resimleri yeniden yükletir, açılışta takılma yapar);
   animasyonu baştan oynatmak için `element.getAnimations()` → `cancel()` + `play()`.
+- **İmleç bildirmeyen uygulamalar:** Sublime Text giriş yöntemine 0×0 (pencere köşesi) imleç verir. Geçerli imleç =
+  yüksekliği > 0 ve pencere içinde (`knownCaret`); GTK4 genişliği 0, yüksekliği satır boyu (ör. 34) verir.

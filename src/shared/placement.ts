@@ -92,3 +92,13 @@ export function insideFrame(r: Rect, frame: Rect, slack = 8): boolean {
     r.y + r.height <= frame.y + frame.height + slack
   )
 }
+
+/**
+ * Uygulamanın bildirdiği metin imleci kullanılabiliyorsa onu döndürür. İmleç konumunu hiç bildirmeyen uygulamalar
+ * (ör. Sublime Text) giriş yöntemine pencerenin sol üst köşesinde 0×0 bir dikdörtgen verir; yüksekliği olmayan ya da
+ * pencerenin dışında kalan imleç bilinmiyor sayılır.
+ */
+export function knownCaret(caret: Rect | undefined, frame: Rect | undefined): Rect | null {
+  if (!caret || caret.height <= 0) return null
+  return !frame || insideFrame(caret, frame) ? caret : null
+}
