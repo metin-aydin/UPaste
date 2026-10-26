@@ -58,23 +58,23 @@ export function ItemCard({
           : 'hover:border-primary/40'
       )}
     >
-      <div className="flex h-8 shrink-0 items-center gap-1.5 border-b bg-muted/60 ps-3 pe-1.5 text-[11px] text-muted-foreground">
+      {/* Yazılar büyük harf yüksekliğine kırpılır (`text-box`): simgeyle aynı eksende ortalanırlar. */}
+      <div className="flex h-8 shrink-0 items-center gap-1.5 border-b bg-muted/60 px-3 text-[11px] text-muted-foreground [&>span]:[text-box:trim-both_cap_alphabetic]">
         {item.kind === 'image' ? (
-          <ImageIcon className="size-3.5" />
+          <ImageIcon className="size-3.5 shrink-0" />
         ) : (
-          <TextIcon className="size-3.5" />
+          <TextIcon className="size-3.5 shrink-0" />
         )}
-        <span className="font-medium">
+        {/* Küçük pencerede tür yalnız simgeyle gösterilir. */}
+        <span className={sheet ? 'font-medium' : 'sr-only'}>
           {item.kind === 'image' ? t('popup.image') : t('popup.filterText')}
         </span>
-        {item.pinned && <PinIcon className="size-3 text-brand" aria-label={t('popup.pinned')} />}
+        {item.pinned && (
+          <PinIcon className="size-3 shrink-0 text-brand" aria-label={t('popup.pinned')} />
+        )}
         <span className="ms-auto">{relativeTime(item.createdAt, locale, now)}</span>
-        <div
-          className={cn(
-            'flex gap-0.5 transition-opacity',
-            selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-          )}
-        >
+        {/* İşlemler seçili ya da üzerine gelinen kartta yer kaplar; diğer kartlarda zaman sağ kenara yaslanır. */}
+        <div className={cn('-me-1.5 gap-0.5', selected ? 'flex' : 'hidden group-hover:flex')}>
           <IconButton
             label={item.pinned ? t('popup.unpin') : t('popup.pin')}
             onClick={onPin}
