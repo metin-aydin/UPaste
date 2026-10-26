@@ -52,6 +52,7 @@ export function PopupApp(): React.ReactNode {
   const [openCount, setOpenCount] = useState(0)
   const [now, setNow] = useState(() => Date.now())
   const inputRef = useRef<HTMLInputElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const state = useRef({ query, filter, items, selected, mode })
   useLayoutEffect(() => {
     state.current = { query, filter, items, selected, mode }
@@ -89,6 +90,14 @@ export function PopupApp(): React.ReactNode {
       }),
     []
   )
+
+  // Her açılışta yalnız giriş animasyonu baştan oynatılır; kartlar (ve çözülmüş resimleri) yerinde kalır.
+  useLayoutEffect(() => {
+    for (const animation of panelRef.current?.getAnimations() ?? []) {
+      animation.cancel()
+      animation.play()
+    }
+  }, [openCount])
 
   useEffect(
     () =>
@@ -245,7 +254,7 @@ export function PopupApp(): React.ReactNode {
     return (
       <div className="h-full pt-6" onKeyDown={onKeyDown}>
         <div
-          key={openCount}
+          ref={panelRef}
           className="flex h-full animate-sheet-in flex-col overflow-hidden rounded-t-2xl border-x border-t bg-popover text-popover-foreground shadow-[0_-10px_30px_-12px_rgb(0_0_0/0.35)] dark:border-white/12"
         >
           <div className="flex h-14 shrink-0 items-center gap-4 px-5">
@@ -292,7 +301,7 @@ export function PopupApp(): React.ReactNode {
   return (
     <div className="h-full p-7" onKeyDown={onKeyDown}>
       <div
-        key={openCount}
+        ref={panelRef}
         className={cn(
           'flex h-full flex-col overflow-hidden rounded-xl border bg-popover text-popover-foreground',
           'shadow-[0_10px_24px_-8px_rgb(0_0_0/0.35),0_2px_8px_-2px_rgb(0_0_0/0.12)] dark:border-white/12',
