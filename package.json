@@ -2,7 +2,7 @@
   "name": "upaste",
   "productName": "UPaste",
   "desktopName": "upaste.desktop",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Searchable clipboard history for text and images: press one shortcut in any text field to find and paste what you copied before",
   "main": "./out/main/index.js",
   "author": "metin-aydin",

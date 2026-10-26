@@ -617,11 +617,10 @@ export class UPasteCore {
     })
   }
 
+  // Pencereler doğrudan mutter'dan listelenir: masaüstü simgeleri (DING) gibi eklentiler `global.get_window_actors()`'ı
+  // kendi pencerelerini gizleyecek biçimde değiştirir.
   _windows() {
-    return global
-      .get_window_actors()
-      .map((actor) => actor.meta_window)
-      .filter(Boolean)
+    return global.display.list_all_windows()
   }
 
   _findWindow(id) {

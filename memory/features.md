@@ -164,3 +164,14 @@ kod gönderilince kullanıcıya sorulacak).
 (günlük geçici klasörde). **Canlı eklenti güncellemesi gerçek oturumda doğrulandı:** uygulama
 core-5.js'i koydu, yükleyici oturum yenilemeden yükledi (GetVersion 4 → 5, günlükte `extension 4` → `extension 5`).
 Kullanıcıdan masaüstünde Super+V + dışarı tıklama denemesi bekleniyor.
+
+### 10. tur (2026-10-26, 14:46–14:52): commit + masaüstü kesin çözümü
+1. **Commit:** tüm çalışma `development` dalına tek commit (`9d2a4ac`, gönderilmedi). Öncesinde JumpDesk'teki gibi md
+   dosyaları kişisel ipuçlarından arındırıldı (yerel klasör yolları, monitör koordinatları, kurulu eklenti listesi,
+   geçici günlük yolları genel ifadeyle yazıldı; çalışma tercihleri kaldı). Eski "yalnız Ubuntu" satırı düzeltildi.
+2. **Masaüstü kök neden (0.1.4 günlüğü):** `hide target window gone`. DING `Shell.Global.prototype.get_window_actors`'ı
+   değiştirip kendi masaüstü pencerelerini listeden çıkarıyor (gnomeShellOverride.js `newGetWindowActors`);
+   çekirdeğin `_windows()`'ı bu listeyi kullandığı için hedef DING penceresi hiç bulunamıyordu. Çözüm: pencereler
+   `global.display.list_all_windows()` ile listelenir. Başsız kabukta DING'in değişikliği birebir taklit edildi
+   (bir pencere `get_window_actors`'tan gizlendi): panel açık kalıyor, dışarı tıklama kapatıyor. ✓
+Sürüm 0.1.5 (eklenti v6, API 5 aynı). Kurulunca uygulama core-6'yı koyar, yükleyici canlı yükler.

@@ -64,3 +64,5 @@ metadata:
   ve üstü türler hariç). Başsız kabukta DING sürekli yeniden başlatılıyor; orada denenemez.
 - **Fare düğmesi durumu kabukta okunabilir:** `global.get_pointer()[2]` değiştirici maskesi BUTTON1..3 bitlerini
   (256/512/1024) içerir; istemci pencerelerine giden tıklamalar Clutter sahnesinde görünmediği için yoklama kullanılır.
+- **`global.get_window_actors()` güvenilmez:** DING `Shell.Global.prototype.get_window_actors`'ı değiştirip masaüstü
+  pencerelerini listeden çıkarır (başka eklentiler de yapabilir). Pencere aramak için `global.display.list_all_windows()`.
