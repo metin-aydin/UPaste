@@ -175,3 +175,25 @@ Kullanıcıdan masaüstünde Super+V + dışarı tıklama denemesi bekleniyor.
    `global.display.list_all_windows()` ile listelenir. Başsız kabukta DING'in değişikliği birebir taklit edildi
    (bir pencere `get_window_actors`'tan gizlendi): panel açık kalıyor, dışarı tıklama kapatıyor. ✓
 Sürüm 0.1.5 (eklenti v6, API 5 aynı). Kurulunca uygulama core-6'yı koyar, yükleyici canlı yükler.
+15:34 kullanıcı 0.1.5'i kurdu; Claude uygulamayı debug kipinde yeniden başlattı, uygulama core-6'yı koydu (canlı).
+**Gerçek oturumda doğrulandı:** masaüstünde (hedef DING `gjs`) panel açık kalıyor, yalnız dışarı tıklamayla kapanıyor
+(4/4); Chrome'da metin alanı altında küçük pencere çalışıyor. Masaüstü sorunu kapandı.
+Not: uygulama yeniden başlarken (ad sahibi yokken) Super+V'ye basılırsa eklenti uygulamayı başlatır; ikinci örnek
+ayarlar penceresini açtırıp çıkar.
+
+### 11. tur (2026-10-26, 15:35–15:44): açılışta kasma, kart sonu, ayar başlıkları
+1. **Kasma:** kullanıcı "tüm veri yükleniyor" sandı; ölçüldü: geçmiş küçük (26 öğe, 8 resim, ~640 KB), listeler zaten
+   sanal (yalnız görünen + 4 kart çizilir), tuş yakalama 2–4 ms, kısayol → ilk kare 24–41 ms (başsız). Gerçek neden:
+   her açılışta `key={openCount}` tüm paneli yeniden kuruyordu → tüm küçük resimler yeniden yüklenip çözülüyor,
+   açılış animasyonuyla aynı anda. Çözüm: panel yeniden kurulmaz; açılışta yalnız giriş animasyonu
+   `getAnimations()` ile baştan oynatılır; resimler `decoding="async"`.
+2. **Kart sonu:** küçük penceredeki kart `line-clamp-4` ("…") ile, alt paneldeki saydamlaşarak bitiyordu → ikisi de
+   sığmayan metinde son 32 px'te saydamlaşır (`data-overflow`, yalnız taşan metinde); küçük pencerede en çok 5 satır.
+3. **Ayar başlıkları Title Case** (en, tr): Start at Login / Oturum Açılınca Başlat, Open As / Açılış Biçimi, Next to
+   the Text Field / Metin Alanının Yanında, Bottom Panel / Alt Panel, Keep History For / Geçmişi Saklama Süresi, Disk
+   Usage / Disk Kullanımı, Clear Clipboard History? / Pano Geçmişi Temizlensin mi?, GNOME Shell Extension / GNOME
+   Shell Eklentisi, Check for Updates Automatically / Güncellemeleri Kendiliğinden Denetle. Diğer diller kendi
+   geleneğinde. CLAUDE.md kuralı başlıkları da kapsayacak şekilde genişletildi.
+Başsız kabukta ekran görüntüsüyle doğrulandı (1400x1000; `dev/nested-shell.sh` 3. argümanı monitör boyutu). Bu
+boyutta gerçek DING de çalıştı: masaüstü penceresi odaktayken alt panel 2 sn sonra açık (düzeltme gerçek DING'le de ✓).
+Sürüm 0.1.6 paketlendi.

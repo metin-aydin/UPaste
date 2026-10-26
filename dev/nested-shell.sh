@@ -3,7 +3,7 @@
 # ayarlar (dconf), eklenti klasörü ve önbellekler geçici bir klasördedir, oturum veri yolu ayrıdır, kabuk gerçek ekrana
 # bağlanmaz (sanal monitörler; sanal klavye/fare olayları yalnız bu kabukta kalır). Görüntü Screenshot ile alınır.
 #
-# Kullanım: sh dev/nested-shell.sh [klasör] [monitör sayısı]
+# Kullanım: sh dev/nested-shell.sh [klasör] [monitör sayısı] [monitör boyutu, ör. 1600x1000; varsayılan 960x600]
 # Klasör yolu kısa olmalı: IBus soketi onun altında açılır ve Unix soket yolu 108 karakteri geçemez.
 # Ortam değişkenleri `<klasör>/env` dosyasına yazılır; iç içe kabukta komut çalıştırmak için:
 #   sh -c '. <klasör>/env && gdbus call --session ...'
@@ -20,6 +20,7 @@ esac
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DIR="${1:-${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/upaste-nested}"
 MONITORS="${2:-2}"
+SIZE="${3:-960x600}"
 UUID="upaste@metin-aydin.github.io"
 
 rm -rf "$DIR"
@@ -32,7 +33,7 @@ export XDG_DATA_HOME="$DIR/data"
 export XDG_CACHE_HOME="$DIR/cache"
 export XDG_STATE_HOME="$DIR/state"
 VIRTUAL_MONITORS=""
-for _ in $(seq 1 "$MONITORS"); do VIRTUAL_MONITORS="$VIRTUAL_MONITORS --virtual-monitor 960x600"; done
+for _ in $(seq 1 "$MONITORS"); do VIRTUAL_MONITORS="$VIRTUAL_MONITORS --virtual-monitor $SIZE"; done
 WAYLAND_NAME="upaste-nested-$$"
 
 RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"

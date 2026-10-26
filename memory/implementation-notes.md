@@ -66,3 +66,9 @@ metadata:
   (256/512/1024) içerir; istemci pencerelerine giden tıklamalar Clutter sahnesinde görünmediği için yoklama kullanılır.
 - **`global.get_window_actors()` güvenilmez:** DING `Shell.Global.prototype.get_window_actors`'ı değiştirip masaüstü
   pencerelerini listeden çıkarır (başka eklentiler de yapabilir). Pencere aramak için `global.display.list_all_windows()`.
+- **Başsız kabukta DING:** tek, büyük monitörde (ör. `sh dev/nested-shell.sh <klasör> 1 1400x1000`) Ubuntu oturum
+  kipinin DING'i çalışır ve gerçek `~/Desktop` dosyalarını gösterir (yalnız okur; ayarları yalıtılmış klasörde).
+  960x600 ×2'de sürekli yeniden başlar. Test panosu: kabuk Eval'de `St.Clipboard.get_default().set_text(...)` /
+  `set_content(CLIPBOARD, 'image/png', GLib.Bytes)` (makinede wl-copy/xclip yok).
+- **Panel her açılışta yeniden kurulmamalı** (`key` değiştirmek resimleri yeniden yükletir, açılışta takılma yapar);
+  animasyonu baştan oynatmak için `element.getAnimations()` → `cancel()` + `play()`.
