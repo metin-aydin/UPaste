@@ -226,3 +226,17 @@ kapanıyor, yeniden başlamıyor). Claude 0.1.8'i debug kipinde başlattı; ekle
 Karar: `STALE_CARET_APPS` (shared/placement.ts, şimdilik `sublime_text`) → imleç bilinmiyor → alt panel. Wayland Shift
 dokunuşu geri alındı (Sublime'a yaramadı, diğerlerine 60 ms gecikme ekliyordu); X11 dokunuşu ve `caretFresh` kaldı.
 Eklenti v8, uygulama 0.1.9. Birim testi eklendi. Başka uygulamada imleç kayarsa günlükteki `wmClass` listeye eklenir.
+16:09 kullanıcı 0.1.9'u kurdu (önceki süreç kurulumda kapandı); Claude 0.1.9'u debug kipinde başlattı, core-8 canlı.
+Düzeltme: 0.1.9'u kullanıcı/eklenti 16:09:56'da başlatmıştı (debug'sız); Claude'un ikinci örneği tek örnek kilidine
+takılıp çıktı (çalışan örnekte Ayarlar penceresi açılmış olabilir). Önce `pgrep` ile kontrol edip öyle başlatmalı.
+
+### 14. tur (2026-10-26, 16:11–16:17): kart başlığı
+1. Başlık yazısı simgeyle dikeyde hizalı değildi → başlıktaki yazılar `text-box: trim-both cap alphabetic` ile büyük
+   harf yüksekliğine kırpılıyor (Chromium destekli), `items-center` artık optik olarak ortalıyor. ✓ (3x büyütmeyle)
+2. Zaman sağa yaslı: işlem düğmeleri yalnız seçili ya da üzerine gelinen kartta yer kaplar (`hidden group-hover:flex`),
+   o zaman zaman sola kayar. ✓
+3. Küçük penceredeki kartlarda başlıkta yalnız simge (tür adı `sr-only`); alt panelde ad görünür. ✓
+Ek (testte bulundu): pencere, uygulamanın imleci son bildirmesinden sonra taşınırsa küçük pencere eski yerde açılıyordu.
+Eklenti artık bildirim anındaki pencere konumunu saklar ve imleci pencerenin kaydığı kadar kaydırır (`_followWindow`;
+Wayland `_cursorRect` nesnesi aynı bildirimle eşleştirilir). Başsız: imleç (145,516) → pencere (+400,−100) → (545,416). ✓
+Eklenti v9, uygulama 0.1.10.

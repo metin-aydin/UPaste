@@ -190,9 +190,14 @@ export class UPasteCore {
       this._ibus.connect('focus-out', () => {
         this._ime.focused = false
       }),
+      // Bildirim anındaki pencere konumu da saklanır: pencere sonradan taşınırsa imleç onunla birlikte kaydırılır.
+      // Wayland uygulamalarının konumu kabuğun giriş yöntemine de yazılır; o nesne de aynı bildirimle eşleştirilir.
       this._ibus.connect('set-cursor-location', (_manager, rect) => {
+        const win = global.display.focus_window
         this._ime.caret = this._toStage(rect)
-        this._ime.caretWindow = global.display.focus_window
+        this._ime.caretWindow = win
+        this._ime.caretFrame = win?.get_frame_rect() ?? null
+        this._ime.cursorRect = Main.inputMethod?._cursorRect ?? null
         this._ime.serial++
       })
     ]
@@ -665,7 +670,19 @@ export class UPasteCore {
     let caret = this._ime.caretWindow === win ? this._ime.caret : null
     if (wayland && focused && inputMethod?.currentFocus && inputMethod._cursorRect)
       caret = inputMethod._cursorRect
-    return { textInput, caret: textInput ? caret : null }
+    return { textInput, caret: textInput && caret ? this._followWindow(caret, win) : null }
+  }
+
+  // Bildirilen imleç, bildirimden bu yana pencerenin yer değiştirdiği kadar kaydırılır.
+  _followWindow(caret, win) {
+    const ime = this._ime
+    const reported =
+      ime.caretWindow === win && ime.caretFrame && (caret === ime.caret || caret === ime.cursorRect)
+    if (!reported) return caret
+    const frame = win.get_frame_rect()
+    const dx = frame.x - ime.caretFrame.x
+    const dy = frame.y - ime.caretFrame.y
+    return { x: caret.x + dx, y: caret.y + dy, width: caret.width, height: caret.height }
   }
 
   /** Her monitörün ekran dikdörtgeni ve (paneller, rıhtım düşülmüş) çalışma alanı: [x, y, w, h, wx, wy, ww, wh]. */
