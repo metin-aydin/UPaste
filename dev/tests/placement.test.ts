@@ -65,4 +65,11 @@ test('imleç: pencerenin dışında kalan dikdörtgen bilinmiyor sayılır', () 
   eq(knownCaret({ x: 100, y: 100, width: 0, height: 18 }, frame), null)
 })
 
+test('imleç: konumunu yalnız yazarken bildiren uygulamada bilinmiyor sayılır', () => {
+  const frame = { x: 1920, y: 133, width: 1920, height: 1002 }
+  const caret = { x: 2123, y: 581, width: 2, height: 23 }
+  eq(knownCaret(caret, frame, 'sublime_text'), null)
+  eq(knownCaret(caret, frame, 'google-chrome'), caret)
+})
+
 void run('placement')

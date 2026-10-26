@@ -29,7 +29,6 @@ const GRAB_RETRY_SECONDS = 3
 const FOCUS_WAIT_MS = 600
 const FOCUS_SETTLE_MS = 40
 const CARET_WAIT_MS = 120
-const WAYLAND_CARET_WAIT_MS = 60
 const CLICK_POLL_MS = 20
 const BUTTON_MASK =
   Clutter.ModifierType.BUTTON1_MASK |
@@ -576,29 +575,22 @@ export class UPasteCore {
     })
   }
 
-  // Uygulamaların çoğu imleç konumunu yalnız bir tuş işlerken bildirir; fareyle taşınan imlecin bildirilen konumu bu
-  // yüzden eski kalabilir. Kısayolda zararsız bir Shift dokunuşu gönderilir ve kısa bir süre taze konum beklenir: X11
-  // uygulamaları IBus üzerinden, Wayland uygulamaları kabuğun giriş yöntemine bildirir. Konumu zaten güncel olan
-  // uygulama yeniden bildirmez; bekleme süre dolunca biter. `done(fresh)`: yeni konum geldi mi.
+  // IBus, X11 uygulamalarının imleç konumunu yalnız bir tuş işlenirken iletir; bildirilen son konum bu yüzden bir
+  // tuş geride kalır. Kısayolda zararsız bir Shift dokunuşu gönderilir ve taze konum kısa bir süre beklenir.
+  // `done(fresh)`: yeni konum geldi mi.
   _refreshCaret(win, done) {
-    const inputMethod = Main.inputMethod
-    const wayland = win?.get_client_type() === Meta.WindowClientType.WAYLAND
-    const focused = wayland
-      ? win.has_focus() && inputMethod?.currentFocus != null
-      : !!win && this._ime.focused && this._ime.window === win
-    if (!focused) {
+    const x11 = win?.get_client_type() === Meta.WindowClientType.X11
+    if (!x11 || !this._ime.focused || this._ime.window !== win) {
       done(false)
       return
     }
     const serial = this._ime.serial
-    const rect = inputMethod?._cursorRect
-    const limit = wayland ? WAYLAND_CARET_WAIT_MS : CARET_WAIT_MS
     const start = GLib.get_monotonic_time()
     this._sendKeys([KEY_LEFTSHIFT])
     const check = () => {
-      const fresh = wayland ? inputMethod._cursorRect !== rect : this._ime.serial !== serial
+      const fresh = this._ime.serial !== serial
       const waited = (GLib.get_monotonic_time() - start) / 1000
-      if (fresh || waited > limit) done(fresh)
+      if (fresh || waited > CARET_WAIT_MS) done(fresh)
       else this._later(10, check)
     }
     this._later(10, check)

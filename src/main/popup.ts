@@ -150,7 +150,7 @@ const caretAnchor = (caret: Rect): Rect => ({
  */
 export function anchorFor(info: FocusInfo): Rect {
   const frame = info.frame
-  const caret = knownCaret(info.caret, frame)
+  const caret = knownCaret(info.caret, frame, info.wmClass)
   if (caret) return caretAnchor(caret)
   const [px, py] = info.pointer
   if (!frame || insideFrame({ x: px, y: py, width: 1, height: 1 }, frame, 0))
@@ -243,7 +243,7 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
     const textInput = focus.textInput === true
     // Küçük pencere yalnız imlecin yeri biliniyorsa açılır; aksi hâlde (metin alanı yok ya da uygulama imleci
     // bildirmiyor) ekranın altındaki panel açılır.
-    const caretKnown = knownCaret(focus.caret, focus.frame) !== null
+    const caretKnown = knownCaret(focus.caret, focus.frame, focus.wmClass) !== null
     const mode: PopupMode =
       store.settings.layout === 'sheet' || !textInput || !caretKnown ? 'sheet' : 'popup'
     const anchor = anchorFor(focus)
@@ -407,7 +407,7 @@ function startTracking(): void {
       }
       if (t.mode === 'sheet') return
       let anchor = t.anchor
-      const caret = knownCaret(info.caret, info.frame)
+      const caret = knownCaret(info.caret, info.frame, info.wmClass)
       if (caret && !sameRect(caret, t.caret)) {
         t.caret = caret
         anchor = caretAnchor(caret)

@@ -4,6 +4,6 @@
   "description": "Companion for the UPaste clipboard history app: binds Super+V, reports the focused window, watches the clipboard and pastes the chosen item.",
   "shell-version": ["45", "46", "47", "48", "49", "50"],
   "url": "https://github.com/metin-aydin/UPaste",
-  "version": 7,
+  "version": 8,
   "upaste-api": 5
 }

@@ -94,11 +94,21 @@ export function insideFrame(r: Rect, frame: Rect, slack = 8): boolean {
 }
 
 /**
+ * İmleç konumunu yalnız yazarken bildiren uygulamalar (pencere sınıfı): fareyle taşınan imleci bildirmez, zararsız
+ * bir tuşla da güncellemezler; bildirdikleri konum eski olabileceği için bilinmiyor sayılır.
+ */
+const STALE_CARET_APPS = new Set(['sublime_text'])
+
+/**
  * Uygulamanın bildirdiği metin imleci kullanılabiliyorsa onu döndürür. İmleç konumunu hiç bildirmeyen uygulamalar
  * (ör. Sublime Text) giriş yöntemine pencerenin sol üst köşesinde 0×0 bir dikdörtgen verir; yüksekliği olmayan ya da
  * pencerenin dışında kalan imleç bilinmiyor sayılır.
  */
-export function knownCaret(caret: Rect | undefined, frame: Rect | undefined): Rect | null {
-  if (!caret || caret.height <= 0) return null
+export function knownCaret(
+  caret: Rect | undefined,
+  frame: Rect | undefined,
+  wmClass?: string
+): Rect | null {
+  if (!caret || caret.height <= 0 || STALE_CARET_APPS.has(wmClass ?? '')) return null
   return !frame || insideFrame(caret, frame) ? caret : null
 }

@@ -219,3 +219,10 @@ en çok 60 ms beklenir (X11: 120 ms). GTK4 uygulamaları konumu zaten her deği�
 (başsız: `caretFresh:false`, konum doğru) → en çok 60 ms gecikme. Odak bilgisine `caretFresh` eklendi (günlükte
 görünür). Eklenti v7 (API 5 aynı). 0.1.8 paketlendi. Sublime'ın Shift'e yanıt verip vermediği kullanıcının denemesiyle
 anlaşılacak; vermezse Sublime için imleç güvenilmez sayılıp alt panel açılabilir.
+16:02 kullanıcı 0.1.8'i kurdu; 0.1.7 kurulum sırasında kendiliğinden kapanmıştı (elle apt kurulumunda çalışan süreç
+kapanıyor, yeniden başlamıyor). Claude 0.1.8'i debug kipinde başlattı; eklenti core-7 canlı yüklendi.
+16:04 deneme (0.1.8 günlüğü): Sublime Shift dokunuşuna yanıt vermiyor (`caretFresh:false`), bildirdiği imleç eski kalıyor
+(ekranda imleç 1. satır sonunda, popup birkaç satır aşağıda). Sublime'ın gerçek imlecine dışarıdan ulaşmanın yolu yok.
+Karar: `STALE_CARET_APPS` (shared/placement.ts, şimdilik `sublime_text`) → imleç bilinmiyor → alt panel. Wayland Shift
+dokunuşu geri alındı (Sublime'a yaramadı, diğerlerine 60 ms gecikme ekliyordu); X11 dokunuşu ve `caretFresh` kaldı.
+Eklenti v8, uygulama 0.1.9. Birim testi eklendi. Başka uygulamada imleç kayarsa günlükteki `wmClass` listeye eklenir.

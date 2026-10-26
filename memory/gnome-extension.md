@@ -55,7 +55,7 @@ yalnız iç içe kabukta güvensiz kipi açar (Eval + Screenshot) ve açılış 
 Eval'de `imports.gi.*` çalışır; `ui/main.js` için `import('resource:///org/gnome/shell/ui/main.js')` ile global'e alınır.
 Uygulama iç içe kabukta: `UPASTE_TEST=1 UPASTE_NESTED=1` (gsettings/eklenti adımları yalıtılmış dconf'ta çalışır).
 
-**Taze imleç (v7):** kısayolda odaktaki pencere metin odağındaysa (X11: IBus focus-in; Wayland: `inputMethod.currentFocus`)
-Shift dokunuşu. X11: IBus `set-cursor-location` sayacı (≤120 ms), Wayland: `Main.inputMethod._cursorRect` nesnesi
-değişti mi (≤60 ms; kabuk `vfunc_set_cursor_location`'da nesneyi yeniden oluşturur). Sonuç `caretFresh` olarak
-ShortcutPressed bilgisine eklenir. GTK4 Shift'e yanıt vermez (konumu zaten günceldir).
+**Taze imleç (v8):** kısayolda odaktaki X11 pencere IBus metin odağındaysa Shift dokunuşu, IBus `set-cursor-location`
+sayacı ≤120 ms beklenir; sonuç `caretFresh` olarak ShortcutPressed bilgisine eklenir. Wayland'da denendi (v7,
+`Main.inputMethod._cursorRect` nesnesinin değişimi, ≤60 ms) ama GTK4 konumu zaten güncel tuttuğu, Sublime ise yanıt
+vermediği için geri alındı. Konumu eski kalan uygulamalar `STALE_CARET_APPS` listesinde (uygulama tarafı).
