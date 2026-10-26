@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx eslint .
+      - name: Unit tests (D-Bus tests run against the runner's session bus when available)
+        run: dbus-run-session -- node dev/run-unit-tests.mjs
+      - name: Build
+        run: npx electron-vite build
+
+  # PR'larda Linux paketleri yayımlanmadan üretilir; main'e birleşince yayın akışının paketleme adımı bozulmaz.
+  package:
+    if: github.event_name == 'pull_request'
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Package
+        run: npx electron-builder --linux --x64 --publish never

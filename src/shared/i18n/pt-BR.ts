@@ -1,0 +1,146 @@
+import type { Messages } from './en'
+
+export const ptBR: Messages = {
+  'popup.search': 'Pesquisar no histórico da área de transferência',
+  'popup.filterAll': 'Tudo',
+  'popup.filterText': 'Texto',
+  'popup.filterImages': 'Imagens',
+  'popup.filterPinned': 'Fixados',
+  'popup.emptyTitle': 'Seu histórico da área de transferência está vazio',
+  'popup.emptyBody': 'Copie um texto ou uma imagem e ele aparecerá aqui.',
+  'popup.noResults': 'Nenhum resultado para “{query}”',
+  'popup.noPinned': 'Fixe os itens que você usa com frequência para mantê-los aqui.',
+  'popup.pin': 'Fixar',
+  'popup.unpin': 'Desafixar',
+  'popup.delete': 'Excluir',
+  'popup.pinned': 'Fixado',
+  'popup.image': 'Imagem',
+  'popup.navigate': 'Navegar',
+  'popup.paste': 'Colar',
+  'popup.close': 'Fechar',
+  'popup.settings': 'Configurações',
+
+  'notify.copiedTitle': 'Copiado para a área de transferência',
+  'notify.relogin':
+    'A extensão do GNOME do UPaste foi atualizada. Saia e entre novamente na sessão para concluir.',
+  'notify.copiedBody':
+    'Pressione Ctrl+V para colar. Conclua a configuração do UPaste para colar automaticamente.',
+
+  'tray.settings': 'Configurações',
+  'tray.quit': 'Sair',
+  'tray.update': 'Instalar atualização {version}',
+
+  'settings.title': 'Configurações do UPaste',
+  'nav.general': 'Geral',
+  'nav.history': 'Histórico',
+  'nav.setup': 'Configuração',
+  'nav.updates': 'Atualizações',
+  'nav.about': 'Sobre',
+
+  'general.description': 'Idioma, aparência e inicialização.',
+  'general.language': 'Idioma',
+  'general.languageHint':
+    'Usado na janela da área de transferência, nas configurações e no menu da bandeja do sistema.',
+  'general.systemLanguage': 'Padrão do sistema ({language})',
+  'general.theme': 'Aparência',
+  'general.themeSystem': 'Sistema',
+  'general.themeLight': 'Claro',
+  'general.themeDark': 'Escuro',
+  'general.launchAtLogin': 'Iniciar ao fazer login',
+  'general.launchAtLoginHint':
+    'O UPaste fica na bandeja do sistema e registra tudo o que você copia.',
+  'general.layout': 'Abrir como',
+  'general.layoutHint': 'Onde o histórico aparece quando você pressiona o atalho.',
+  'general.layoutAuto': 'Ao lado do campo de texto',
+  'general.layoutAutoHint':
+    'Uma janela pequena abaixo do campo de texto em que você está digitando; nos demais casos, um painel na parte inferior da tela.',
+  'general.layoutSheet': 'Painel inferior',
+  'general.layoutSheetHint':
+    'Sempre um painel na parte inferior da tela, com os itens lado a lado.',
+
+  'history.description': 'O que o UPaste guarda e por quanto tempo.',
+  'history.items': 'Itens',
+  'history.images': 'Imagens',
+  'history.pinned': 'Fixados',
+  'history.disk': 'Uso de disco',
+  'history.keepFor': 'Manter o histórico',
+  'history.keepForHint':
+    'Itens mais antigos são excluídos automaticamente. Itens fixados são sempre mantidos.',
+  'history.forever': 'Para sempre',
+  'history.days': 'dias',
+  'history.privacy':
+    'Seu histórico nunca sai deste computador. Senhas copiadas de gerenciadores de senhas não são salvas.',
+  'history.clear': 'Limpar histórico',
+  'history.clearHint': 'Exclui todos os itens do histórico da área de transferência.',
+  'history.clearTitle': 'Limpar o histórico da área de transferência?',
+  'history.clearBody': 'Esta ação não pode ser desfeita.',
+  'history.clearPinned': 'Excluir também os itens fixados',
+  'history.cancel': 'Cancelar',
+  'history.confirmClear': 'Limpar',
+  'history.cleared': 'Histórico da área de transferência limpo',
+
+  'setup.description':
+    'Conecte o UPaste ao GNOME para que seu atalho abra o histórico logo abaixo do campo de texto em que você está digitando.',
+  'setup.ready': 'Tudo pronto. Pressione {shortcut} em qualquer campo de texto.',
+  'setup.notReady': 'Conclua as etapas abaixo para usar {shortcut}.',
+  'setup.notGnome':
+    'No Linux, o UPaste precisa do ambiente GNOME. Seu ambiente não foi reconhecido.',
+  'setup.extension': 'Extensão do GNOME Shell',
+  'setup.extensionHint':
+    'Posiciona a janela no seu campo de texto, monitora a área de transferência e cola o item escolhido.',
+  'setup.install': 'Instalar',
+  'setup.update': 'Atualizar',
+  'setup.enable': 'Ativar',
+  'setup.logout': 'Encerrar sessão',
+  'setup.statusActive': 'Ativa',
+  'setup.statusRelogin': 'Encerre a sessão e entre novamente para concluir',
+  'setup.statusDisabled': 'Desativada',
+  'setup.statusError': 'Falha ao carregar',
+  'setup.statusMissing': 'Não instalada',
+  'setup.shortcut': 'Atalho',
+  'setup.shortcutHint': 'Abre o histórico da área de transferência.',
+  'setup.shortcutReady': 'Atribuído ao UPaste',
+  'setup.shortcutTaken': 'Usado por {names}',
+  'setup.shortcutWaiting': 'Aguardando a extensão',
+  'setup.takeOver': 'Usar no UPaste',
+  'setup.restore': 'Restaurar anterior',
+  'setup.restored': 'Seu atalho anterior foi restaurado.',
+  'setup.shortcutChange': 'Alterar',
+  'setup.shortcutRecording': 'Pressione o novo atalho…',
+  'setup.shortcutReset': 'Redefinir',
+  'setup.shortcutInvalid': 'Use Super, Ctrl ou Alt junto com uma letra, um número ou uma tecla F.',
+  'setup.messageTray': 'Lista de notificações',
+
+  'updates.description': 'O UPaste se atualiza sozinho pelo GitHub Releases.',
+  'updates.version': 'Versão {version}',
+  'updates.check': 'Verificar atualizações',
+  'updates.checking': 'Verificando…',
+  'updates.upToDate': 'O UPaste está atualizado.',
+  'updates.available': 'A versão {version} está disponível.',
+  'updates.download': 'Baixar e instalar',
+  'updates.downloading': 'Baixando… {percent}%',
+  'updates.downloaded': 'A versão {version} está pronta para ser instalada.',
+  'updates.install': 'Reiniciar e instalar',
+  'updates.installing': 'Instalando… Digite sua senha se ela for solicitada.',
+  'updates.openPage': 'Abrir página de download',
+  'updates.notes': 'Notas da versão',
+  'updates.failed': 'Falha na atualização: {message}',
+  'updates.lastChecked': 'Última verificação: {time}',
+  'updates.auto': 'Verificar atualizações automaticamente',
+  'updates.autoHint':
+    'Verifica logo após a inicialização e a cada 6 horas. Nada é baixado sem perguntar.',
+  'updates.manualOnly':
+    'Esta cópia não pode se atualizar sozinha; novas versões são abertas na página de download.',
+  'updates.passwordClosed': 'A janela de senha foi fechada. A atualização não foi instalada.',
+  'updates.noAdmin':
+    'Não foi possível obter permissões de administrador. A atualização não foi instalada.',
+  'updates.noNewPrivs':
+    'O UPaste não pode solicitar permissões de administrador nesta sessão. Feche o UPaste pelo menu da bandeja do sistema, abra-o novamente e tente outra vez.',
+  'updates.installFailed': 'Não foi possível instalar a atualização (código de saída {code}).',
+  'updates.startFailed': 'Não foi possível iniciar o instalador: {message}',
+
+  'about.tagline': 'Histórico da área de transferência pesquisável para textos e imagens.',
+  'about.source': 'Código-fonte',
+  'about.issues': 'Relatar um problema',
+  'about.license': 'Distribuído sob a licença MIT.'
+}

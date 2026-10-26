@@ -1,0 +1,50 @@
+appId: io.github.metin-aydin.upaste
+productName: UPaste
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,.editorconfig,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Geliştirme dosyaları, hafıza notları ve yerel eklenti günlükleri pakete girmez.
+  - '!{.remember,memory,dev,docs,dist,.github}{,/**/*}'
+  - '!{CLAUDE.md,LICENSE,components.json,*.tsbuildinfo}'
+  - '!resources/tray/*.svg'
+# GNOME Shell eklentisi kullanıcının eklenti klasörüne kopyalanır; tepsi simgeleri dosyadan okunur.
+asarUnpack:
+  - resources/**
+afterPack: build/after-pack.cjs
+linux:
+  target:
+    - AppImage
+    - deb
+  executableName: upaste
+  maintainer: metin-aydin
+  synopsis: Searchable clipboard history for text and images (Super+V)
+  description: >-
+    UPaste keeps everything you copy, text and images, and opens a searchable clipboard history right under the text
+    field you are typing in when you press Super+V, just like Windows. Built for GNOME on Wayland and X11.
+  category: Utility
+  icon: build/icons
+  syncDesktopName: true
+  desktop:
+    entry:
+      Name: UPaste
+      Comment: Clipboard history (Super+V)
+      Keywords: clipboard;paste;copy;history;super+v;
+appImage:
+  artifactName: ${productName}-${version}.${ext}
+deb:
+  artifactName: ${name}_${version}_${arch}.${ext}
+  appArmorProfile: build/apparmor-profile.tpl
+npmRebuild: false
+# Sürüm dosyaları GitHub Releases'a yüklenir (yalnız --publish verilince): release iş akışı taslak sürümü önceden açar,
+# paketler ona eklenir, iş akışının son adımı yayımlar. Uygulama içi güncelleme aynı depoyu okur (src/main/updater.ts).
+publish:
+  provider: github
+  owner: metin-aydin
+  repo: UPaste
+  releaseType: draft
