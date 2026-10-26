@@ -1,5 +1,6 @@
 // Geçmiş öğesinin kartı: üstte tür, zaman ve işlemler; ortada metin ya da resim; altta uzunluk ya da boyut. Küçük
 // pencerede kartlar alt alta, alt panelde yan yana dizilir.
+import { useLayoutEffect, useRef } from 'react'
 import { ImageIcon, PinIcon, PinOffIcon, TextIcon, Trash2Icon } from 'lucide-react'
 import type { PopupItem } from '@shared/types'
 import { formatBytes, formatNumber, relativeTime } from '@/lib/format'
@@ -34,6 +35,12 @@ export function ItemCard({
   t
 }: ItemCardProps): React.ReactNode {
   const sheet = variant === 'sheet'
+  const textRef = useRef<HTMLParagraphElement>(null)
+  // Sığmayan metnin sonu alta doğru saydamlaşarak kesilir; sığan metin olduğu gibi görünür.
+  useLayoutEffect(() => {
+    const el = textRef.current
+    if (el) el.dataset.overflow = String(el.scrollHeight > el.clientHeight + 1)
+  }, [item.preview, variant])
   return (
     <div
       role="option"
@@ -90,6 +97,7 @@ export function ItemCard({
             src={item.image.thumb}
             alt={t('popup.image')}
             draggable={false}
+            decoding="async"
             className={cn(
               'rounded-md bg-[repeating-conic-gradient(var(--muted)_0_25%,transparent_0_50%)] bg-size-[12px_12px] object-contain',
               sheet ? 'size-full' : 'max-h-32 max-w-full'
@@ -97,12 +105,12 @@ export function ItemCard({
           />
         ) : (
           <p
+            ref={textRef}
             dir="auto"
             className={cn(
-              'text-[12.5px] leading-[18px] break-words whitespace-pre-wrap',
-              sheet
-                ? 'h-full overflow-hidden [mask-image:linear-gradient(to_bottom,black_80%,transparent)]'
-                : 'line-clamp-4'
+              'overflow-hidden text-[12.5px] leading-[18px] break-words whitespace-pre-wrap',
+              'data-[overflow=true]:[mask-image:linear-gradient(to_bottom,black_calc(100%-32px),transparent)]',
+              sheet ? 'h-full' : 'max-h-[90px]'
             )}
           >
             <Highlighted text={item.preview ?? ''} ranges={item.ranges} />
