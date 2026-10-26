@@ -37,8 +37,10 @@ yayımlanır (`.github/workflows/release.yml`) ve dal silinir. Sonraki tur:
 
 ## ⛔ KURAL: Arayüz metinlerinde her kelimenin baş harfi büyük
 
-Menü öğeleri, düğmeler ve araç ipuçları (`title`) Türkçede her kelimesinin baş harfi büyük yazılır
-("Geçmişi Temizle", "Ayarları Aç"); diğer dillerde o dilin düğme yazım geleneği izlenir (İngilizce Title Case).
+Menü öğeleri, düğmeler, araç ipuçları (`title`) ve ayar başlıkları (bölüm, kart, satır ve seçenek kartı başlıkları,
+iletişim kutusu başlığı) Türkçede her kelimesinin baş harfi büyük yazılır ("Geçmişi Temizle", "Oturum Açılınca
+Başlat"; "ve", "ile", "mi" gibi bağlaç ve ekler küçük); diğer dillerde o dilin yazım geleneği izlenir (İngilizce Title
+Case). Açıklama ve ipucu cümleleri normal yazılır.
 Kullanıcı verisi (kopyalanan metin) olduğu gibi kalır.
 
 ## Geliştirme komutları
