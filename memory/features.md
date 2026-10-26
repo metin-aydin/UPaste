@@ -244,3 +244,37 @@ Eklenti v9, uygulama 0.1.10.
 16:17:38 0.1.10 masaüstü kısayolundan yeniden başlatıldı (kullanıcı ya da eklenti); Claude'un debug örneği kapandı.
 Günlükte electron-updater `GitHubProvider.getLatestVersion` hatası: depoda henüz sürüm (release) yok; ilk sürüm
 yayımlanınca kaybolur.
+
+### 15. tur (2026-10-26, 16:21–16:50): Windows + macOS, imzalama, GitHub Actions sürümü, README
+İstek: her şeyi commit'le; Windows ve macOS'u tamamla; macOS imzalamayı JumpDesk'teki gibi kurdur; GitHub Actions ile
+sürüm; GitHub sayfası (açıklama, README).
+1. Platform katmanı (`src/main/platform/`): `DesktopBridge` (geçmiş penceresinin köprüsü) + `Integration` (Kurulum
+   bölümü). Linux: köprü `shell.ts`, bütünleşme `LinuxIntegration` (gnome.ts'i sarar; eklenti izleme index.ts'ten
+   taşındı). Windows/macOS: `NativeDesktop` tabanlı `WindowsDesktop`, `MacDesktop` (ikisi birden). Linux davranışı
+   değişmedi: başsız kabukta Super+V → küçük pencere → Enter → zenity'ye "Merhaba UPaste" yapıştı. ✓
+2. Windows (koffi, `win32-api.ts`): Win'li kısayol alt düzey klavye kancasıyla (WH_KEYBOARD_LL) alınır, tuş yutulur ve
+   Başlat menüsü açılmasın diye 0xFF maske tuşu gönderilir; diğer kısayollar globalShortcut. İmleç: GetGUIThreadInfo
+   (sistem imleci) → yoksa MSAA OBJID_CARET (IAccessible::accLocation, sanal tablo 22. yuva). Çerçeve DWM extended
+   frame bounds; fiziksel piksel → `screen.screenToDipRect`. Yapıştırma: SetForegroundWindow + Ctrl+V (SendInput).
+   Pano: GetClipboardSequenceNumber 300 ms yoklama. Pencere `type: 'toolbar'`, odak alır (focusMode), dışarı tıklama
+   = blur → kapanır.
+3. macOS (koffi, `darwin-api.ts`): kısayol globalShortcut (varsayılan ⌘⇧V = `<Super><Shift>v`). AX: odaktaki uygulama
+   (pid), pencere (AXPosition/AXSize), eleman, AXSelectedTextRange → AXBoundsForRange (boşsa önceki karakterin sağ
+   kenarı); Chromium/Electron uygulamalarına AXManualAccessibility=true. Yapıştırma: NSRunningApplication
+   activateWithOptions + CGEvent ⌘V. Pano: NSPasteboard changeCount. Erişilebilirlik izni yoksa alt panel + yalnız
+   kopyalama; Kurulum'da izin satırı ve "Gizlilik Ayarlarını Aç". Dock gizli (LSUIElement + app.dock.hide), menü
+   çubuğunda şablon simge (`resources/tray/trayTemplate*.png`), pencere `type: 'panel'`, `app.focus({steal})`.
+4. Ortak: kısayol biçimi GTK (`<Super>v`), `electronAccelerator`, `windowsVirtualKey`, platforma göre etiket (Win+V,
+   ⇧⌘V), `defaultShortcut(platform)`; IntegrationState'e `platform`, `accessibility`, `shortcutInUse`; UiInfo'ya
+   `platform`; Kurulum bölümü platforma göre; ⌘P ipucu; `notify.copiedBody` `{paste}`; 9 yeni çeviri anahtarı
+   (33 dil; 31'ini alt ajan çevirdi, denetimler geçti). Otomatik başlatma Windows/macOS'ta `setLoginItemSettings`,
+   macOS'ta oturumla açılış `wasOpenedAtLogin`. Güncelleyici: NSIS ve Mac (JumpDesk'ten). Pano gizli biçimleri:
+   Windows ExcludeClipboardContentFromMonitorProcessing, macOS org.nspasteboard.Concealed/TransientType.
+5. Paketleme: electron-builder `win` (nsis), `mac` (dmg+zip, arm64+x64, hardenedRuntime, entitlements, LSUIElement,
+   `afterSign: build/notarize.cjs` JumpDesk'ten). CI: `native` işi (windows/macos birim testleri, yerel API yükleme
+   denemesi), PR'da 3 platform paketleme (macOS imzasız, iki mimari koffi modülü denetimi). Release: 3 platform matrisi,
+   macOS gizli değerler yoksa durur. macOS'ta koffi'nin iki mimari modülü `npm install --no-save --force` ile kurulur.
+6. README (İngilizce, ekran görüntüleri `docs/images/`: başsız kabukta, DING kapalı, örnek veriyle).
+7. Sürüm 0.2.0 (`dist/upaste_0.2.0_amd64.deb`). Windows/macOS gerçek makinede denenmedi (yalnız tür denetimi, yapı
+   boyutu testleri; CI'da yükleme denemesi). Bekleyen: kullanıcı UPaste deposuna 5 gizli değeri ekler, push + PR,
+   CI sonucu, birleştirme (= ilk sürüm).

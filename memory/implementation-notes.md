@@ -74,3 +74,17 @@ metadata:
   animasyonu baştan oynatmak için `element.getAnimations()` → `cancel()` + `play()`.
 - **İmleç bildirmeyen uygulamalar:** Sublime Text giriş yöntemine 0×0 (pencere köşesi) imleç verir. Geçerli imleç =
   yüksekliği > 0 ve pencere içinde (`knownCaret`); GTK4 genişliği 0, yüksekliği satır boyu (ör. 34) verir.
+- **koffi 3:** platform modülü isteğe bağlı bağımlılık (`@koromix/koffi-<os>-<arch>`); npm yalnız çalıştığı
+  mimariyinkini kurar → macOS'ta iki mimari paket için CI'da `npm install --no-save --force` ile ikisi de kurulur.
+  `.node` dosyaları electron-builder'ın akıllı açmasıyla `app.asar.unpacked`'a çıkar (deb'de doğrulandı).
+  Geri çağrıda işaretçi argümanı BigInt adres gelir → `koffi.decode(adres, YAPI)`. `_Inout_` yapı nesnesi çağrıdan
+  sonra yerinde güncellenir; tek öğeli dizi (`[0]`, `[null]`) çıktı parametresi. Dışa aktarılan değişken:
+  `koffi.decode(lib.symbol('kCFBooleanTrue'), 'void *')`. COM yöntemi: sanal tabloyu `koffi.decode(nesne, 'void *')`,
+  yuvaları `koffi.array('void *', n)` ile okuyup `koffi.call(yuva, proto, ...)`. Aynı sembol farklı imzalarla birden
+  çok kez tanımlanabilir (objc_msgSend). Birim testi paketinde koffi dış modül; paket çıktısı depo içindeki
+  `node_modules/.cache` altında (yoksa koffi bulunamaz).
+- **Windows yapı boyutları (64 bit):** INPUT 40 (birleşim 8. bayttan), GUITHREADINFO 72, KBDLLHOOKSTRUCT 24,
+  VARIANT 24 (8 bayt hizalı), GUID 16. macOS: CGRect 32, CFRange 16.
+- **README ekran görüntüsü:** başsız kabukta `gsettings set org.gnome.shell disabled-extensions "['ding@rastersoft.com']"`
+  (yoksa gerçek ~/Desktop dosyaları görünür), LANG=en_US, gnome-text-editor `-s`; başlıktaki dosya yolu kırpılır;
+  kırpma kabukta GdkPixbuf ile (`new_subpixbuf().savev`).

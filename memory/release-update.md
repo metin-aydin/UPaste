@@ -22,3 +22,10 @@ Kaynak: JumpDesk deposunun yerel kopyası (CLAUDE.md, `src/main/updater.ts`, `.g
 dosyaları kopyalar (`refreshInstalledExtension`). Kabukta yükleyicili eklenti (API ≥ 4) varsa yeni çekirdek
 canlı yüklenir, uygulama 1,5 sn sonra sürümü yeniden sorar. Yükleyicisiz eski eklentide bildirim + bir oturum yenilemesi.
 Böylece "iki kez oturum yenileme" sorunu API 4 sonrası için kapandı.
+
+**Üç platform (15. tur):** release.yml build matrisi ubuntu (AppImage, deb), windows (NSIS `UPaste-<v>-Setup.exe`,
+imzasız → SmartScreen uyarısı), macos (dmg + zip, arm64 + x64, Developer ID + Apple onayı). macOS gizli değerleri
+JumpDesk'teki 5 değerin aynısı (`CSC_LINK` base64 .p12, `CSC_KEY_PASSWORD`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`,
+`APPLE_TEAM_ID`); sertifika ve .p12 kullanıcının `~/Documents/apple-signing` klasöründe (JumpDesk hafızası). Değerleri
+kullanıcı `gh secret set ... -R metin-aydin/UPaste` ile ekler (Claude parola görmez). Güncelleyici NsisUpdater ve
+MacUpdater (macOS'ta `app-update.yml` varsa).

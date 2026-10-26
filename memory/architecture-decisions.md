@@ -46,3 +46,10 @@ metadata:
     pencere kipine düştü (alt panel rıhtımın altında, ekran dibinde değil). Çözüm: sabit yükleyici `extension.js` +
     sürüm numaralı çekirdek `core-N.js`, klasör izlenir, yeni çekirdek canlı yüklenir (gnome-extension.md). Eklenti
     yükleyicisizse (API < 4) uygulama açılışta "Oturumu kapatıp açın" bildirimi gösterir (tıklayınca Kurulum).
+11. **Platform katmanı (15. tur, 2026-10-26):** `src/main/platform/` — `DesktopBridge` (popup.ts'in kullandığı tek
+    arayüz: odak/imleç, yapıştırma, odaksız katman işlemleri) ve `Integration` (Kurulum bölümü + açılış). Windows ve
+    macOS'ta geçmiş penceresi odağı alır (GNOME'daki eski eklenti yedek yolu "focusMode"), tuşları kendisi işler;
+    odaksız katman yalnız GNOME'da. Yerel API'ler koffi ile (derleme gerektirmez, her platformun hazır ikilisi);
+    `win32-api.ts`/`darwin-api.ts` yalnız kendi sisteminde `await import` ile yüklenir (electron-vite ayrı parça
+    üretir). Yapı tanımları ayrı dosyada (`*-types.ts`), boyutları her platformda birim testinde denetlenir.
+    Windows'ta Win+V Explorer'a ayrılmış olduğu için alt düzey klavye kancası; macOS varsayılanı ⌘⇧V (⌘V yapıştırma).
