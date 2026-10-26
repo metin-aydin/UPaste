@@ -71,6 +71,18 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npx electron-builder ${{ matrix.platform }} --publish never
+      # Sürüm yayımlanmadan önce paketler gerçek makinelerde denenebilsin diye PR'ın derleme çıktısına eklenir.
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: upaste-${{ runner.os }}
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.exe
+            dist/*.dmg
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Native module in the package (macOS, both architectures)
         if: runner.os == 'macOS'
         shell: bash

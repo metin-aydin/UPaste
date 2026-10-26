@@ -278,3 +278,8 @@ sürüm; GitHub sayfası (açıklama, README).
 7. Sürüm 0.2.0 (`dist/upaste_0.2.0_amd64.deb`). Windows/macOS gerçek makinede denenmedi (yalnız tür denetimi, yapı
    boyutu testleri; CI'da yükleme denemesi). Bekleyen: kullanıcı UPaste deposuna 5 gizli değeri ekler, push + PR,
    CI sonucu, birleştirme (= ilk sürüm).
+16:50 `development` GitHub'a gönderildi (git kimliği: `git -c credential.helper='!gh auth git-credential' push`;
+genel git ayarına dokunulmadı), PR #1 açıldı (development → main, sürüm notu açıklamada), uygulamanın PR çubuğuna
+bağlandı. Depo açıklaması ve 15 konu etiketi `gh repo edit` ile ayarlandı. CI'ın PR paketleme işine
+`upload-artifact` eklendi: Windows/macOS paketleri yayımlanmadan PR'dan indirilip denenebilir (macOS PR paketi
+imzasız → Gatekeeper uyarır).
