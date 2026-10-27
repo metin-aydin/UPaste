@@ -12,10 +12,9 @@ const check = (name, actual, expected) => {
   )
 }
 
-const template = fs.readFileSync(
-  path.join(import.meta.dirname, '../.github/pull_request_template.md'),
-  'utf8'
-)
+const template = fs
+  .readFileSync(path.join(import.meta.dirname, '../.github/pull_request_template.md'), 'utf8')
+  .replace(/\r\n/g, '\n')
 check('untouched template is empty', cleanNotes(template), '')
 check(
   'filled section kept, empty ones dropped',

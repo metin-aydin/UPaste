@@ -1,0 +1,2 @@
+# Kaynaklar her işletim sisteminde LF satır sonuyla açılır (Windows'taki CI dahil).
+* text=auto eol=lf
