@@ -307,3 +307,8 @@ yazılmaz). Bekleyen: kullanıcı PR paketlerini Windows/Mac'te dener (isteğe b
 depoda): dal korumaları, `v*` etiket kural kümesi, Actions kısıtları, `release` ortamı (yalnız korunan dallar),
 `delete_branch_on_merge` kapalı (development kalıcı), release.yml `environment: release`, CI salt okunur. Ayrıntı:
 release-update.md "Depo koruması". Gizli değerlerin ortama taşınması kullanıcı girişi ister (değerler geri okunamaz).
+JumpDesk: aynı ayarlar uygulandı, iş akışı/kural değişikliği `development`'a gönderildi, PR metin-aydin/JumpDesk#17
+açıldı (birleşince JumpDesk sürümü çıkar; zamanı kullanıcıda). Gizli değerleri ortama taşımak için kullanıcıya betik
+verildi (scratchpad `release-secrets.sh`: Team ID ve .p12 dosyadan, Apple ID/.p12 şifresi/uygulamaya özel parola bir kez
+sorulur, iki depoya `gh secret set --env release`). Sonra: UPaste depo düzeyi 5 gizli değer silinir; JumpDesk'inkiler
+PR #17 birleşince silinir.
