@@ -295,3 +295,6 @@ yalnız release-notes testi (CRLF); yerel API testi Windows'ta da geçti. Düzel
 CSC_LINK ve CSC_KEY_PASSWORD yeniden yazıldı (05:34–05:35Z). JumpDesk eski .p12/parolayla çalışmaya devam eder.
 Kalan gizli değerler: APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID. PR CI: 6 geçti, 3 sürüyor, 0 hata.
 08:35 yeni .p12 (4213 bayt, 08:34:47) CSC_LINK'ten önce oluştu ✓; APPLE_ID eklendi. Kalan: APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID.
+08:40 APPLE_APP_SPECIFIC_PASSWORD eklendi (kullanıcı account.apple.com'da yenisini oluşturdu; JumpDesk'inki hatırlanmadı).
+Kalan: APPLE_TEAM_ID. PR #1 CI tamamen yeşil (9 ✓): üç platform paketlendi, macOS'ta iki mimari koffi modülü pakette;
+PR çıktıları upaste-Linux (217 MB), upaste-macOS (256 MB), upaste-Windows (116 MB), 14 gün saklanır.
