@@ -66,8 +66,10 @@ jobs:
           gh release create "v$VERSION" --draft --target "$GITHUB_SHA" \
             --title "UPaste $VERSION" --notes-file "$RUNNER_TEMP/notes.md"
 
+  # İmza gizli değerleri `release` ortamındadır; ortam yalnız korunan dallardan (main) çalıştırılabilir.
   build:
     needs: prepare
+    environment: release
     strategy:
       matrix:
         include:

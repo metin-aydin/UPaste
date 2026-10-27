@@ -5,6 +5,10 @@ on:
     branches: [main, development]
   pull_request:
 
+# CI yalnız okur; gizli değer ve yazma yetkisi kullanmaz.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest

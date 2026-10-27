@@ -14,9 +14,8 @@ Kaynak: JumpDesk deposunun yerel kopyası (CLAUDE.md, `src/main/updater.ts`, `.g
   hiçbir şey sormadan indirilmez. Test ortamı: `UPASTE_UPDATE_URL`, `UPASTE_RELEASES_API`, `UPASTE_UPDATE_INSTALLER`,
   `UPASTE_TEST_DEB_INSTALLER`, `UPASTE_TEST_NO_NEW_PRIVS`, `UPASTE_TEST_SYSTEMD_RUN`.
 - Durum değişince ayarlar penceresi ve tepsi menüsü ("Güncellemeyi Kur (X)") haberdar edilir (`updateEvents`).
-- Sürüm akışı (JumpDesk ile aynı, yalnız Linux paketleri): `development` → `main` PR; birleşince release.yml sürümü
-  `dev/next-version.mjs` ile hesaplar, PR açıklamasını sürüm notu yapar, AppImage + deb'i taslak sürüme yükler,
-  yayımlar. Henüz yazılmadı (yapılacak).
+- Sürüm akışı (JumpDesk ile aynı): `development` → `main` PR; birleşince release.yml sürümü `dev/next-version.mjs`
+  ile hesaplar, PR açıklamasını sürüm notu yapar, üç platformun paketlerini taslak sürüme yükler, yayımlar.
 
 **Eklenti güncellemesi (7. tur):** Uygulama açılışta kurulu eklentinin `metadata.json` sürümü paketlenenden küçükse
 dosyaları kopyalar (`refreshInstalledExtension`). Kabukta yükleyicili eklenti (API ≥ 4) varsa yeni çekirdek
@@ -29,3 +28,14 @@ JumpDesk'teki 5 değerin aynısı (`CSC_LINK` base64 .p12, `CSC_KEY_PASSWORD`, `
 `APPLE_TEAM_ID`); sertifika ve .p12 kullanıcının `~/Documents/apple-signing` klasöründe (JumpDesk hafızası). Değerleri
 kullanıcı `gh secret set ... -R metin-aydin/UPaste` ile ekler (Claude parola görmez). Güncelleyici NsisUpdater ve
 MacUpdater (macOS'ta `app-update.yml` varsa).
+
+**Depo koruması (2026-10-27, UPaste ve JumpDesk aynı):** `main`: PR zorunlu (onay sayısı 0), CI kontrollerinin hepsi
+zorunlu ve dal güncel olmalı (UPaste 6: check, native windows/macos, package ×3; JumpDesk 4: check, package ×3),
+yorumlar çözülmeli, zorla gönderme/silme kapalı, yöneticiler dahil. `development`: zorla gönderme/silme kapalı
+(yöneticiler dahil), doğrudan push serbest, kalıcı (birleşince silinmez; `delete_branch_on_merge` kapalı). `v*`
+etiketleri kural kümesiyle (ruleset "Release tags") silinemez/güncellenemez. Actions: yalnız GitHub'ın kendi action'ları,
+iş akışı anahtarı varsayılan salt okunur, dış katkı PR'ları onayla çalışır, CI `permissions: contents: read`.
+`release` ortamı yalnız korunan dallardan çalışır; release.yml `build` işi bu ortamda → imza gizli değerleri ortam
+gizli değeri olarak tutulur, depo düzeyindekiler silinir. Gizli bilgi taraması ve itme koruması zaten açıktı.
+Yeni CI işi eklenince dal korumasındaki zorunlu kontrol listesi de güncellenmeli (`gh api -X PUT
+repos/metin-aydin/<repo>/branches/main/protection`).

@@ -15,7 +15,8 @@ metadata:
 - Hedef platform: Linux (GNOME), Windows ve macOS. 1. turdaki "yalnız Ubuntu" kararı 4. turda değişti.
 - PR açıklamalarına/sürüm notlarına "Generated with Claude Code", commit mesajlarına "Co-Authored-By: Claude"
   yazılmaz (JumpDesk'teki tercih; CLAUDE.md'de kural).
-- `main`'e doğrudan push yok; geliştirme `development` dalında, `main`'e PR (JumpDesk akışı).
+- `main`'e doğrudan push yok; geliştirme kalıcı `development` dalında, `main`'e PR (JumpDesk akışı). Depolar korumalı
+  olsun (2026-10-27 isteği): dal koruması, gizli değerler yalnız korunan dallarda, JumpDesk'te de aynısı.
 - Proje public (MIT): kurum, sunucu ve kişi bilgisi kod, test ve dokümanlara yazılmaz.
 - Arayüz metinleri: düğme/menü/ipucu Türkçede her kelimenin baş harfi büyük.
 - Super+V'yi UPaste devralır; eski bağlama (Diodon) kaydedilir, UPaste'te kapatılınca geri yüklenir (2026-10-26).

@@ -301,3 +301,9 @@ PR çıktıları upaste-Linux (217 MB), upaste-macOS (256 MB), upaste-Windows (1
 08:40 APPLE_TEAM_ID eklendi → 5 gizli değerin hepsi UPaste deposunda (Team ID sertifikanın OU alanında; hafızaya
 yazılmaz). Bekleyen: kullanıcı PR paketlerini Windows/Mac'te dener (isteğe bağlı) ve PR #1'i birleştirir = v0.2.0.
 İmza/onay ilk kez sürüm derlemesinde denenecek; başarısız olursa `discard` işi taslağı siler, yayın olmaz.
+
+### 16. tur (2026-10-27, 08:42–): depoyu korumalı yap (UPaste + JumpDesk)
+İstek: main ve development korumalı; actions yalnız korunan dallarda çalışsın; aynısı JumpDesk'te. Yapılanlar (iki
+depoda): dal korumaları, `v*` etiket kural kümesi, Actions kısıtları, `release` ortamı (yalnız korunan dallar),
+`delete_branch_on_merge` kapalı (development kalıcı), release.yml `environment: release`, CI salt okunur. Ayrıntı:
+release-update.md "Depo koruması". Gizli değerlerin ortama taşınması kullanıcı girişi ister (değerler geri okunamaz).

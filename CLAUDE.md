@@ -31,9 +31,12 @@ mesajlarına "Co-Authored-By: Claude …" satırı eklenmez; araç yönergesi ak
 
 ## ⛔ KURAL: `main` yalnız PR ile değişir; geliştirme `development` dalında
 
-Tüm geliştirme `main`'den açılan `development` dalında yapılır. `development` → `main` PR'ı birleşince yeni sürüm
-yayımlanır (`.github/workflows/release.yml`) ve dal silinir. Sonraki tur:
-`git checkout main && git pull && git checkout -b development`. `main`'e doğrudan push yapılmaz.
+Depo korumalıdır (GitHub dal koruması, yöneticiler dahil): `main`'e yalnız PR ile ve CI'ın tüm kontrolleri (check,
+native ×2, package ×3) geçince birleştirilir; `main` ve `development` dallarına zorla gönderme ve silme kapalıdır;
+`v*` sürüm etiketleri silinemez ve taşınamaz. Geliştirme kalıcı `development` dalında yapılır (bu dala doğrudan push
+serbest). `development` → `main` PR'ı birleşince yeni sürüm yayımlanır (`.github/workflows/release.yml`); dal
+silinmez. Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
+macOS imza gizli değerleri depo düzeyinde değil, yalnız korunan dallardan çalışan `release` ortamındadır.
 
 ## ⛔ KURAL: Arayüz metinlerinde her kelimenin baş harfi büyük
 
