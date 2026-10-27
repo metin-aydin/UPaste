@@ -1,0 +1,157 @@
+import type { Messages } from './en'
+
+export const hu: Messages = {
+  'popup.search': 'Keresés a vágólap előzményeiben',
+  'popup.filterAll': 'Összes',
+  'popup.filterText': 'Szöveg',
+  'popup.filterImages': 'Képek',
+  'popup.filterPinned': 'Rögzítettek',
+  'popup.emptyTitle': 'A vágólap előzményei üresek',
+  'popup.emptyBody': 'Másoljon ki egy szöveget vagy képet, és itt fog megjelenni.',
+  'popup.noResults': 'Nincs találat erre: „{query}”',
+  'popup.noPinned': 'Rögzítse a gyakran használt elemeket, hogy mindig itt legyenek.',
+  'popup.pin': 'Rögzítés',
+  'popup.unpin': 'Rögzítés feloldása',
+  'popup.delete': 'Törlés',
+  'popup.pinned': 'Rögzítve',
+  'popup.image': 'Kép',
+  'popup.navigate': 'Navigálás',
+  'popup.paste': 'Beillesztés',
+  'popup.close': 'Bezárás',
+  'popup.settings': 'Beállítások',
+
+  'notify.copiedTitle': 'Vágólapra másolva',
+  'notify.relogin':
+    'Az UPaste GNOME-bővítménye frissült. A befejezéshez jelentkezzen ki, majd be újra.',
+  'notify.copiedBody':
+    'A beillesztéshez nyomja meg a {paste} billentyűket. Az automatikus beillesztéshez fejezze be a UPaste telepítését.',
+
+  'tray.settings': 'Beállítások',
+  'tray.quit': 'Kilépés',
+  'tray.update': 'Frissítés telepítése ({version})',
+
+  'settings.title': 'UPaste beállításai',
+  'nav.general': 'Általános',
+  'nav.history': 'Előzmények',
+  'nav.setup': 'Telepítés',
+  'nav.updates': 'Frissítések',
+  'nav.about': 'Névjegy',
+
+  'general.description': 'Nyelv, megjelenés és indítás.',
+  'general.language': 'Nyelv',
+  'general.languageHint':
+    'A vágólapablakban, a beállításokban és a rendszertálca menüjében használatos.',
+  'general.systemLanguage': 'Rendszer szerint ({language})',
+  'general.theme': 'Megjelenés',
+  'general.themeSystem': 'Rendszer szerint',
+  'general.themeLight': 'Világos',
+  'general.themeDark': 'Sötét',
+  'general.launchAtLogin': 'Indítás bejelentkezéskor',
+  'general.launchAtLoginHint': 'A UPaste a rendszertálcán fut, és elment mindent, amit kimásol.',
+  'general.layout': 'Megnyitás módja',
+  'general.layoutHint': 'Hol jelennek meg az előzmények, amikor megnyomja a gyorsbillentyűt.',
+  'general.layoutAuto': 'A szövegmező mellett',
+  'general.layoutAutoHint':
+    'Kis ablak az éppen használt szövegmező alatt; máshol panel a képernyő alján.',
+  'general.layoutSheet': 'Alsó panel',
+  'general.layoutSheetHint': 'Mindig panel a képernyő alján, egymás mellett elhelyezett elemekkel.',
+
+  'history.description': 'Mit és mennyi ideig őriz meg a UPaste.',
+  'history.items': 'Elemek',
+  'history.images': 'Képek',
+  'history.pinned': 'Rögzítettek',
+  'history.disk': 'Lemezhasználat',
+  'history.keepFor': 'Előzmények megőrzése',
+  'history.keepForHint':
+    'A régebbi elemek automatikusan törlődnek. A rögzített elemek mindig megmaradnak.',
+  'history.forever': 'Örökre',
+  'history.days': 'nap',
+  'history.privacy':
+    'Az előzmények sosem hagyják el ezt a számítógépet. A jelszókezelőkből másolt jelszavakat a UPaste nem menti el.',
+  'history.clear': 'Előzmények törlése',
+  'history.clearHint': 'Törli a vágólap-előzmények összes elemét.',
+  'history.clearTitle': 'Törli a vágólap előzményeit?',
+  'history.clearBody': 'Ez a művelet nem vonható vissza.',
+  'history.clearPinned': 'A rögzített elemek törlése is',
+  'history.cancel': 'Mégse',
+  'history.confirmClear': 'Törlés',
+  'history.cleared': 'A vágólap előzményei törölve',
+
+  'setup.description':
+    'Kapcsolja össze a UPaste alkalmazást a GNOME-mal, hogy a gyorsbillentyű közvetlenül az éppen használt szövegmező alatt nyissa meg az előzményeket.',
+  'setup.ready': 'Minden kész. Bármelyik szövegmezőben nyomja meg a következőt: {shortcut}.',
+  'setup.notReady': 'A gyorsbillentyű ({shortcut}) használatához végezze el az alábbi lépéseket.',
+  'setup.notGnome':
+    'Linuxon az UPaste-hez GNOME asztali környezet szükséges. Az asztali környezetét nem sikerült felismerni.',
+  'setup.extension': 'GNOME Shell-kiterjesztés',
+  'setup.extensionHint':
+    'Az ablakot a szövegmezőhöz igazítja, figyeli a vágólapot, és beilleszti a kiválasztott elemet.',
+  'setup.install': 'Telepítés',
+  'setup.update': 'Frissítés',
+  'setup.enable': 'Engedélyezés',
+  'setup.logout': 'Kijelentkezés',
+  'setup.statusActive': 'Aktív',
+  'setup.statusRelogin': 'A befejezéshez jelentkezzen ki, majd be',
+  'setup.statusDisabled': 'Letiltva',
+  'setup.statusError': 'Nem sikerült betölteni',
+  'setup.statusMissing': 'Nincs telepítve',
+  'setup.shortcut': 'Gyorsbillentyű',
+  'setup.shortcutHint': 'Megnyitja a vágólap előzményeit.',
+  'setup.shortcutReady': 'Hozzárendelve a UPaste-hez',
+  'setup.shortcutTaken': 'Használja: {names}',
+  'setup.shortcutWaiting': 'Várakozás a kiterjesztésre',
+  'setup.takeOver': 'Hozzárendelés a UPaste-hez',
+  'setup.restore': 'Előző visszaállítása',
+  'setup.restored': 'Az előző billentyűparancs visszaállt.',
+  'setup.shortcutChange': 'Módosítás',
+  'setup.shortcutRecording': 'Nyomja meg az új gyorsbillentyűt…',
+  'setup.shortcutReset': 'Visszaállítás',
+  'setup.shortcutInvalid':
+    'Használja a Super, Ctrl vagy Alt billentyűt egy betűvel, számmal vagy F billentyűvel együtt.',
+  'setup.descriptionWindows': 'Válassza ki a vágólap előzményeit megnyitó gyorsbillentyűt.',
+  'setup.descriptionMac':
+    'Engedélyezze, hogy a UPaste együttműködjön más alkalmazásokkal, és válassza ki a vágólap előzményeit megnyitó gyorsbillentyűt.',
+  'setup.shortcutHintWindows':
+    'A Win+V a Windows vágólap-előzményei helyett a UPaste alkalmazást nyitja meg. Ha vissza szeretné adni a Win+V-t a Windowsnak, válasszon másik gyorsbillentyűt.',
+  'setup.shortcutInUse': 'Ezt a gyorsbillentyűt egy másik alkalmazás használja',
+  'setup.accessibility': 'Hozzáférés a kisegítő lehetőségekhez',
+  'setup.accessibilityHint':
+    'Lehetővé teszi, hogy a UPaste a szövegkurzornál nyissa meg az előzményeket, és beillessze a kiválasztott elemet.',
+  'setup.statusAllowed': 'Engedélyezve',
+  'setup.statusNotAllowed': 'Nincs engedélyezve',
+  'setup.openAccessibility': 'Adatvédelmi beállítások megnyitása',
+  'setup.messageTray': 'Értesítési lista',
+
+  'updates.description': 'A UPaste a GitHub Releases oldalról frissíti magát.',
+  'updates.version': 'Verzió: {version}',
+  'updates.check': 'Frissítések keresése',
+  'updates.checking': 'Keresés…',
+  'updates.upToDate': 'A UPaste naprakész.',
+  'updates.available': 'Új verzió érhető el: {version}.',
+  'updates.download': 'Letöltés és telepítés',
+  'updates.downloading': 'Letöltés… {percent}%',
+  'updates.downloaded': 'Az új verzió ({version}) telepítésre kész.',
+  'updates.install': 'Újraindítás és telepítés',
+  'updates.installing': 'Telepítés… Ha a rendszer kéri, adja meg a jelszavát.',
+  'updates.openPage': 'Letöltési oldal megnyitása',
+  'updates.notes': 'Kiadási megjegyzések',
+  'updates.failed': 'A frissítés sikertelen: {message}',
+  'updates.lastChecked': 'Utolsó ellenőrzés: {time}',
+  'updates.auto': 'Frissítések automatikus keresése',
+  'updates.autoHint':
+    'Röviddel indítás után, majd 6 óránként ellenőriz. Kérdezés nélkül semmi sem töltődik le.',
+  'updates.manualOnly':
+    'Ez a példány nem tudja frissíteni magát; az új verziók a letöltési oldalon nyílnak meg.',
+  'updates.passwordClosed': 'A jelszókérő ablak bezárult. A frissítés nem települt.',
+  'updates.noAdmin':
+    'Nem sikerült rendszergazdai jogosultságot szerezni. A frissítés nem települt.',
+  'updates.noNewPrivs':
+    'A UPaste ebben a munkamenetben nem tud rendszergazdai jogosultságot kérni. Lépjen ki a UPaste-ből a rendszertálca menüjében, indítsa újra, majd próbálja meg ismét.',
+  'updates.installFailed': 'A frissítést nem sikerült telepíteni (kilépési kód: {code}).',
+  'updates.startFailed': 'A telepítőt nem sikerült elindítani: {message}',
+
+  'about.tagline': 'Kereshető vágólapelőzmények szöveghez és képekhez.',
+  'about.source': 'Forráskód',
+  'about.issues': 'Hiba bejelentése',
+  'about.license': 'Az MIT licenc alatt kiadva.'
+}

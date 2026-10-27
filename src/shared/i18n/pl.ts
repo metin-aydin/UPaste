@@ -1,0 +1,157 @@
+import type { Messages } from './en'
+
+export const pl: Messages = {
+  'popup.search': 'Przeszukaj historię schowka',
+  'popup.filterAll': 'Wszystko',
+  'popup.filterText': 'Tekst',
+  'popup.filterImages': 'Obrazy',
+  'popup.filterPinned': 'Przypięte',
+  'popup.emptyTitle': 'Historia schowka jest pusta',
+  'popup.emptyBody': 'Skopiuj tekst lub obraz, a pojawi się tutaj.',
+  'popup.noResults': 'Brak wyników dla „{query}”',
+  'popup.noPinned': 'Przypinaj często używane elementy, aby zawsze mieć je tutaj.',
+  'popup.pin': 'Przypnij',
+  'popup.unpin': 'Odepnij',
+  'popup.delete': 'Usuń',
+  'popup.pinned': 'Przypięty',
+  'popup.image': 'Obraz',
+  'popup.navigate': 'Nawiguj',
+  'popup.paste': 'Wklej',
+  'popup.close': 'Zamknij',
+  'popup.settings': 'Ustawienia',
+
+  'notify.copiedTitle': 'Skopiowano do schowka',
+  'notify.relogin':
+    'Rozszerzenie GNOME aplikacji UPaste zostało zaktualizowane. Aby dokończyć, wyloguj się i zaloguj ponownie.',
+  'notify.copiedBody':
+    'Naciśnij {paste}, aby wkleić. Dokończ konfigurację UPaste, aby wklejać automatycznie.',
+
+  'tray.settings': 'Ustawienia',
+  'tray.quit': 'Zakończ',
+  'tray.update': 'Zainstaluj aktualizację {version}',
+
+  'settings.title': 'Ustawienia UPaste',
+  'nav.general': 'Ogólne',
+  'nav.history': 'Historia',
+  'nav.setup': 'Konfiguracja',
+  'nav.updates': 'Aktualizacje',
+  'nav.about': 'O programie',
+
+  'general.description': 'Język, wygląd i uruchamianie.',
+  'general.language': 'Język',
+  'general.languageHint':
+    'Używany w oknie schowka, w ustawieniach i w menu w zasobniku systemowym.',
+  'general.systemLanguage': 'Język systemu ({language})',
+  'general.theme': 'Wygląd',
+  'general.themeSystem': 'Systemowy',
+  'general.themeLight': 'Jasny',
+  'general.themeDark': 'Ciemny',
+  'general.launchAtLogin': 'Uruchamiaj po zalogowaniu',
+  'general.launchAtLoginHint':
+    'UPaste działa w zasobniku systemowym i zapisuje wszystko, co kopiujesz.',
+  'general.layout': 'Otwieraj jako',
+  'general.layoutHint': 'Gdzie pojawia się historia po naciśnięciu skrótu.',
+  'general.layoutAuto': 'Obok pola tekstowego',
+  'general.layoutAutoHint':
+    'Małe okno pod polem tekstowym, w którym piszesz; w pozostałych miejscach panel u dołu ekranu.',
+  'general.layoutSheet': 'Panel u dołu',
+  'general.layoutSheetHint': 'Zawsze panel u dołu ekranu z elementami ułożonymi obok siebie.',
+
+  'history.description': 'Co UPaste przechowuje i jak długo.',
+  'history.items': 'Elementy',
+  'history.images': 'Obrazy',
+  'history.pinned': 'Przypięte',
+  'history.disk': 'Zajęte miejsce',
+  'history.keepFor': 'Przechowuj historię',
+  'history.keepForHint':
+    'Starsze elementy są usuwane automatycznie. Przypięte elementy są zawsze zachowywane.',
+  'history.forever': 'Bez limitu',
+  'history.days': 'dni',
+  'history.privacy':
+    'Historia nigdy nie opuszcza tego komputera. Hasła skopiowane z menedżerów haseł nie są zapisywane.',
+  'history.clear': 'Wyczyść historię',
+  'history.clearHint': 'Usuwa wszystkie elementy z historii schowka.',
+  'history.clearTitle': 'Wyczyścić historię schowka?',
+  'history.clearBody': 'Tej operacji nie można cofnąć.',
+  'history.clearPinned': 'Usuń również przypięte elementy',
+  'history.cancel': 'Anuluj',
+  'history.confirmClear': 'Wyczyść',
+  'history.cleared': 'Wyczyszczono historię schowka',
+
+  'setup.description':
+    'Połącz UPaste z GNOME, aby skrót otwierał historię tuż pod polem tekstowym, w którym piszesz.',
+  'setup.ready': 'Wszystko gotowe. Naciśnij {shortcut} w dowolnym polu tekstowym.',
+  'setup.notReady': 'Wykonaj poniższe kroki, aby używać skrótu {shortcut}.',
+  'setup.notGnome':
+    'W systemie Linux UPaste wymaga środowiska GNOME. Nie rozpoznano Twojego środowiska.',
+  'setup.extension': 'Rozszerzenie GNOME Shell',
+  'setup.extensionHint':
+    'Umieszcza okno przy polu tekstowym, monitoruje schowek i wkleja wybrany element.',
+  'setup.install': 'Zainstaluj',
+  'setup.update': 'Zaktualizuj',
+  'setup.enable': 'Włącz',
+  'setup.logout': 'Wyloguj',
+  'setup.statusActive': 'Aktywne',
+  'setup.statusRelogin': 'Wyloguj się i zaloguj ponownie, aby zakończyć',
+  'setup.statusDisabled': 'Wyłączone',
+  'setup.statusError': 'Nie udało się wczytać',
+  'setup.statusMissing': 'Niezainstalowane',
+  'setup.shortcut': 'Skrót',
+  'setup.shortcutHint': 'Otwiera historię schowka.',
+  'setup.shortcutReady': 'Przypisany do UPaste',
+  'setup.shortcutTaken': 'Używany przez: {names}',
+  'setup.shortcutWaiting': 'Oczekiwanie na rozszerzenie',
+  'setup.takeOver': 'Użyj dla UPaste',
+  'setup.restore': 'Przywróć poprzedni',
+  'setup.restored': 'Przywrócono poprzedni skrót.',
+  'setup.shortcutChange': 'Zmień',
+  'setup.shortcutRecording': 'Naciśnij nowy skrót…',
+  'setup.shortcutReset': 'Resetuj',
+  'setup.shortcutInvalid': 'Użyj Super, Ctrl lub Alt razem z literą, cyfrą lub klawiszem F.',
+  'setup.descriptionWindows': 'Wybierz skrót, który otwiera historię schowka.',
+  'setup.descriptionMac':
+    'Zezwól UPaste na współpracę z innymi aplikacjami i wybierz skrót, który otwiera historię schowka.',
+  'setup.shortcutHintWindows':
+    'Win+V otwiera UPaste zamiast historii schowka systemu Windows. Wybierz inny skrót, aby oddać Win+V systemowi Windows.',
+  'setup.shortcutInUse': 'Inna aplikacja używa tego skrótu',
+  'setup.accessibility': 'Uprawnienia dostępności',
+  'setup.accessibilityHint':
+    'Pozwala UPaste otwierać historię przy kursorze tekstowym i wklejać wybrany element.',
+  'setup.statusAllowed': 'Dozwolone',
+  'setup.statusNotAllowed': 'Niedozwolone',
+  'setup.openAccessibility': 'Otwórz ustawienia prywatności',
+  'setup.messageTray': 'Lista powiadomień',
+
+  'updates.description': 'UPaste aktualizuje się samodzielnie z GitHub Releases.',
+  'updates.version': 'Wersja {version}',
+  'updates.check': 'Sprawdź aktualizacje',
+  'updates.checking': 'Sprawdzanie…',
+  'updates.upToDate': 'UPaste jest aktualny.',
+  'updates.available': 'Dostępna jest wersja {version}.',
+  'updates.download': 'Pobierz i zainstaluj',
+  'updates.downloading': 'Pobieranie… {percent}%',
+  'updates.downloaded': 'Wersja {version} jest gotowa do instalacji.',
+  'updates.install': 'Uruchom ponownie i zainstaluj',
+  'updates.installing': 'Instalowanie… Jeśli pojawi się prośba, wpisz hasło.',
+  'updates.openPage': 'Otwórz stronę pobierania',
+  'updates.notes': 'Informacje o wydaniu',
+  'updates.failed': 'Aktualizacja nie powiodła się: {message}',
+  'updates.lastChecked': 'Ostatnio sprawdzono: {time}',
+  'updates.auto': 'Automatycznie sprawdzaj aktualizacje',
+  'updates.autoHint':
+    'Sprawdza krótko po uruchomieniu i co 6 godzin. Nic nie jest pobierane bez pytania.',
+  'updates.manualOnly':
+    'Ta kopia nie może aktualizować się sama; nowe wersje otwierają się na stronie pobierania.',
+  'updates.passwordClosed': 'Okno hasła zostało zamknięte. Aktualizacja nie została zainstalowana.',
+  'updates.noAdmin':
+    'Nie udało się uzyskać uprawnień administratora. Aktualizacja nie została zainstalowana.',
+  'updates.noNewPrivs':
+    'UPaste nie może poprosić o uprawnienia administratora w tej sesji. Zakończ UPaste z menu w zasobniku systemowym, uruchom go ponownie i spróbuj jeszcze raz.',
+  'updates.installFailed': 'Nie udało się zainstalować aktualizacji (kod wyjścia {code}).',
+  'updates.startFailed': 'Nie udało się uruchomić instalatora: {message}',
+
+  'about.tagline': 'Przeszukiwalna historia schowka dla tekstu i obrazów.',
+  'about.source': 'Kod źródłowy',
+  'about.issues': 'Zgłoś problem',
+  'about.license': 'Udostępniono na licencji MIT.'
+}

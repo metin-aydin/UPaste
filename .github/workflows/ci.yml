@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+
+# CI yalnız okur; gizli değer ve yazma yetkisi kullanmaz.
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx eslint .
+      - name: Unit tests (D-Bus tests run against the runner's session bus when available)
+        run: dbus-run-session -- node dev/run-unit-tests.mjs
+      - name: Build
+        run: npx electron-vite build
+
+  # Windows ve macOS'ta birim testleri yerel API bağlamalarını da yükleyip zararsız çağrılarla dener.
+  native:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Unit tests
+        run: node dev/run-unit-tests.mjs
+
+  # PR'larda paketler yayımlanmadan üretilir (macOS imzasız); main'e birleşince yayın akışının paketleme adımı
+  # bozulmaz.
+  package:
+    if: github.event_name == 'pull_request'
+    needs: [check, native]
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: --linux --x64
+          - os: windows-latest
+            platform: --win --x64
+          - os: macos-latest
+            platform: --mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Native modules for both Mac architectures
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          v=$(node -p "require('./node_modules/koffi/package.json').version")
+          npm install --no-save --force "@koromix/koffi-darwin-x64@$v" "@koromix/koffi-darwin-arm64@$v"
+      - run: npm run build
+      - name: Package
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder ${{ matrix.platform }} --publish never
+      # Sürüm yayımlanmadan önce paketler gerçek makinelerde denenebilsin diye PR'ın derleme çıktısına eklenir.
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: upaste-${{ runner.os }}
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.exe
+            dist/*.dmg
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Native module in the package (macOS, both architectures)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          for dir in dist/mac dist/mac-arm64; do
+            ls -d "$dir"/UPaste.app/Contents/Resources/app.asar.unpacked/node_modules/@koromix/koffi-darwin-*
+          done

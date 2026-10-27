@@ -1,0 +1,6 @@
+{
+  "uuid": "nested-devtools@upaste",
+  "name": "UPaste nested devtools",
+  "description": "Test-only: turns on unsafe mode in the isolated nested shell so tests can use Eval and Screenshot.",
+  "shell-version": ["45", "46", "47", "48", "49", "50"]
+}

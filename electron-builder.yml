@@ -1,0 +1,81 @@
+appId: io.github.metin-aydin.upaste
+productName: UPaste
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,.editorconfig,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Geliştirme dosyaları, hafıza notları ve yerel eklenti günlükleri pakete girmez.
+  - '!{.remember,memory,dev,docs,dist,.github}{,/**/*}'
+  - '!{CLAUDE.md,LICENSE,components.json,*.tsbuildinfo}'
+  - '!resources/tray/*.svg'
+# GNOME Shell eklentisi kullanıcının eklenti klasörüne kopyalanır; tepsi simgeleri dosyadan okunur.
+asarUnpack:
+  - resources/**
+afterPack: build/after-pack.cjs
+afterSign: build/notarize.cjs
+win:
+  executableName: upaste
+  icon: build/icon.png
+  target:
+    - nsis
+nsis:
+  artifactName: ${productName}-${version}-Setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+# macOS: Apple Silicon ve Intel için dmg (kurulum) ve zip (uygulama içi güncelleme, Squirrel.Mac). Developer ID
+# sertifikası CSC_LINK/CSC_KEY_PASSWORD ortam değişkenlerinden gelir. Apple onayını (notarization) ve damgalamayı
+# build/notarize.cjs yapar (APPLE_ID/APPLE_APP_SPECIFIC_PASSWORD/APPLE_TEAM_ID); electron-builder'ın kendi onayı kapalı.
+# Değerler verilmezse imza ve onay atlanır (yalnız derlemeyi denemek için). Uygulama menü çubuğunda çalışır, Dock'ta
+# görünmez (LSUIElement).
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+  category: public.app-category.utilities
+  icon: build/icon.png
+  hardenedRuntime: true
+  entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
+  extendInfo:
+    LSUIElement: true
+dmg:
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+linux:
+  target:
+    - AppImage
+    - deb
+  executableName: upaste
+  maintainer: metin-aydin
+  synopsis: Searchable clipboard history for text and images (Super+V)
+  description: >-
+    UPaste keeps everything you copy, text and images, and opens a searchable clipboard history right under the text
+    field you are typing in when you press Super+V, just like Windows. Built for GNOME on Wayland and X11.
+  category: Utility
+  icon: build/icons
+  syncDesktopName: true
+  desktop:
+    entry:
+      Name: UPaste
+      Comment: Clipboard history (Super+V)
+      Keywords: clipboard;paste;copy;history;super+v;
+appImage:
+  artifactName: ${productName}-${version}.${ext}
+deb:
+  artifactName: ${name}_${version}_${arch}.${ext}
+  appArmorProfile: build/apparmor-profile.tpl
+npmRebuild: false
+# Sürüm dosyaları GitHub Releases'a yüklenir (yalnız --publish verilince): release iş akışı taslak sürümü önceden açar,
+# paketler ona eklenir, iş akışının son adımı yayımlar. Uygulama içi güncelleme aynı depoyu okur (src/main/updater.ts).
+publish:
+  provider: github
+  owner: metin-aydin
+  repo: UPaste
+  releaseType: draft
