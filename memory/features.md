@@ -290,3 +290,7 @@ developerID_application.cer): `base64 -w0 …/DeveloperID.p12 | gh secret set CS
 Windows/Mac denemesi, birleştirme (= v0.2.0 yayını).
 2026-10-27 08:31: kullanıcı CSC_LINK'i ekledi (doğrulandı). İlk PR CI'ı: check ✓, native macOS ✓, native Windows ✗ —
 yalnız release-notes testi (CRLF); yerel API testi Windows'ta da geçti. Düzeltme `d606fbd` gönderildi.
+08:35 kullanıcı .p12 parolasını hatırlamadı → aynı anahtar ve sertifikadan yeni `UPaste-DeveloperID.p12` üretildi
+(`openssl pkcs12 -export -legacy -inkey developer-id.key -in cert.pem -certfile ca.pem`; anahtar şifresiz PKCS#8),
+CSC_LINK ve CSC_KEY_PASSWORD yeniden yazıldı (05:34–05:35Z). JumpDesk eski .p12/parolayla çalışmaya devam eder.
+Kalan gizli değerler: APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID. PR CI: 6 geçti, 3 sürüyor, 0 hata.
