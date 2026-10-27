@@ -298,3 +298,6 @@ Kalan gizli değerler: APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID. PR 
 08:40 APPLE_APP_SPECIFIC_PASSWORD eklendi (kullanıcı account.apple.com'da yenisini oluşturdu; JumpDesk'inki hatırlanmadı).
 Kalan: APPLE_TEAM_ID. PR #1 CI tamamen yeşil (9 ✓): üç platform paketlendi, macOS'ta iki mimari koffi modülü pakette;
 PR çıktıları upaste-Linux (217 MB), upaste-macOS (256 MB), upaste-Windows (116 MB), 14 gün saklanır.
+08:40 APPLE_TEAM_ID eklendi → 5 gizli değerin hepsi UPaste deposunda (Team ID sertifikanın OU alanında; hafızaya
+yazılmaz). Bekleyen: kullanıcı PR paketlerini Windows/Mac'te dener (isteğe bağlı) ve PR #1'i birleştirir = v0.2.0.
+İmza/onay ilk kez sürüm derlemesinde denenecek; başarısız olursa `discard` işi taslağı siler, yayın olmaz.
