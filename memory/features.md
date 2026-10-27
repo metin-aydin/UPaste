@@ -288,3 +288,5 @@ developerID_application.cer): `base64 -w0 …/DeveloperID.p12 | gh secret set CS
 `gh secret set <AD> -R metin-aydin/UPaste` (değeri kullanıcı yapıştırır). Team ID: `openssl x509 -inform der -in
 …/developerID_application.cer -noout -subject` (OU). Bekleyen: gizli değerler, PR #1 CI'ı, PR paketleriyle
 Windows/Mac denemesi, birleştirme (= v0.2.0 yayını).
+2026-10-27 08:31: kullanıcı CSC_LINK'i ekledi (doğrulandı). İlk PR CI'ı: check ✓, native macOS ✓, native Windows ✗ —
+yalnız release-notes testi (CRLF); yerel API testi Windows'ta da geçti. Düzeltme `d606fbd` gönderildi.

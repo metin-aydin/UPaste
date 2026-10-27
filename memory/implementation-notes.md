@@ -88,3 +88,6 @@ metadata:
 - **README ekran görüntüsü:** başsız kabukta `gsettings set org.gnome.shell disabled-extensions "['ding@rastersoft.com']"`
   (yoksa gerçek ~/Desktop dosyaları görünür), LANG=en_US, gnome-text-editor `-s`; başlıktaki dosya yolu kırpılır;
   kırpma kabukta GdkPixbuf ile (`new_subpixbuf().savev`).
+- **Windows CI satır sonu:** windows-latest depoyu CRLF ile açıyordu → `.gitattributes` `* text=auto eol=lf`; dosya
+  okuyan testler yine de `\r\n`'i normalleştirir (release-notes testi bu yüzden düşmüştü). İlk CI'da Windows ve macOS
+  yerel API testleri geçti (kütüphaneler yüklendi, Windows'ta klavye kancası kurulup kaldırıldı).
