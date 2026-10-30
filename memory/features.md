@@ -332,3 +332,13 @@ depo düzeyindekiler kullanıldı). Yerel `development` `main`'e ileri sarıldı
    ~/.config/UPaste/logs); içerik yazılmaz, 1 MB'ta döner. Sürüm 0.2.1. İzin: yalnız Erişilebilirlik gerekir.
 PR #2 açıldı (0.2.1, macOS düzeltmeleri), oturuma bağlı; CI çalışıyor. Birleştirme kullanıcıda (= v0.2.1 imzalı yayın). Sonra kullanıcı Mac'te dener, sorun sürerse ~/Library/Logs/UPaste/main.log'daki 'ax' ve 'capture types' satırlarını gönderir.
 09:56 kullanıcı: panel görev çubuğunun üstünde (yukarısında) durmasın, onu örtsün; yalnız alt köşeler düz. 0.2.1 kodu zaten böyle (ekran sınırı + pop-up-menu seviyesi; CSS rounded-t-2xl + roundedCorners:false, Windows 11 dahil); açıklandı.
+
+### 18. tur (2026-10-30, 09:59): Clipman deposu incelendi (imleç yanında açma için)
+Kullanıcı "clipman reposuna bakarak imlecin yanında açmayı iyileştirebilir miyiz" dedi. Aramada eşleşen:
+MohammedEl-sayedAhmed/clipman (GNOME/Wayland, Super+V, Python + GTK4 + Shell eklentisi). Bulgu: pencereyi metin
+imlecine değil **fare imlecine** taşıyor (eklentide `MoveWindowToCursor`: `global.get_pointer()` + çalışma alanına
+sıkıştırma + `metaWin.move_frame` + `activate`); IBus/text-input/AT-SPI kullanımı yok, yalnız Linux. UPaste'in
+yaklaşımı (giriş yönteminden gerçek imleç, X11'de taze imleç için Shift, pencere taşınınca imleci kaydırma, imleç
+yoksa alt panel) bundan ileride; alınacak bir şey yok. Clipman'den alınabilecek başka fikirler (soruldu, karar
+kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelenir, 30 sn sonra silinir), gizli kip
+(kaydı duraklatma), şablonlu parçacıklar (${date}).
