@@ -343,3 +343,4 @@ yoksa alt panel) bundan ileride; alınacak bir şey yok. Clipman'den alınabilec
 kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelenir, 30 sn sonra silinir), gizli kip
 (kaydı duraklatma), şablonlu parçacıklar (${date}).
 10:04 kullanıcı sordu: Clipman gibi mi yapsak, o fare mi metin imleci mi? Yanıt: Clipman fare oku; UPaste yanıp sönen metin imleci. Seçenek sunuldu: (1) olduğu gibi kalsın, (2) Açılış Biçimi'ne 'fare imlecinin yanında' seçeneği, (3) imleç bulunamayınca alt panel yerine fare imlecinde açma. Karar bekleniyor.
+10:05 Clipman yeniden, ayrıntılı incelendi (tüm eklenti, CHANGELOG 'Window appears near cursor position', PR #141 'pinned near the cursor', main/security-baseline/stats dalları): tek konumlama kodu MoveWindowToCursor → global.get_pointer() (fare), metin imleci kullanımı hiçbir dalda yok. Karar: UPaste'in metin imleci yaklaşımı korunur; isteğe bağlı fikir: imleç bulunamayınca fare konumu (kullanıcıya soruldu).
