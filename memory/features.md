@@ -342,3 +342,4 @@ yaklaşımı (giriş yönteminden gerçek imleç, X11'de taze imleç için Shift
 yoksa alt panel) bundan ileride; alınacak bir şey yok. Clipman'den alınabilecek başka fikirler (soruldu, karar
 kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelenir, 30 sn sonra silinir), gizli kip
 (kaydı duraklatma), şablonlu parçacıklar (${date}).
+10:04 kullanıcı sordu: Clipman gibi mi yapsak, o fare mi metin imleci mi? Yanıt: Clipman fare oku; UPaste yanıp sönen metin imleci. Seçenek sunuldu: (1) olduğu gibi kalsın, (2) Açılış Biçimi'ne 'fare imlecinin yanında' seçeneği, (3) imleç bulunamayınca alt panel yerine fare imlecinde açma. Karar bekleniyor.
