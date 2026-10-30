@@ -119,10 +119,14 @@ export interface MacRect {
   height: number
 }
 
+/** Son AX çağrısının hata kodu (0 başarı); tanı kaydına yazılır. */
+let lastError = 0
+
 /** Elemanın özniteliği (sahibi çağırandır: CFRelease gerekir); yoksa null. */
 function copy(element: unknown, name: string): unknown {
   const out: unknown[] = [null]
-  if (AXUIElementCopyAttributeValue(element, attr(name), out) !== kAXErrorSuccess) return null
+  lastError = AXUIElementCopyAttributeValue(element, attr(name), out)
+  if (lastError !== kAXErrorSuccess) return null
   return out[0] ?? null
 }
 
@@ -185,18 +189,11 @@ function enableAccessibility(pid: number): void {
   release(app)
 }
 
-function rangeBounds(
-  element: unknown,
-  range: { location: number; length: number }
-): MacRect | null {
-  const value = AXValueCreateRange(kAXValueCFRangeType, range)
-  if (!value) return null
+/** Parametreli özniteliğin dikdörtgen değeri (ör. bir metin aralığının ekrandaki yeri); yoksa null. */
+function paramRect(element: unknown, name: string, param: unknown): MacRect | null {
   const out: unknown[] = [null]
-  const ok =
-    AXUIElementCopyParameterizedAttributeValue(element, attr('AXBoundsForRange'), value, out) ===
-    kAXErrorSuccess
-  release(value)
-  if (!ok || !out[0]) return null
+  lastError = AXUIElementCopyParameterizedAttributeValue(element, attr(name), param, out)
+  if (lastError !== kAXErrorSuccess || !out[0]) return null
   const rect = { origin: { x: 0, y: 0 }, size: { width: 0, height: 0 } }
   const got = AXValueGetRect(out[0], kAXValueCGRectType, rect)
   release(out[0])
@@ -204,57 +201,106 @@ function rangeBounds(
   return { x: rect.origin.x, y: rect.origin.y, width: rect.size.width, height: rect.size.height }
 }
 
+function rangeBounds(
+  element: unknown,
+  range: { location: number; length: number }
+): MacRect | null {
+  const value = AXValueCreateRange(kAXValueCFRangeType, range)
+  if (!value) return null
+  const rect = paramRect(element, 'AXBoundsForRange', value)
+  release(value)
+  return rect
+}
+
+/** Elemanın ekrandaki çerçevesi (AXPosition + AXSize); yoksa null. */
+function elementFrame(element: unknown): MacRect | null {
+  const position = copy(element, 'AXPosition')
+  const size = copy(element, 'AXSize')
+  const p = { x: 0, y: 0 }
+  const s = { width: 0, height: 0 }
+  const ok =
+    !!position &&
+    !!size &&
+    AXValueGetPoint(position, kAXValueCGPointType, p) &&
+    AXValueGetSize(size, kAXValueCGSizeType, s)
+  release(position, size)
+  return ok && s.height > 0 ? { x: p.x, y: p.y, width: s.width, height: s.height } : null
+}
+
+/** Metin girilen elemanların rolleri. */
+const TEXT_ROLES = new Set(['AXTextField', 'AXTextArea', 'AXComboBox', 'AXSearchField'])
+
 export interface MacFocus {
   pid: number
   role: string | null
+  /** Odaktaki pencerenin çerçevesi. */
   frame: MacRect | null
-  /** Odaktaki eleman metin seçimini destekliyor (metin alanı). */
+  /** Odaktaki metin alanının çerçevesi. */
+  field: MacRect | null
+  /** Odaktaki eleman metin girişi alıyor. */
   textInput: boolean
   caret: MacRect | null
+  /** Adım adım AX hata kodları (0 başarı); tanı kaydı için. */
+  steps: Record<string, number>
 }
 
-/** Odaktaki uygulama, penceresi ve metin imleci (ekran noktası; sol üst köşe başlangıç). */
+/**
+ * Odaktaki uygulama, penceresi, metin alanı ve imleci (ekran noktası; sol üst köşe başlangıç). İmleç önce seçili metin
+ * aralığından (Cocoa), yoksa WebKit/Chromium'un metin işaretçisi aralığından okunur. Uygulama odakta değilse null.
+ */
 export function focusedElement(): MacFocus | null {
+  const steps: Record<string, number> = {}
   const system = AXUIElementCreateSystemWide()
   const app = copy(system, 'AXFocusedApplication')
-  release(system)
-  if (!app) return null
+  steps['app'] = lastError
+  if (!app) {
+    release(system)
+    return { pid: 0, role: null, frame: null, field: null, textInput: false, caret: null, steps }
+  }
   const pid = [0]
   AXUIElementGetPid(app, pid)
   enableAccessibility(pid[0])
-  const result: MacFocus = { pid: pid[0], role: null, frame: null, textInput: false, caret: null }
-  const window = copy(app, 'AXFocusedWindow')
-  if (window) {
-    const position = copy(window, 'AXPosition')
-    const size = copy(window, 'AXSize')
-    const p = { x: 0, y: 0 }
-    const s = { width: 0, height: 0 }
-    if (
-      position &&
-      size &&
-      AXValueGetPoint(position, kAXValueCGPointType, p) &&
-      AXValueGetSize(size, kAXValueCGSizeType, s)
-    )
-      result.frame = { x: p.x, y: p.y, width: s.width, height: s.height }
-    release(position, size, window)
+  const result: MacFocus = {
+    pid: pid[0],
+    role: null,
+    frame: null,
+    field: null,
+    textInput: false,
+    caret: null,
+    steps
   }
-  const element = copy(app, 'AXFocusedUIElement')
+  const window = copy(app, 'AXFocusedWindow')
+  steps['window'] = lastError
+  if (window) {
+    result.frame = elementFrame(window)
+    release(window)
+  }
+  let element = copy(app, 'AXFocusedUIElement')
+  steps['element'] = lastError
   release(app)
+  if (!element) {
+    element = copy(system, 'AXFocusedUIElement')
+    steps['systemElement'] = lastError
+  }
+  release(system)
   if (!element) return result
   const role = copy(element, 'AXRole')
   result.role = text(role)
   release(role)
+  result.field = elementFrame(element)
   const selected = copy(element, 'AXSelectedTextRange')
+  steps['range'] = lastError
   if (selected) {
     const range = { location: 0, length: 0 }
     if (AXValueGetRange(selected, kAXValueCFRangeType, range)) {
       result.textInput = true
-      const location = Number(range.location)
-      const length = Number(range.length)
+      const end = Number(range.location) + Number(range.length)
       // Boş seçimde çoğu uygulama imlecin dikdörtgenini verir; vermeyenlerde önceki karakterin sağ kenarı kullanılır.
-      result.caret = rangeBounds(element, { location: location + length, length: 0 })
-      if (!result.caret && location + length > 0) {
-        const previous = rangeBounds(element, { location: location + length - 1, length: 1 })
+      result.caret = rangeBounds(element, { location: end, length: 0 })
+      steps['bounds'] = lastError
+      if (!result.caret && end > 0) {
+        const previous = rangeBounds(element, { location: end - 1, length: 1 })
+        steps['previous'] = lastError
         if (previous)
           result.caret = {
             x: previous.x + previous.width,
@@ -266,6 +312,17 @@ export function focusedElement(): MacFocus | null {
     }
     release(selected)
   }
+  if (!result.caret) {
+    const marker = copy(element, 'AXSelectedTextMarkerRange')
+    steps['marker'] = lastError
+    if (marker) {
+      result.textInput = true
+      result.caret = paramRect(element, 'AXBoundsForTextMarkerRange', marker)
+      steps['markerBounds'] = lastError
+      release(marker)
+    }
+  }
+  if (result.role && TEXT_ROLES.has(result.role)) result.textInput = true
   release(element)
   return result
 }

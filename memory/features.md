@@ -312,3 +312,21 @@ açıldı (birleşince JumpDesk sürümü çıkar; zamanı kullanıcıda). Gizli
 verildi (scratchpad `release-secrets.sh`: Team ID ve .p12 dosyadan, Apple ID/.p12 şifresi/uygulamaya özel parola bir kez
 sorulur, iki depoya `gh secret set --env release`). Sonra: UPaste depo düzeyi 5 gizli değer silinir; JumpDesk'inkiler
 PR #17 birleşince silinir.
+
+### 17. tur (2026-10-30): macOS geri bildirimi (v0.2.0 imzalı sürüm denendi)
+PR #1 27 Ekim'de birleştirilmiş, v0.2.0 yayımlanmış (imza + Apple onayı başarılı; ortam gizli değerleri girilmedi,
+depo düzeyindekiler kullanıldı). Yerel `development` `main`'e ileri sarıldı. Kullanıcı Mac'te:
+1. İmleç hiç bulunamıyor, hep alt panel açılıyor → kesin neden bilinmiyor (veri yok). Yapılanlar: AX imleç arama
+   kademeli (AXSelectedTextRange → AXBoundsForRange, önceki karakter; yoksa WebKit/Chromium AXSelectedTextMarkerRange →
+   AXBoundsForTextMarkerRange; uygulamanın odak elemanı yoksa sistem geneli AXFocusedUIElement), metin rolleri
+   (AXTextField/TextArea/ComboBox/SearchField) metin girişi sayılır; imleç okunamazsa alan çerçevesi (tek satırda alanın
+   altı, çok satırda fare satırı ya da ilk satır). Her adımın AX hata kodu tanı kaydına (`ax {...steps}`).
+2. CleanShot'tan kopyalanan resimler görünmüyor → panoda resimle birlikte dosya adı/yolu metni varsa artık resim
+   kaydedilir; yalnız resim dosyası adresi varsa (public.file-url / text/uri-list) dosyadan okunur; macOS'ta yalnız
+   TIFF varsa `sips` ile PNG'ye çevrilir. Biçim adları kayda yazılır. Başsız kabukta metin/PNG/uri-list doğrulandı.
+3. Alt panelin alt köşeleri yuvarlak (boşluk) → `roundedCorners: false` (macOS çerçevesiz pencere varsayılanı).
+4. Ana ekranda alt panel dipte değil, ortalanıyor → Windows/macOS'ta panel ekranın kendi alt kenarına (Dock/görev
+   çubuğunun üstünde çizilir), macOS'ta konum gösterildikten sonra yeniden verilir; setVisibleOnAllWorkspaces
+   `skipTransformProcessType` (Dock simgesi görünmesin).
+5. Tanı kaydı artık her zaman dosyaya: macOS ~/Library/Logs/UPaste/main.log (Windows %APPDATA%\UPaste\logs, Linux
+   ~/.config/UPaste/logs); içerik yazılmaz, 1 MB'ta döner. Sürüm 0.2.1. İzin: yalnız Erişilebilirlik gerekir.

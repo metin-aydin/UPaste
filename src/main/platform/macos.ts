@@ -21,7 +21,24 @@ const ACTIVATE_SETTLE_MS = 120
 const ACCESSIBILITY_SETTINGS =
   'x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility'
 
+/** Bundan alçak metin alanı tek satırlık sayılır: imleç bilinmezse küçük pencere alanın altında açılır. */
+const SINGLE_LINE_MAX = 64
+const LINE_HEIGHT = 20
+
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
+
+/**
+ * İmleci okunamayan metin alanında küçük pencerenin dayanacağı dikdörtgen: tek satırlık alanın kendisi; çok satırlı
+ * alanda fare alanın içindeyse fare satırı, değilse alanın ilk satırı.
+ */
+function fieldAnchor(field: Rect, [px, py]: [number, number]): Rect {
+  if (field.height <= SINGLE_LINE_MAX) return { ...field, width: 1 }
+  const inside =
+    px >= field.x && px < field.x + field.width && py >= field.y && py < field.y + field.height
+  return inside
+    ? { x: px, y: py - LINE_HEIGHT / 2, width: 1, height: LINE_HEIGHT }
+    : { x: field.x + 8, y: field.y + 4, width: 1, height: LINE_HEIGHT }
+}
 
 export class MacDesktop extends NativeDesktop {
   private api: Darwin | null = null
@@ -99,12 +116,21 @@ export class MacDesktop extends NativeDesktop {
 
   private focusInfo(): FocusInfo {
     const cursor = screen.getCursorScreenPoint()
+    const pointer: [number, number] = [cursor.x, cursor.y]
     const monitors = screen.getAllDisplays().map((d) => ({ bounds: d.bounds, work: d.workArea }))
-    const base: FocusInfo = { pointer: [cursor.x, cursor.y], monitors }
+    const base: FocusInfo = { pointer, monitors }
     this.trusted = this.api!.accessibilityTrusted()
-    const focus = this.trusted ? this.api!.focusedElement() : null
-    if (!focus) return base
+    if (!this.trusted) {
+      debug('focus', 'accessibility access not granted')
+      return base
+    }
+    const focus = this.api!.focusedElement()
+    debug('ax', JSON.stringify(focus))
+    if (!focus || !focus.pid) return base
     this.targetFrame = focus.frame ?? undefined
+    // İmleç okunamayan metin alanında küçük pencere alanın kendisine göre yerleşir.
+    const caret =
+      focus.caret ?? (focus.textInput && focus.field ? fieldAnchor(focus.field, pointer) : null)
     const info: FocusInfo = {
       ...base,
       id: focus.pid,
@@ -114,7 +140,7 @@ export class MacDesktop extends NativeDesktop {
       own: focus.pid === process.pid,
       focused: true,
       textInput: focus.textInput,
-      caret: focus.caret ?? undefined
+      caret: caret ?? undefined
     }
     debug('focus', JSON.stringify(info))
     return info
