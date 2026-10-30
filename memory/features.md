@@ -330,3 +330,4 @@ depo düzeyindekiler kullanıldı). Yerel `development` `main`'e ileri sarıldı
    `skipTransformProcessType` (Dock simgesi görünmesin).
 5. Tanı kaydı artık her zaman dosyaya: macOS ~/Library/Logs/UPaste/main.log (Windows %APPDATA%\UPaste\logs, Linux
    ~/.config/UPaste/logs); içerik yazılmaz, 1 MB'ta döner. Sürüm 0.2.1. İzin: yalnız Erişilebilirlik gerekir.
+PR #2 açıldı (0.2.1, macOS düzeltmeleri), oturuma bağlı; CI çalışıyor. Birleştirme kullanıcıda (= v0.2.1 imzalı yayın). Sonra kullanıcı Mac'te dener, sorun sürerse ~/Library/Logs/UPaste/main.log'daki 'ax' ve 'capture types' satırlarını gönderir.
