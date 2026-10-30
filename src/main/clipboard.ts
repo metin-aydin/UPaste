@@ -3,7 +3,12 @@
 // eklenti yoksa pano düzenli aralıklarla yoklanır.
 import { clipboard, ClipboardItem, nativeImage } from 'electron'
 import { createHash } from 'crypto'
-import { readFileSync } from 'fs'
+import { execFile } from 'child_process'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs'
+import { tmpdir } from 'os'
+import { join } from 'path'
+import { fileURLToPath } from 'url'
+import { promisify } from 'util'
 import { history } from './history'
 import type { HistoryItem } from '@shared/types'
 import { debug } from './log'
@@ -23,8 +28,42 @@ const SECRET_FORMATS = [
   // Windows: parola yöneticileri pano izleyicilerine bu biçimle "kaydetme" der.
   /ExcludeClipboardContentFromMonitorProcessing/i,
   // macOS: nspasteboard.org kuralı (gizli ya da geçici içerik).
-  /org\.nspasteboard\.(Concealed|Transient)Type/i
+  /org[./]nspasteboard[./](Concealed|Transient)Type/i
 ]
+
+/** Resim dosyası uzantıları: kopyalanan dosya resimse geçmişe resim olarak girer. */
+const IMAGE_FILE = /\.(png|jpe?g|gif|bmp|tiff?|webp|heic)$/i
+/** Dosya kopyalandığında dosyanın adresini taşıyan biçimler (macOS public.file-url, Linux ve diğerleri uri-list). */
+const FILE_URL_TYPES = [
+  /format="public[./]file-url"/i,
+  /^text\/uri-list$/i,
+  /format="text\/uri-list"/i
+]
+
+/** macOS'ta yalnız TIFF olarak kopyalanan resmin ham biçimi (Electron bunu image/png olarak bildirmez). */
+const MAC_TIFF = /format="public[./]tiff"/i
+
+const execFileAsync = promisify(execFile)
+
+/** TIFF verisini macOS'un `sips` aracıyla PNG'ye çevirir. */
+async function tiffToImage(tiff: Buffer): Promise<Electron.NativeImage> {
+  const dir = mkdtempSync(join(tmpdir(), 'upaste-'))
+  try {
+    writeFileSync(join(dir, 'in.tiff'), tiff)
+    await execFileAsync('/usr/bin/sips', ['-s', 'format', 'png', 'in.tiff', '--out', 'out.png'], {
+      cwd: dir
+    })
+    return nativeImage.createFromPath(join(dir, 'out.png'))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+}
+
+/** Tek satırlık metin bir resim dosyasının adı, yolu ya da adresi mi. */
+const isImageFileReference = (text: string): boolean => {
+  const t = text.trim()
+  return !t.includes('\n') && IMAGE_FILE.test(t.replace(/^file:\/\//, ''))
+}
 
 const sha1 = (data: string | Buffer): string => createHash('sha1').update(data).digest('hex')
 
@@ -120,24 +159,68 @@ class ClipboardWatcher {
     }
   }
 
+  /**
+   * Panodaki öğe. Resim kopyalandığında panoda çoğu zaman dosyanın adı ya da yolu da metin olarak bulunur (ekran
+   * görüntüsü araçları, dosya yöneticileri); o zaman metin değil resim kaydedilir. Panoda resim verisi yoksa ama tek
+   * bir resim dosyasının adresi varsa resim dosyadan okunur. Biçim adları ve sonuç tanı kaydına yazılır.
+   */
   private async read(includeText: boolean): Promise<HistoryItem | null> {
     const [item] = await clipboard.read()
     if (!item) return null
     const types = item.types
-    debug('capture types', types.filter((t) => !t.startsWith('electron')).join(','))
-    if (types.some((f) => SECRET_FORMATS.some((re) => re.test(f)))) return null
-    if (includeText && types.includes('text/plain')) {
-      const text = await clipboard.readText()
-      if (text.trim()) {
-        const html = types.includes('text/html') ? await blobText(item, 'text/html') : undefined
-        return history.addText(text, html || undefined)
-      }
+    debug('capture types', types.join(','))
+    if (types.some((f) => SECRET_FORMATS.some((re) => re.test(f)))) {
+      debug('capture skipped', 'marked secret or transient')
+      return null
     }
     const imageType = types.includes('image/png')
       ? 'image/png'
       : types.find((t) => t.startsWith('image/'))
-    if (!imageType) return null
-    return history.addImage(nativeImage.createFromBuffer(await blobBuffer(item, imageType)))
+    const tiff = process.platform === 'darwin' ? types.find((t) => MAC_TIFF.test(t)) : undefined
+    const file = await this.imageFile(item, types)
+    if (includeText && types.includes('text/plain')) {
+      const text = await clipboard.readText()
+      const imagePresent = !!imageType || !!tiff || file !== null
+      if (text.trim() && !(imagePresent && (file !== null || isImageFileReference(text)))) {
+        const html = types.includes('text/html') ? await blobText(item, 'text/html') : undefined
+        return history.addText(text, html || undefined)
+      }
+    }
+    if (imageType) {
+      const image = nativeImage.createFromBuffer(await blobBuffer(item, imageType))
+      debug('capture image', imageType, image.isEmpty() ? 'unreadable' : image.getSize())
+      if (!image.isEmpty()) return history.addImage(image)
+    }
+    if (tiff) {
+      const image = await tiffToImage(await blobBuffer(item, tiff)).catch(() =>
+        nativeImage.createEmpty()
+      )
+      debug('capture image tiff', image.isEmpty() ? 'unreadable' : image.getSize())
+      if (!image.isEmpty()) return history.addImage(image)
+    }
+    if (file) {
+      const image = nativeImage.createFromPath(file)
+      debug('capture image file', image.isEmpty() ? 'unreadable' : image.getSize())
+      if (!image.isEmpty()) return history.addImage(image)
+    }
+    return null
+  }
+
+  /** Panoda tek bir resim dosyasının adresi varsa dosyanın yolu. */
+  private async imageFile(item: ClipboardItem, types: string[]): Promise<string | null> {
+    const type = types.find((t) => FILE_URL_TYPES.some((re) => re.test(t)))
+    if (!type) return null
+    try {
+      const lines = (await blobText(item, type))
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l && !l.startsWith('#'))
+      if (lines.length !== 1 || !lines[0].startsWith('file:')) return null
+      const path = fileURLToPath(lines[0])
+      return IMAGE_FILE.test(path) ? path : null
+    } catch {
+      return null
+    }
   }
 
   /**

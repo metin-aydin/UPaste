@@ -91,3 +91,6 @@ metadata:
 - **Windows CI satır sonu:** windows-latest depoyu CRLF ile açıyordu → `.gitattributes` `* text=auto eol=lf`; dosya
   okuyan testler yine de `\r\n`'i normalleştirir (release-notes testi bu yüzden düşmüştü). İlk CI'da Windows ve macOS
   yerel API testleri geçti (kütüphaneler yüklendi, Windows'ta klavye kancası kurulup kaldırıldı).
+- **Electron pano biçimleri (Linux):** dosya adresi standart `text/uri-list` olarak gelir; ham biçimler
+  `electron application/osclipboard;format="..."`. macOS'ta ham ad nokta ya da eğik çizgiyle gelebilir
+  (`public.file-url` / `public/file-url`) — desenler ikisini de kabul eder.

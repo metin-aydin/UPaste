@@ -312,3 +312,35 @@ açıldı (birleşince JumpDesk sürümü çıkar; zamanı kullanıcıda). Gizli
 verildi (scratchpad `release-secrets.sh`: Team ID ve .p12 dosyadan, Apple ID/.p12 şifresi/uygulamaya özel parola bir kez
 sorulur, iki depoya `gh secret set --env release`). Sonra: UPaste depo düzeyi 5 gizli değer silinir; JumpDesk'inkiler
 PR #17 birleşince silinir.
+
+### 17. tur (2026-10-30): macOS geri bildirimi (v0.2.0 imzalı sürüm denendi)
+PR #1 27 Ekim'de birleştirilmiş, v0.2.0 yayımlanmış (imza + Apple onayı başarılı; ortam gizli değerleri girilmedi,
+depo düzeyindekiler kullanıldı). Yerel `development` `main`'e ileri sarıldı. Kullanıcı Mac'te:
+1. İmleç hiç bulunamıyor, hep alt panel açılıyor → kesin neden bilinmiyor (veri yok). Yapılanlar: AX imleç arama
+   kademeli (AXSelectedTextRange → AXBoundsForRange, önceki karakter; yoksa WebKit/Chromium AXSelectedTextMarkerRange →
+   AXBoundsForTextMarkerRange; uygulamanın odak elemanı yoksa sistem geneli AXFocusedUIElement), metin rolleri
+   (AXTextField/TextArea/ComboBox/SearchField) metin girişi sayılır; imleç okunamazsa alan çerçevesi (tek satırda alanın
+   altı, çok satırda fare satırı ya da ilk satır). Her adımın AX hata kodu tanı kaydına (`ax {...steps}`).
+2. CleanShot'tan kopyalanan resimler görünmüyor → panoda resimle birlikte dosya adı/yolu metni varsa artık resim
+   kaydedilir; yalnız resim dosyası adresi varsa (public.file-url / text/uri-list) dosyadan okunur; macOS'ta yalnız
+   TIFF varsa `sips` ile PNG'ye çevrilir. Biçim adları kayda yazılır. Başsız kabukta metin/PNG/uri-list doğrulandı.
+3. Alt panelin alt köşeleri yuvarlak (boşluk) → `roundedCorners: false` (macOS çerçevesiz pencere varsayılanı).
+4. Ana ekranda alt panel dipte değil, ortalanıyor → Windows/macOS'ta panel ekranın kendi alt kenarına (Dock/görev
+   çubuğunun üstünde çizilir), macOS'ta konum gösterildikten sonra yeniden verilir; setVisibleOnAllWorkspaces
+   `skipTransformProcessType` (Dock simgesi görünmesin).
+5. Tanı kaydı artık her zaman dosyaya: macOS ~/Library/Logs/UPaste/main.log (Windows %APPDATA%\UPaste\logs, Linux
+   ~/.config/UPaste/logs); içerik yazılmaz, 1 MB'ta döner. Sürüm 0.2.1. İzin: yalnız Erişilebilirlik gerekir.
+PR #2 açıldı (0.2.1, macOS düzeltmeleri), oturuma bağlı; CI çalışıyor. Birleştirme kullanıcıda (= v0.2.1 imzalı yayın). Sonra kullanıcı Mac'te dener, sorun sürerse ~/Library/Logs/UPaste/main.log'daki 'ax' ve 'capture types' satırlarını gönderir.
+09:56 kullanıcı: panel görev çubuğunun üstünde (yukarısında) durmasın, onu örtsün; yalnız alt köşeler düz. 0.2.1 kodu zaten böyle (ekran sınırı + pop-up-menu seviyesi; CSS rounded-t-2xl + roundedCorners:false, Windows 11 dahil); açıklandı.
+
+### 18. tur (2026-10-30, 09:59): Clipman deposu incelendi (imleç yanında açma için)
+Kullanıcı "clipman reposuna bakarak imlecin yanında açmayı iyileştirebilir miyiz" dedi. Aramada eşleşen:
+MohammedEl-sayedAhmed/clipman (GNOME/Wayland, Super+V, Python + GTK4 + Shell eklentisi). Bulgu: pencereyi metin
+imlecine değil **fare imlecine** taşıyor (eklentide `MoveWindowToCursor`: `global.get_pointer()` + çalışma alanına
+sıkıştırma + `metaWin.move_frame` + `activate`); IBus/text-input/AT-SPI kullanımı yok, yalnız Linux. UPaste'in
+yaklaşımı (giriş yönteminden gerçek imleç, X11'de taze imleç için Shift, pencere taşınınca imleci kaydırma, imleç
+yoksa alt panel) bundan ileride; alınacak bir şey yok. Clipman'den alınabilecek başka fikirler (soruldu, karar
+kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelenir, 30 sn sonra silinir), gizli kip
+(kaydı duraklatma), şablonlu parçacıklar (${date}).
+10:04 kullanıcı sordu: Clipman gibi mi yapsak, o fare mi metin imleci mi? Yanıt: Clipman fare oku; UPaste yanıp sönen metin imleci. Seçenek sunuldu: (1) olduğu gibi kalsın, (2) Açılış Biçimi'ne 'fare imlecinin yanında' seçeneği, (3) imleç bulunamayınca alt panel yerine fare imlecinde açma. Karar bekleniyor.
+10:05 Clipman yeniden, ayrıntılı incelendi (tüm eklenti, CHANGELOG 'Window appears near cursor position', PR #141 'pinned near the cursor', main/security-baseline/stats dalları): tek konumlama kodu MoveWindowToCursor → global.get_pointer() (fare), metin imleci kullanımı hiçbir dalda yok. Karar: UPaste'in metin imleci yaklaşımı korunur; isteğe bağlı fikir: imleç bulunamayınca fare konumu (kullanıcıya soruldu).

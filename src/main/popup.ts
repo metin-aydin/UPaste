@@ -76,6 +76,8 @@ function createWindow(asOverlay: boolean): void {
     transparent: true,
     backgroundColor: '#00000000',
     hasShadow: false,
+    // macOS çerçevesiz pencerenin köşelerini yuvarlar; panelin alt köşelerinde boşluk kalmasın.
+    roundedCorners: false,
     resizable: false,
     minimizable: false,
     maximizable: false,
@@ -99,7 +101,11 @@ function createWindow(asOverlay: boolean): void {
   })
   win = created
   created.setAlwaysOnTop(true, 'pop-up-menu')
-  created.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+  // macOS'ta süreç türü değiştirilmez: menü çubuğu uygulamasının Dock simgesi bir an bile görünmez.
+  created.setVisibleOnAllWorkspaces(true, {
+    visibleOnFullScreen: true,
+    skipTransformProcessType: true
+  })
   created.on('page-title-updated', (e) => e.preventDefault())
   created.on('blur', () => {
     if (focusMode && Date.now() - shownAt > BLUR_GRACE_MS) hidePopup()
@@ -175,9 +181,9 @@ function placeCard(anchor: Rect, areas: Rect[]): { bounds: Rect; above: boolean 
 }
 
 /**
- * Alt panel: odaklı pencerenin (yoksa fare imlecinin) bulunduğu ekranın altında, tam genişlik. Odaksız pencere
- * kabuk çubuklarının üstünde durduğu için ekranın kendi alt kenarına oturur; yönetilen pencere rıhtımın altında
- * kalmasın diye çalışma alanının altına yerleşir.
+ * Alt panel: odaklı pencerenin (yoksa fare imlecinin) bulunduğu ekranın altında, tam genişlik, ekranın kendi alt
+ * kenarında; rıhtımın (Dock, görev çubuğu) üstünde çizilir. Yalnız GNOME'un eski eklentisindeki yönetilen pencere
+ * kabuk çubuklarının altında kaldığı için çalışma alanının altına yerleşir.
  */
 function sheetBounds(info: FocusInfo): Rect {
   const point = info.frame
@@ -191,7 +197,7 @@ function sheetBounds(info: FocusInfo): Rect {
     monitors.map((m) => m.bounds)
   )
   const monitor = monitors.find((m) => m.bounds === screenRect) ?? monitors[0]
-  const area = overlay ? monitor.bounds : monitor.work
+  const area = overlay || process.platform !== 'linux' ? monitor.bounds : monitor.work
   const height = Math.min(SHEET_HEIGHT, area.height)
   return { x: area.x, y: area.y + area.height - height, width: area.width, height }
 }
@@ -299,6 +305,8 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
       // alınır.
       if (process.platform === 'darwin') app.focus({ steal: true })
       win.show()
+      // macOS gizli pencerenin konumunu gösterilirken yeniden belirleyebilir; yer gösterildikten sonra yeniden verilir.
+      if (process.platform === 'darwin') win.setBounds(placed.bounds)
       win.focus()
       if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
     }
