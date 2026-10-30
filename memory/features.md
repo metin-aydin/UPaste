@@ -331,3 +331,4 @@ depo düzeyindekiler kullanıldı). Yerel `development` `main`'e ileri sarıldı
 5. Tanı kaydı artık her zaman dosyaya: macOS ~/Library/Logs/UPaste/main.log (Windows %APPDATA%\UPaste\logs, Linux
    ~/.config/UPaste/logs); içerik yazılmaz, 1 MB'ta döner. Sürüm 0.2.1. İzin: yalnız Erişilebilirlik gerekir.
 PR #2 açıldı (0.2.1, macOS düzeltmeleri), oturuma bağlı; CI çalışıyor. Birleştirme kullanıcıda (= v0.2.1 imzalı yayın). Sonra kullanıcı Mac'te dener, sorun sürerse ~/Library/Logs/UPaste/main.log'daki 'ax' ve 'capture types' satırlarını gönderir.
+09:56 kullanıcı: panel görev çubuğunun üstünde (yukarısında) durmasın, onu örtsün; yalnız alt köşeler düz. 0.2.1 kodu zaten böyle (ekran sınırı + pop-up-menu seviyesi; CSS rounded-t-2xl + roundedCorners:false, Windows 11 dahil); açıklandı.

@@ -33,3 +33,6 @@ metadata:
 - **Windows kısayolu (2026-10-26):** Win+V kalsın — UPaste, Windows'un pano geçmişi kısayolunu devralır.
 - **Metinler platformdan bağımsız (2026-10-26):** arayüz ve paket metinlerinde "Ubuntu için" gibi tek işletim sistemine
   bağlayan ifade olmaz; kullanıcı uygulamanın tüm işletim sistemlerinde geçerli olmasını bekliyor.
+- **Alt panel (2026-10-30):** her sistemde ekranın en altına yapışır ve görev çubuğunu/Dock'u/rıhtımı ARKASINDA bırakır
+  (üstlerinde çizilir; onların üstünde, daha yukarıda durmaz). Yalnız sol alt ve sağ alt köşeler düz, üst köşeler
+  yuvarlak. Yanıtlarda "üstüne" yerine "örter / arkada bırakır" gibi açık ifade kullan (yanlış anlaşıldı).
