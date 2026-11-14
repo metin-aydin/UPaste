@@ -70,7 +70,8 @@ Kullanıcı verisi (kopyalanan metin) olduğu gibi kalır.
   odaklanılmışken kısayolla girdinin altında açılır, girdiyi takip eder, seçilen öğeyi yapıştırır; girdi yoksa
   ekranın altında kartlı panel açılır.
 - Platform durumu: Linux (GNOME, Wayland + X11) çalışıyor ve denendi. macOS (⌘⇧V, Erişilebilirlik izni) gerçek
-  Mac'te kullanılıyor (0.2.1); imleç çoğu uygulamada bulunamıyor, açık iş (`memory/features.md` 19. tur). Windows
+  Mac'te kullanılıyor ve denendi (0.2.2: Claude, Chrome'da imleç bulunuyor; Sublime imleç vermez → alt panel;
+  ayrıntı `memory/features.md` 19.–23. tur). Windows
   (Win+V'yi alt düzey klavye kancasıyla devralır) yazıldı (`src/main/platform/`, koffi), gerçek makinede henüz
   denenmedi. Geliştirme makinesi artık macOS; GNOME testleri burada yapılamaz. Arayüz ve paket metinleri işletim sistemine özgü olmaz (yalnız ilgili sistemde görünen metinler hariç).
 - Ayrıntılar: `memory/MEMORY.md`.

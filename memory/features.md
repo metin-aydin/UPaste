@@ -417,3 +417,4 @@ PR metni: Fixed (macOS odaktaki uygulama yedeği, Chrome adres çubuğu imleci),
 kimliği). Claude imzası yazılmaz (CLAUDE.md).
 PR zaten açıktı (metin-aydin/UPaste#3, kullanıcı 21:18'de boş şablonla açmış) → başlık ve sürüm notu `gh pr edit` ile dolduruldu; oturuma bağlı, CI çalışıyor. Geliştirme sürümü kapatıldı, kurulu UPaste 0.2.1 yeniden açıldı. Birleştirme kullanıcıda (= v0.2.2 imzalı yayın).
 Birleştirmeyi kullanıcı kendisi yapacak (Claude birleştirmez). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
+21:39 kullanıcı PR #3'ü birleştirdi (f8aa327); Release iş akışı v0.2.2 için başladı. Yerel `development` yerel commit'le birlikte origin/main üstüne yeniden kuruldu (rebase; ff-only yerel commit yüzünden olmazdı), `main` ileri sarıldı. Açık: "ilk açılışta saçmalıyor" tarifi, Electron/Chromium AXGroup imleci, kayıttaki uygulama kimliğini sorun çözülünce kaldırmak ya da UPASTE_DEBUG'a bağlamak, Windows gerçek makine denemesi.
