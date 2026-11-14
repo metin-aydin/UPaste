@@ -410,3 +410,8 @@ yöntemi (IMK) olmak, çok ağır. Karar kullanıcıya soruldu: alt panel kalsı
 yanında mı açılsın (18. turdaki açık soru (d)). "İlk açılış" sorununun tarifi hâlâ bekleniyor.
 Karar (2026-11-15): imleç bulunamayan uygulamalarda (Sublime) **alt panel kalır**; fare imlecinin yanında açma
 seçeneği reddedildi (18. turdaki (d) sorusu kapandı). Kod değişikliği yok.
+
+### 23. tur (2026-11-15): 0.2.2 PR'ı
+Kullanıcı "PR aç" dedi. package.json/lock 0.2.2 (next-version zaten yama artırırdı; 0.2.1'deki gibi elle artırıldı).
+PR metni: Fixed (macOS odaktaki uygulama yedeği, Chrome adres çubuğu imleci), Changed (README logosu, kayıtta uygulama
+kimliği). Claude imzası yazılmaz (CLAUDE.md).
