@@ -448,4 +448,4 @@ gönderilir, arayüz giriş animasyonunu baştan başlatıp iki rAF sonra `popup
 typecheck/lint (yalnız eski 2 virtualizer uyarısı)/9 test geçti. Dev yeniden başlatıldı; kullanıcı dener. Görsel
 doğrulama kullanıcıda.
 Kullanıcı: ilk açılış zıplaması **gitti** (onaylandı). Henüz commit yok; dev sürümü Terminal panelinde çalışıyor,
-kurulu UPaste kapalı. Açık: commit + development push, sonraki sürüm (0.2.3) PR'ı.
+kurulu UPaste kapalı. Commit edildi (0cc49f1, a4c07d0) ve development'a gönderildi; dev kapatıldı, kurulu 0.2.2 yeniden açıldı. Açık: 0.2.3 PR'ı (kullanıcı isterse).
