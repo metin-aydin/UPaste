@@ -449,3 +449,9 @@ typecheck/lint (yalnız eski 2 virtualizer uyarısı)/9 test geçti. Dev yeniden
 doğrulama kullanıcıda.
 Kullanıcı: ilk açılış zıplaması **gitti** (onaylandı). Henüz commit yok; dev sürümü Terminal panelinde çalışıyor,
 kurulu UPaste kapalı. Commit edildi (0cc49f1, a4c07d0) ve development'a gönderildi; dev kapatıldı, kurulu 0.2.2 yeniden açıldı. Açık: 0.2.3 PR'ı (kullanıcı isterse).
+
+### 26. tur (2026-11-15): 0.2.3 PR'ı
+package.json/lock 0.2.3 (`npm version --no-git-tag-version`, elle). PR metin-aydin/UPaste#4 (development → main,
+taslak değil): "UPaste 0.2.3: selected text and first-open fixes"; Fixed: ⌘A seçiminde alt panel, ilk açılışta
+boş/zıplama, resim önizlemesi yüklenirken liste kayması. Claude imzası yok. Oturuma bağlı, CI (6 kontrol) çalışıyor.
+Birleştirme kullanıcıda (= v0.2.3 imzalı yayın). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
