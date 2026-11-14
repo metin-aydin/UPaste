@@ -402,3 +402,9 @@ tamamlar (yatay konum korunur); (2) macos.ts hedef çerçeveyi pencere ∪ metin
 dev yeniden başlatıldı, kullanıcı Chrome'da yeniden dener. "İlk açılış" sorunu kayıtta görünmüyor → kullanıcıya soruldu.
 Claude'da boş metin kutusunda AXBoundsForRange tüm alan genişliğini veriyor (644 px); küçük pencere alanın sol
 kenarında açılıyor, kabul edilebilir.
+Kullanıcı: Chrome'da artık çalışıyor (adres çubuğu: AXBoundsForRange yine null, ama fieldAnchor + genişletilmiş
+çerçeveyle küçük pencere alanın sol kenarında açılıyor). Sublime Text 4'te (com.sublimetext.4) çalışmıyor: odak
+elemanı AXWindow, AXSelectedTextRange ve AXSelectedTextMarkerRange -25205 (kAXErrorAttributeUnsupported) → metin
+alanı yok, alt panel açılıyor. Sublime macOS'ta da (Linux'taki gibi) dışarıya imleç bildirmiyor; tek yol giriş
+yöntemi (IMK) olmak, çok ağır. Karar kullanıcıya soruldu: alt panel kalsın mı, imleç bulunamayınca fare imlecinin
+yanında mı açılsın (18. turdaki açık soru (d)). "İlk açılış" sorununun tarifi hâlâ bekleniyor.
