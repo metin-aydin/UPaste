@@ -365,3 +365,4 @@ Tanı kaydı (`~/Library/Logs/UPaste/main.log`, 2026-10-30 → 11-14) incelendi 
 Açık işler: (a) macOS'ta odaktaki uygulama yedeği, (b) Electron/Chromium AXGroup imleci, (c) 579 px genişlikli alt
 panel, (d) 18. turdaki karar: imleç bulunamayınca fare konumu seçeneği (kullanıcıda), (e) Windows gerçek makinede
 denenmedi.
+Hafıza commit'i (dd47221) kullanıcı onayıyla `development`'a gönderildi (`git -c credential.helper='!gh auth git-credential' push`).
