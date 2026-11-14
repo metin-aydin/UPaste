@@ -367,3 +367,9 @@ panel, (d) 18. turdaki karar: imleç bulunamayınca fare konumu seçeneği (kull
 denenmedi.
 Hafıza commit'i (dd47221) kullanıcı onayıyla `development`'a gönderildi (`git -c credential.helper='!gh auth git-credential' push`).
 GitHub MCP denendi: bağlantı çalışıyor (`get_me` → metin-aydin). `gh` CLI de oturum açık.
+
+### 20. tur (2026-11-15): README girişi JumpDesk biçiminde
+İstek: UPaste README'sinin girişi JumpDesk'teki gibi olsun (logo), gerisi aynı kalsın. Yapılan: ortalanmış logo
+(`build/icons/256x256.png`, width 112), `<h1 align="center">`, ortalanmış kısa slogan, ortalanmış HTML rozetler (CI,
+Latest release, MIT), açıklama paragrafı rozetlerin altında. Diğer bölümlere dokunulmadı. Prettier denetimi
+çalıştırılamadı (node_modules kurulu değil, npx indirmesi izin almadı).
