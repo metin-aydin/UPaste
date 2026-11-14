@@ -408,3 +408,5 @@ elemanı AXWindow, AXSelectedTextRange ve AXSelectedTextMarkerRange -25205 (kAXE
 alanı yok, alt panel açılıyor. Sublime macOS'ta da (Linux'taki gibi) dışarıya imleç bildirmiyor; tek yol giriş
 yöntemi (IMK) olmak, çok ağır. Karar kullanıcıya soruldu: alt panel kalsın mı, imleç bulunamayınca fare imlecinin
 yanında mı açılsın (18. turdaki açık soru (d)). "İlk açılış" sorununun tarifi hâlâ bekleniyor.
+Karar (2026-11-15): imleç bulunamayan uygulamalarda (Sublime) **alt panel kalır**; fare imlecinin yanında açma
+seçeneği reddedildi (18. turdaki (d) sorusu kapandı). Kod değişikliği yok.
