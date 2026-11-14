@@ -366,3 +366,4 @@ Açık işler: (a) macOS'ta odaktaki uygulama yedeği, (b) Electron/Chromium AXG
 panel, (d) 18. turdaki karar: imleç bulunamayınca fare konumu seçeneği (kullanıcıda), (e) Windows gerçek makinede
 denenmedi.
 Hafıza commit'i (dd47221) kullanıcı onayıyla `development`'a gönderildi (`git -c credential.helper='!gh auth git-credential' push`).
+GitHub MCP denendi: bağlantı çalışıyor (`get_me` → metin-aydin). `gh` CLI de oturum açık.
