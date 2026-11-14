@@ -98,6 +98,8 @@ const objc_getClass = objc.func('objc_getClass', 'void *', ['str'])
 const sel_registerName = objc.func('sel_registerName', 'void *', ['str'])
 const sendId = objc.func('objc_msgSend', 'void *', ['void *', 'void *'])
 const sendLong = objc.func('objc_msgSend', 'int64_t', ['void *', 'void *'])
+const sendInt = objc.func('objc_msgSend', 'int32_t', ['void *', 'void *'])
+const sendStr = objc.func('objc_msgSend', 'str', ['void *', 'void *'])
 const sendIdInt = objc.func('objc_msgSend', 'void *', ['void *', 'void *', 'int32_t'])
 const sendBoolUlong = objc.func('objc_msgSend', 'bool', ['void *', 'void *', 'uint64_t'])
 
@@ -148,6 +150,18 @@ export const accessibilityTrusted = (): boolean => AXIsProcessTrusted()
 export function pasteboardChangeCount(): number {
   const board = sendId(objc_getClass('NSPasteboard'), sel_registerName('generalPasteboard'))
   return Number(sendLong(board, sel_registerName('changeCount')))
+}
+
+/** Öndeki uygulama (NSWorkspace frontmostApplication): süreç kimliği ve paket kimliği; yoksa null. */
+function frontmostApplication(): { pid: number; bundle: string | null } | null {
+  const workspace = sendId(objc_getClass('NSWorkspace'), sel_registerName('sharedWorkspace'))
+  const app = workspace ? sendId(workspace, sel_registerName('frontmostApplication')) : null
+  if (!app) return null
+  const id = sendId(app, sel_registerName('bundleIdentifier'))
+  return {
+    pid: sendInt(app, sel_registerName('processIdentifier')),
+    bundle: id ? sendStr(id, sel_registerName('UTF8String')) : null
+  }
 }
 
 /** Süreci öne alır (NSRunningApplication activateWithOptions:). */
@@ -232,6 +246,8 @@ const TEXT_ROLES = new Set(['AXTextField', 'AXTextArea', 'AXComboBox', 'AXSearch
 
 export interface MacFocus {
   pid: number
+  /** Öndeki uygulamanın paket kimliği (tanı kaydı için). */
+  bundle: string | null
   role: string | null
   /** Odaktaki pencerenin çerçevesi. */
   frame: MacRect | null
@@ -245,23 +261,37 @@ export interface MacFocus {
 }
 
 /**
- * Odaktaki uygulama, penceresi, metin alanı ve imleci (ekran noktası; sol üst köşe başlangıç). İmleç önce seçili metin
- * aralığından (Cocoa), yoksa WebKit/Chromium'un metin işaretçisi aralığından okunur. Uygulama odakta değilse null.
+ * Odaktaki uygulama, penceresi, metin alanı ve imleci (ekran noktası; sol üst köşe başlangıç). Uygulama sistem genelinin
+ * AXFocusedApplication özniteliğinden, o değer vermezse (birçok uygulamada kAXErrorNoValue) öndeki uygulamanın süreç
+ * kimliğinden alınır. İmleç önce seçili metin aralığından (Cocoa), yoksa WebKit/Chromium'un metin işaretçisi
+ * aralığından okunur.
  */
 export function focusedElement(): MacFocus | null {
   const steps: Record<string, number> = {}
   const system = AXUIElementCreateSystemWide()
-  const app = copy(system, 'AXFocusedApplication')
+  const front = frontmostApplication()
+  let app = copy(system, 'AXFocusedApplication')
   steps['app'] = lastError
+  if (!app && front && front.pid > 0) app = AXUIElementCreateApplication(front.pid)
   if (!app) {
     release(system)
-    return { pid: 0, role: null, frame: null, field: null, textInput: false, caret: null, steps }
+    return {
+      pid: 0,
+      bundle: front?.bundle ?? null,
+      role: null,
+      frame: null,
+      field: null,
+      textInput: false,
+      caret: null,
+      steps
+    }
   }
   const pid = [0]
   AXUIElementGetPid(app, pid)
   enableAccessibility(pid[0])
   const result: MacFocus = {
     pid: pid[0],
+    bundle: front && front.pid === pid[0] ? front.bundle : null,
     role: null,
     frame: null,
     field: null,

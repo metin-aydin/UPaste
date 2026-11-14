@@ -374,3 +374,16 @@ GitHub MCP denendi: bağlantı çalışıyor (`get_me` → metin-aydin). `gh` CL
 Latest release, MIT), açıklama paragrafı rozetlerin altında. Diğer bölümlere dokunulmadı. Prettier denetimi
 çalıştırılamadı (node_modules kurulu değil, npx indirmesi izin almadı).
 README değişikliği kullanıcı onayıyla `development`'a gönderildi.
+
+### 21. tur (2026-11-15): macOS imleç düzeltmesi başladı
+İstek: 19. turdaki (a) işi. Yapılan (`src/main/platform/darwin-api.ts`):
+1. Sistem geneli `AXFocusedApplication` değer vermezse (-25212) öndeki uygulama `NSWorkspace.sharedWorkspace
+   .frontmostApplication` → `processIdentifier` ile alınır, `AXUIElementCreateApplication(pid)` ile devam edilir.
+   `steps.app` yine ilk hatayı gösterir; ardından `window/element` adımları görünüyorsa yedek çalışmıştır.
+2. `MacFocus.bundle`: öndeki uygulamanın paket kimliği tanı kaydına (`ax {...}`) yazılır → hangi uygulamada imleç
+   bulunamadığı artık görülecek.
+3. 19. turdaki (c) "579 px panel" hata değil: kayıtta o anki tek ekranın kendisi 579×1144 (monitors listesi).
+Doğrulama: typecheck, eslint, prettier, 9 birim test dosyası geçti. frontmostApplication çağrısı bu Mac'te koffi ile
+denendi (pid + paket kimliği doğru; düz node'da AppKit ayrıca yüklenmeli, Electron'da zaten yüklü). Tam AX yolu
+Erişilebilirlik izni olan paketli uygulamada denenmedi → kullanıcı yeni sürümle dener, kayıttaki `ax` satırlarına
+bakılır. Bekleyen: (b) Electron/Chromium AXGroup imleci, sürüm numarası (0.2.2) ve PR.
