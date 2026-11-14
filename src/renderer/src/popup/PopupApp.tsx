@@ -99,6 +99,19 @@ export function PopupApp(): React.ReactNode {
     }
   }, [openCount])
 
+  // Pencere saydam gösterildi: giriş animasyonu görünür karede baştan başlar, iki kare sonra pencere belirir.
+  useEffect(
+    () =>
+      api.onPopupPaint(() => {
+        for (const animation of panelRef.current?.getAnimations() ?? []) {
+          animation.cancel()
+          animation.play()
+        }
+        requestAnimationFrame(() => requestAnimationFrame(() => api.popupPainted()))
+      }),
+    []
+  )
+
   useEffect(
     () =>
       api.onPopupFocus(() => {

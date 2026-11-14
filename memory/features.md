@@ -416,3 +416,42 @@ Kullanıcı "PR aç" dedi. package.json/lock 0.2.2 (next-version zaten yama art�
 PR metni: Fixed (macOS odaktaki uygulama yedeği, Chrome adres çubuğu imleci), Changed (README logosu, kayıtta uygulama
 kimliği). Claude imzası yazılmaz (CLAUDE.md).
 PR zaten açıktı (metin-aydin/UPaste#3, kullanıcı 21:18'de boş şablonla açmış) → başlık ve sürüm notu `gh pr edit` ile dolduruldu; oturuma bağlı, CI çalışıyor. Geliştirme sürümü kapatıldı, kurulu UPaste 0.2.1 yeniden açıldı. Birleştirme kullanıcıda (= v0.2.2 imzalı yayın).
+Birleştirmeyi kullanıcı kendisi yapacak (Claude birleştirmez). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
+21:39 kullanıcı PR #3'ü birleştirdi (f8aa327); Release iş akışı v0.2.2 için başladı. Yerel `development` yerel commit'le birlikte origin/main üstüne yeniden kuruldu (rebase; ff-only yerel commit yüzünden olmazdı), `main` ileri sarıldı. Açık: "ilk açılışta saçmalıyor" tarifi, Electron/Chromium AXGroup imleci, kayıttaki uygulama kimliğini sorun çözülünce kaldırmak ya da UPASTE_DEBUG'a bağlamak, Windows gerçek makine denemesi.
+21:44 v0.2.2 Release işi düştü: macOS Apple onayı 403 (süresi dolmuş/imzalanmamış Apple Developer anlaşması; ayrıntı release-update.md). Windows/Linux paketlendi ama yayın olmadı. Kullanıcı anlaşmayı kabul edince `gh run rerun 43644009890 -R metin-aydin/UPaste`.
+21:52 kullanıcı anlaşmayı kabul ettiğini söyledi, iş baştan çalıştırıldı → yine aynı 403 (Windows/Linux geçti, discard taslağı sildi). Olasılıklar: kabulün Apple'da yayılması gecikiyor ya da bekleyen ikinci bir anlaşma var (App Store Connect → Business/Agreements). Kullanıcıya iki sayfa da kontrol ettirildi; sonra yeniden `gh run rerun 43644009890`.
+22:07 üçüncü deneme başarılı: anlaşma kabulü yayılmıştı, v0.2.2 imzalı + Apple onaylı yayımlandı (Latest).
+22:10 kullanıcı 0.2.2'ye güncelledi (kurulu sürüm doğrulandı), çalıştığını onayladı. Kayıt: Chrome'da `app` adımı 0, küçük pencere adres çubuğunun altında (popup, y=82). 21. turdaki macOS imleç işi kapandı; açık işler: ilk açılış tarifi, Electron AXGroup imleci, kayıttaki uygulama kimliği, Windows denemesi.
+
+### 24. tur (2026-11-15): Claude'da ⌘A ile seçili metinde alt panel
+Kullanıcı: Claude masaüstünde metni Ctrl/⌘A ile seçip kısayola basınca alt panel açılıyor. Kayıt (kurulu 0.2.2,
+~/Library/Logs/UPaste/main.log): AXSelectedTextRange yolu imleç vermiyor (bounds/previous null), yedek
+AXBoundsForTextMarkerRange **tüm seçimin** dikdörtgenini veriyor ({664,690,633×732}; alanın ve pencerenin dışına
+taşıyor) → "pencere dışında" → `popup sheet`.
+Düzeltme (`darwin-api.ts` `markerCaret`): dikdörtgen bir satırdan (64 px) yüksekse aralık
+`AXEndTextMarkerForTextMarkerRange` + `AXTextMarkerRangeForUnorderedTextMarkers` (CFArrayCreate, geri çağrısız) ile
+seçimin sonuna daraltılır; daraltılamazsa ya da sonu alanın görünen kısmı dışındaysa caret null → `fieldAnchor`
+(fare alan içindeyse fare satırı, değilse ilk satır). typecheck/eslint/prettier/9 test geçti. Kurulu UPaste kapatıldı,
+`UPASTE_DEBUG=1 npm run dev` Terminal panelinde (sekme "upaste dev"); kullanıcı Claude'da dener. Gerçek AX davranışı
+henüz doğrulanmadı.
+Kullanıcı: ⌘A düzeltmesi **çalıştı**. Kayıtta Claude'da daraltma `markerBounds -25212` verdi → fieldAnchor yolu
+(fare satırı) devreye girdi; yani Claude AXEndTextMarker… zincirini desteklemiyor, sonuç yine doğru.
+
+### 25. tur (2026-11-15): ilk açılışta zıplama ("boş açılıp sonra doluyor")
+Kullanıcı: ilk açılışta kasma/zıplama var, pencere boş açılıp sonra doluyor gibi (22. turdaki "ilk açılışta
+saçmalıyor" bu). Nedenler (koddan): (1) macOS'ta `win.show()` önce eski konumda gösterip ardından `setBounds` ile
+taşıyordu; (2) gizli pencere kare çizmez, 16 ms bekleme ilk açılışta yetmiyor → boş/eski içerik görünüyor;
+(3) küçük penceredeki resimlerin boyutu yüklenene dek bilinmiyordu → kartlar yüklenince uzuyordu.
+Düzeltme: macOS/Windows'ta (`REVEAL`; Linux'ta setOpacity yok) pencere `setOpacity(0)` ile gösterilir, `popup:paint`
+gönderilir, arayüz giriş animasyonunu baştan başlatıp iki rAF sonra `popup:painted` döner (en çok 250 ms), sonra
+`setOpacity(1)`. ItemCard resmine `thumbStyle` (aspect-ratio + `min(100%, w, 128·w/h)` genişlik) verildi.
+typecheck/lint (yalnız eski 2 virtualizer uyarısı)/9 test geçti. Dev yeniden başlatıldı; kullanıcı dener. Görsel
+doğrulama kullanıcıda.
+Kullanıcı: ilk açılış zıplaması **gitti** (onaylandı). Henüz commit yok; dev sürümü Terminal panelinde çalışıyor,
+kurulu UPaste kapalı. Commit edildi (0cc49f1, a4c07d0) ve development'a gönderildi; dev kapatıldı, kurulu 0.2.2 yeniden açıldı. Açık: 0.2.3 PR'ı (kullanıcı isterse).
+
+### 26. tur (2026-11-15): 0.2.3 PR'ı
+package.json/lock 0.2.3 (`npm version --no-git-tag-version`, elle). PR metin-aydin/UPaste#4 (development → main,
+taslak değil): "UPaste 0.2.3: selected text and first-open fixes"; Fixed: ⌘A seçiminde alt panel, ilk açılışta
+boş/zıplama, resim önizlemesi yüklenirken liste kayması. Claude imzası yok. Oturuma bağlı, CI (6 kontrol) çalışıyor.
+Birleştirme kullanıcıda (= v0.2.3 imzalı yayın). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.

@@ -39,3 +39,10 @@ iş akışı anahtarı varsayılan salt okunur, dış katkı PR'ları onayla ça
 gizli değeri olarak tutulur, depo düzeyindekiler silinir. Gizli bilgi taraması ve itme koruması zaten açıktı.
 Yeni CI işi eklenince dal korumasındaki zorunlu kontrol listesi de güncellenmeli (`gh api -X PUT
 repos/metin-aydin/<repo>/branches/main/protection`).
+
+**Apple anlaşması (2026-11-15, v0.2.2 yayını düştü):** macOS işinde imza başarılı, Apple onayı (notarize) `HTTP 403. A
+required agreement is missing or has expired` ile düştü → kod sorunu değil; hesap sahibi developer.apple.com/account'ta
+güncel Apple Developer Program License Agreement'ı kabul etmeli (Apple yılda bir kez yeniler; JumpDesk de aynı hesapla
+etkilenir). Sonra çalıştırmanın TAMAMI yeniden çalıştırılır (`gh run rerun <id>`; yalnız başarısızları değil: prepare
+taslağı ve sürüm notunu yeniden kurar, Windows/Linux paketleri yeniden yüklenir). `discard` işi "release not found"
+ile düştü ama ortada artık taslak görünmüyor (zararsız).

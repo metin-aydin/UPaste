@@ -1,12 +1,25 @@
 // Geçmiş öğesinin kartı: üstte tür, zaman ve işlemler; ortada metin ya da resim; altta uzunluk ya da boyut. Küçük
 // pencerede kartlar alt alta, alt panelde yan yana dizilir.
-import { useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef, type CSSProperties } from 'react'
 import { ImageIcon, PinIcon, PinOffIcon, TextIcon, Trash2Icon } from 'lucide-react'
 import type { PopupItem } from '@shared/types'
 import { formatBytes, formatNumber, relativeTime } from '@/lib/format'
 import type { useUi } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { Highlighted, IconButton } from './parts'
+
+/** Küçük penceredeki resmin yüksekliği (Tailwind max-h-32). */
+const THUMB_MAX_HEIGHT = 128
+
+/**
+ * Resim yüklenmeden önce de yerini tutan boyut: en-boy oranı korunur, genişlik kartı, alanı ve en çok yüksekliği
+ * aşmaz (resmin kendiliğinden aldığı boyutla aynı).
+ */
+function thumbStyle(width: number, height: number): CSSProperties | undefined {
+  if (!(width > 0 && height > 0)) return undefined
+  const fit = Math.round((THUMB_MAX_HEIGHT * width) / height)
+  return { aspectRatio: `${width} / ${height}`, width: `min(100%, ${width}px, ${fit}px)` }
+}
 
 export interface ItemCardProps {
   item: PopupItem
@@ -95,6 +108,8 @@ export function ItemCard({
         {item.kind === 'image' && item.image ? (
           <img
             src={item.image.thumb}
+            // Boyut önceden verilir: resim yüklenirken kart yüksekliği değişip liste zıplamasın.
+            style={sheet ? undefined : thumbStyle(item.image.width, item.image.height)}
             alt={t('popup.image')}
             draggable={false}
             decoding="async"

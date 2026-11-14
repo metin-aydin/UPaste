@@ -36,6 +36,12 @@ const CFStringGetCString = cf.func('CFStringGetCString', 'bool', [
   'int64_t',
   'uint32_t'
 ])
+const CFArrayCreate = cf.func('CFArrayCreate', 'void *', [
+  'void *',
+  koffi.pointer('void *'),
+  'int64_t',
+  'void *'
+])
 const kCFBooleanTrue = koffi.decode(cf.symbol('kCFBooleanTrue'), 'void *')
 
 const AXIsProcessTrusted = services.func('AXIsProcessTrusted', 'bool', [])
@@ -128,6 +134,14 @@ let lastError = 0
 function copy(element: unknown, name: string): unknown {
   const out: unknown[] = [null]
   lastError = AXUIElementCopyAttributeValue(element, attr(name), out)
+  if (lastError !== kAXErrorSuccess) return null
+  return out[0] ?? null
+}
+
+/** Parametreli özniteliğin değeri (sahibi çağırandır: CFRelease gerekir); yoksa null. */
+function paramCopy(element: unknown, name: string, param: unknown): unknown {
+  const out: unknown[] = [null]
+  lastError = AXUIElementCopyParameterizedAttributeValue(element, attr(name), param, out)
   if (lastError !== kAXErrorSuccess) return null
   return out[0] ?? null
 }
@@ -255,6 +269,31 @@ function withHeight(caret: MacRect | null, field: MacRect | null): MacRect | nul
   return { x: caret.x, y: field.y, width: caret.width, height: field.height }
 }
 
+/**
+ * Metin işaretçisi aralığından imleç: seçim boş değilse (ör. ⌘A) aralık seçimin sonuna daraltılır, yoksa tüm seçimin
+ * dikdörtgeni gelir. Daraltılamayan, bir satırdan yüksek ya da alanın görünen kısmının dışında kalan dikdörtgen imleç
+ * sayılmaz (null; alan çapası kullanılır).
+ */
+function markerCaret(element: unknown, marker: unknown, field: MacRect | null): MacRect | null {
+  const whole = withHeight(paramRect(element, 'AXBoundsForTextMarkerRange', marker), field)
+  if (!whole || whole.height <= SINGLE_LINE_FIELD) return whole
+  const end = paramCopy(element, 'AXEndTextMarkerForTextMarkerRange', marker)
+  if (!end) return null
+  const pair = CFArrayCreate(null, [end, end], 2, null)
+  const collapsed = pair
+    ? paramCopy(element, 'AXTextMarkerRangeForUnorderedTextMarkers', pair)
+    : null
+  release(pair)
+  const caret = collapsed
+    ? withHeight(paramRect(element, 'AXBoundsForTextMarkerRange', collapsed), field)
+    : null
+  release(collapsed, end)
+  if (!caret || caret.height > SINGLE_LINE_FIELD) return null
+  // Seçimin sonu alanın kaydırılmış, görünmeyen kısmındaysa imleç yok sayılır.
+  if (field && (caret.y + caret.height <= field.y || caret.y >= field.y + field.height)) return null
+  return caret
+}
+
 /** Bundan alçak metin alanı tek satırlık sayılır. */
 const SINGLE_LINE_FIELD = 64
 
@@ -367,10 +406,7 @@ export function focusedElement(): MacFocus | null {
     steps['marker'] = lastError
     if (marker) {
       result.textInput = true
-      result.caret = withHeight(
-        paramRect(element, 'AXBoundsForTextMarkerRange', marker),
-        result.field
-      )
+      result.caret = markerCaret(element, marker, result.field)
       steps['markerBounds'] = lastError
       release(marker)
     }

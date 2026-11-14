@@ -32,6 +32,8 @@ export const api = {
   onHistoryChanged: (cb: () => void) => bridge.on(IPC.historyChanged, () => cb()),
   onPopupKey: (cb: (key: string) => void) => bridge.on(IPC.popupKey, (k) => cb(k as string)),
   onPopupFocus: (cb: () => void) => bridge.on(IPC.popupFocus, () => cb()),
+  onPopupPaint: (cb: () => void) => bridge.on(IPC.popupPaint, () => cb()),
+  popupPainted: () => bridge.send(IPC.popupPainted),
   requestFocus: () => bridge.send(IPC.popupRequestFocus),
   onPopupQuery: (cb: (text: string) => void) => bridge.on(IPC.popupQuery, (q) => cb(q as string)),
   onPopupTyping: (cb: (typing: boolean) => void) =>
