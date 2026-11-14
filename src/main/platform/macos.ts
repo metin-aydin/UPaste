@@ -40,6 +40,19 @@ function fieldAnchor(field: Rect, [px, py]: [number, number]): Rect {
     : { x: field.x + 8, y: field.y + 4, width: 1, height: LINE_HEIGHT }
 }
 
+/** İki dikdörtgeni kapsayan en küçük dikdörtgen (biri yoksa öteki). */
+function union(a: Rect | null, b: Rect | null): Rect | undefined {
+  if (!a || !b) return a ?? undefined
+  const x = Math.min(a.x, b.x)
+  const y = Math.min(a.y, b.y)
+  return {
+    x,
+    y,
+    width: Math.max(a.x + a.width, b.x + b.width) - x,
+    height: Math.max(a.y + a.height, b.y + b.height) - y
+  }
+}
+
 export class MacDesktop extends NativeDesktop {
   private api: Darwin | null = null
   private registered: string | null = null
@@ -127,7 +140,9 @@ export class MacDesktop extends NativeDesktop {
     const focus = this.api!.focusedElement()
     debug('ax', JSON.stringify(focus))
     if (!focus || !focus.pid) return base
-    this.targetFrame = focus.frame ?? undefined
+    // Bazı uygulamaların (Chrome) AXFocusedWindow çerçevesi araç çubuğunu dışarıda bırakır; metin alanı da pencereye
+    // dahil sayılsın diye çerçeve alanı kapsayacak kadar genişletilir.
+    this.targetFrame = union(focus.frame, focus.field)
     // İmleç okunamayan metin alanında küçük pencere alanın kendisine göre yerleşir.
     const caret =
       focus.caret ?? (focus.textInput && focus.field ? fieldAnchor(focus.field, pointer) : null)

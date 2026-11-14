@@ -387,3 +387,18 @@ Doğrulama: typecheck, eslint, prettier, 9 birim test dosyası geçti. frontmost
 denendi (pid + paket kimliği doğru; düz node'da AppKit ayrıca yüklenmeli, Electron'da zaten yüklü). Tam AX yolu
 Erişilebilirlik izni olan paketli uygulamada denenmedi → kullanıcı yeni sürümle dener, kayıttaki `ax` satırlarına
 bakılır. Bekleyen: (b) Electron/Chromium AXGroup imleci, sürüm numarası (0.2.2) ve PR.
+
+### 22. tur (2026-11-15): yerel deneme (geliştirme sürümü)
+Kurulu UPaste kapatıldı (tek örnek kilidi + aynı userData), `UPASTE_DEBUG=1 npm run dev` Terminal panelinde.
+`npm ci` Electron ikilisini indirmemişti → `node node_modules/electron/install.js`. Erişilebilirlik izni verildi
+(Claude içinden başlatıldığı için izin Claude/Electron girişine bağlı). Kullanıcı: Claude'da çalışıyor, Chrome'da
+olmadı, "ilk açılışta saçmalıyor sonra düzeliyor".
+Kayıt: geliştirme sürümünde `app` adımı hep 0 (öndeki uygulama yedeğine gerek kalmadı; eski -25212'ler kurulu
+sürümün iznine/sürecine bağlı olabilir). Chrome adres çubuğu: AXTextField, alan {1958,82,1112×24}, AXBoundsForRange
+başarılı ama yüksekliği 0 → caret null; fieldAnchor imleci verdi ama Chrome'un AXFocusedWindow çerçevesi y=152'den
+başlıyor (araç çubuğu dışarıda) → knownCaret "pencere dışında" dedi → alt panel.
+Düzeltme: (1) `paramRect` yüksekliği 0 dikdörtgeni de döndürür, `withHeight` tek satırlık alanda alanın y/yüksekliğiyle
+tamamlar (yatay konum korunur); (2) macos.ts hedef çerçeveyi pencere ∪ metin alanı yapar. typecheck/lint/9 test geçti;
+dev yeniden başlatıldı, kullanıcı Chrome'da yeniden dener. "İlk açılış" sorunu kayıtta görünmüyor → kullanıcıya soruldu.
+Claude'da boş metin kutusunda AXBoundsForRange tüm alan genişliğini veriyor (644 px); küçük pencere alanın sol
+kenarında açılıyor, kabul edilebilir.
