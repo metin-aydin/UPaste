@@ -373,3 +373,4 @@ GitHub MCP denendi: bağlantı çalışıyor (`get_me` → metin-aydin). `gh` CL
 (`build/icons/256x256.png`, width 112), `<h1 align="center">`, ortalanmış kısa slogan, ortalanmış HTML rozetler (CI,
 Latest release, MIT), açıklama paragrafı rozetlerin altında. Diğer bölümlere dokunulmadı. Prettier denetimi
 çalıştırılamadı (node_modules kurulu değil, npx indirmesi izin almadı).
+README değişikliği kullanıcı onayıyla `development`'a gönderildi.
