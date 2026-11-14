@@ -416,3 +416,4 @@ Kullanıcı "PR aç" dedi. package.json/lock 0.2.2 (next-version zaten yama art�
 PR metni: Fixed (macOS odaktaki uygulama yedeği, Chrome adres çubuğu imleci), Changed (README logosu, kayıtta uygulama
 kimliği). Claude imzası yazılmaz (CLAUDE.md).
 PR zaten açıktı (metin-aydin/UPaste#3, kullanıcı 21:18'de boş şablonla açmış) → başlık ve sürüm notu `gh pr edit` ile dolduruldu; oturuma bağlı, CI çalışıyor. Geliştirme sürümü kapatıldı, kurulu UPaste 0.2.1 yeniden açıldı. Birleştirme kullanıcıda (= v0.2.2 imzalı yayın).
+Birleştirmeyi kullanıcı kendisi yapacak (Claude birleştirmez). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
