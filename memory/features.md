@@ -422,3 +422,30 @@ Birleştirmeyi kullanıcı kendisi yapacak (Claude birleştirmez). Sonraki tur: 
 21:52 kullanıcı anlaşmayı kabul ettiğini söyledi, iş baştan çalıştırıldı → yine aynı 403 (Windows/Linux geçti, discard taslağı sildi). Olasılıklar: kabulün Apple'da yayılması gecikiyor ya da bekleyen ikinci bir anlaşma var (App Store Connect → Business/Agreements). Kullanıcıya iki sayfa da kontrol ettirildi; sonra yeniden `gh run rerun 43644009890`.
 22:07 üçüncü deneme başarılı: anlaşma kabulü yayılmıştı, v0.2.2 imzalı + Apple onaylı yayımlandı (Latest).
 22:10 kullanıcı 0.2.2'ye güncelledi (kurulu sürüm doğrulandı), çalıştığını onayladı. Kayıt: Chrome'da `app` adımı 0, küçük pencere adres çubuğunun altında (popup, y=82). 21. turdaki macOS imleç işi kapandı; açık işler: ilk açılış tarifi, Electron AXGroup imleci, kayıttaki uygulama kimliği, Windows denemesi.
+
+### 24. tur (2026-11-15): Claude'da ⌘A ile seçili metinde alt panel
+Kullanıcı: Claude masaüstünde metni Ctrl/⌘A ile seçip kısayola basınca alt panel açılıyor. Kayıt (kurulu 0.2.2,
+~/Library/Logs/UPaste/main.log): AXSelectedTextRange yolu imleç vermiyor (bounds/previous null), yedek
+AXBoundsForTextMarkerRange **tüm seçimin** dikdörtgenini veriyor ({664,690,633×732}; alanın ve pencerenin dışına
+taşıyor) → "pencere dışında" → `popup sheet`.
+Düzeltme (`darwin-api.ts` `markerCaret`): dikdörtgen bir satırdan (64 px) yüksekse aralık
+`AXEndTextMarkerForTextMarkerRange` + `AXTextMarkerRangeForUnorderedTextMarkers` (CFArrayCreate, geri çağrısız) ile
+seçimin sonuna daraltılır; daraltılamazsa ya da sonu alanın görünen kısmı dışındaysa caret null → `fieldAnchor`
+(fare alan içindeyse fare satırı, değilse ilk satır). typecheck/eslint/prettier/9 test geçti. Kurulu UPaste kapatıldı,
+`UPASTE_DEBUG=1 npm run dev` Terminal panelinde (sekme "upaste dev"); kullanıcı Claude'da dener. Gerçek AX davranışı
+henüz doğrulanmadı.
+Kullanıcı: ⌘A düzeltmesi **çalıştı**. Kayıtta Claude'da daraltma `markerBounds -25212` verdi → fieldAnchor yolu
+(fare satırı) devreye girdi; yani Claude AXEndTextMarker… zincirini desteklemiyor, sonuç yine doğru.
+
+### 25. tur (2026-11-15): ilk açılışta zıplama ("boş açılıp sonra doluyor")
+Kullanıcı: ilk açılışta kasma/zıplama var, pencere boş açılıp sonra doluyor gibi (22. turdaki "ilk açılışta
+saçmalıyor" bu). Nedenler (koddan): (1) macOS'ta `win.show()` önce eski konumda gösterip ardından `setBounds` ile
+taşıyordu; (2) gizli pencere kare çizmez, 16 ms bekleme ilk açılışta yetmiyor → boş/eski içerik görünüyor;
+(3) küçük penceredeki resimlerin boyutu yüklenene dek bilinmiyordu → kartlar yüklenince uzuyordu.
+Düzeltme: macOS/Windows'ta (`REVEAL`; Linux'ta setOpacity yok) pencere `setOpacity(0)` ile gösterilir, `popup:paint`
+gönderilir, arayüz giriş animasyonunu baştan başlatıp iki rAF sonra `popup:painted` döner (en çok 250 ms), sonra
+`setOpacity(1)`. ItemCard resmine `thumbStyle` (aspect-ratio + `min(100%, w, 128·w/h)` genişlik) verildi.
+typecheck/lint (yalnız eski 2 virtualizer uyarısı)/9 test geçti. Dev yeniden başlatıldı; kullanıcı dener. Görsel
+doğrulama kullanıcıda.
+Kullanıcı: ilk açılış zıplaması **gitti** (onaylandı). Henüz commit yok; dev sürümü Terminal panelinde çalışıyor,
+kurulu UPaste kapalı. Açık: commit + development push, sonraki sürüm (0.2.3) PR'ı.
