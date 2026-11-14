@@ -94,3 +94,7 @@ metadata:
 - **Electron pano biçimleri (Linux):** dosya adresi standart `text/uri-list` olarak gelir; ham biçimler
   `electron application/osclipboard;format="..."`. macOS'ta ham ad nokta ya da eğik çizgiyle gelebilir
   (`public.file-url` / `public/file-url`) — desenler ikisini de kabul eder.
+- **macOS AX hata kodları (tanı kaydındaki `steps`):** 0 başarı, -25212 kAXErrorNoValue (öznitelik değeri yok),
+  -25213 kAXErrorParameterizedAttributeUnsupported (ör. AXBoundsForRange desteklenmiyor), -25204 kAXErrorCannotComplete,
+  -25211 kAXErrorAPIDisabled (Erişilebilirlik izni yok). Kayıt satırları: `ax {...}`, `popup <sheet|popup> {bounds}`,
+  `capture types ...` (içerik yazılmaz).

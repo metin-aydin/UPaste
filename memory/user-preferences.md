@@ -10,8 +10,11 @@ metadata:
 - Kod yorumları değişim geçmişi anlatmaz, yalnızca kodun ne yaptığını anlatır (global kural).
 - Yanıt biçimi: ADHD modu — ilk satır yapılacak iş, numaralı adımlar, en fazla 5 maddelik listeler, somut süre
   tahmini, sonda tek bir sonraki adım.
-- Geliştirme makinesi: Ubuntu, GNOME **Wayland**, farklı yüksekliklerde dizilmiş çok monitör. Başta başka pano
-  araçları kuruluydu (biri Super+V'ye bağlıydı); 5. turda kaldırıldı.
+- Geliştirme makinesi (2026-11-15'ten): **macOS 27 (Apple Silicon, arm64)**, proje `/Users/metin/projects/UPaste`,
+  kurulu UPaste 0.2.1 (`/Applications/UPaste.app`, kayıt `~/Library/Logs/UPaste/main.log`), birden çok ekran.
+  Linux/GNOME testleri (başsız kabuk, gdbus, apt) bu makinede yapılamaz.
+- Önceki geliştirme makinesi (1.–18. tur): Ubuntu, GNOME **Wayland**, farklı yüksekliklerde dizilmiş çok monitör.
+  Başta başka pano araçları kuruluydu (biri Super+V'ye bağlıydı); 5. turda kaldırıldı.
 - Hedef platform: Linux (GNOME), Windows ve macOS. 1. turdaki "yalnız Ubuntu" kararı 4. turda değişti.
 - PR açıklamalarına/sürüm notlarına "Generated with Claude Code", commit mesajlarına "Co-Authored-By: Claude"
   yazılmaz (JumpDesk'teki tercih; CLAUDE.md'de kural).
@@ -33,6 +36,7 @@ metadata:
 - **Windows kısayolu (2026-10-26):** Win+V kalsın — UPaste, Windows'un pano geçmişi kısayolunu devralır.
 - **Metinler platformdan bağımsız (2026-10-26):** arayüz ve paket metinlerinde "Ubuntu için" gibi tek işletim sistemine
   bağlayan ifade olmaz; kullanıcı uygulamanın tüm işletim sistemlerinde geçerli olmasını bekliyor.
+- **İmleç bilinmezse alt panel (2026-11-15, macOS Sublime için yeniden onaylandı):** fare imlecinin yanında açma istenmedi.
 - **Alt panel (2026-10-30):** her sistemde ekranın en altına yapışır ve görev çubuğunu/Dock'u/rıhtımı ARKASINDA bırakır
   (üstlerinde çizilir; onların üstünde, daha yukarıda durmaz). Yalnız sol alt ve sağ alt köşeler düz, üst köşeler
   yuvarlak. Yanıtlarda "üstüne" yerine "örter / arkada bırakır" gibi açık ifade kullan (yanlış anlaşıldı).

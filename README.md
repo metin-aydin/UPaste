@@ -1,11 +1,21 @@
-# UPaste
+<p align="center">
+  <img src="build/icons/256x256.png" width="112" alt="UPaste logo">
+</p>
 
-**Searchable clipboard history for Linux, Windows and macOS.** Press one shortcut in any text field and pick
-something you copied earlier: text or images, right under your text cursor, just like Win+V on Windows.
+<h1 align="center">UPaste</h1>
 
-[![CI](https://github.com/metin-aydin/UPaste/actions/workflows/ci.yml/badge.svg)](https://github.com/metin-aydin/UPaste/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/metin-aydin/UPaste)](https://github.com/metin-aydin/UPaste/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+<p align="center">
+  <strong>Searchable clipboard history</strong> for Linux, Windows and macOS.
+</p>
+
+<p align="center">
+  <a href="https://github.com/metin-aydin/UPaste/actions/workflows/ci.yml"><img src="https://github.com/metin-aydin/UPaste/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/metin-aydin/UPaste/releases/latest"><img src="https://img.shields.io/github/v/release/metin-aydin/UPaste" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"></a>
+</p>
+
+Press one shortcut in any text field and pick something you copied earlier: text or images, right under your text
+cursor, just like Win+V on Windows.
 
 ![The clipboard history opens under the text cursor](docs/images/popup.png)
 

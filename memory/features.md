@@ -344,3 +344,75 @@ kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelen
 (kaydı duraklatma), şablonlu parçacıklar (${date}).
 10:04 kullanıcı sordu: Clipman gibi mi yapsak, o fare mi metin imleci mi? Yanıt: Clipman fare oku; UPaste yanıp sönen metin imleci. Seçenek sunuldu: (1) olduğu gibi kalsın, (2) Açılış Biçimi'ne 'fare imlecinin yanında' seçeneği, (3) imleç bulunamayınca alt panel yerine fare imlecinde açma. Karar bekleniyor.
 10:05 Clipman yeniden, ayrıntılı incelendi (tüm eklenti, CHANGELOG 'Window appears near cursor position', PR #141 'pinned near the cursor', main/security-baseline/stats dalları): tek konumlama kodu MoveWindowToCursor → global.get_pointer() (fare), metin imleci kullanımı hiçbir dalda yok. Karar: UPaste'in metin imleci yaklaşımı korunur; isteğe bağlı fikir: imleç bulunamayınca fare konumu (kullanıcıya soruldu).
+10:10 kullanıcı "PR aç ve main'e birleştir" dedi: PR #2 zaten açıktı; otomatik birleştirme depoda kapalı (açmak ayar
+değişikliği, sorulmadan yapılmadı); kontroller geçince `gh pr merge 2 --merge` ile birleştirildi (745ece0). Release
+iş akışı v0.2.1 için başladı. `development` main'e ileri sarıldı.
+
+### 19. tur (2026-11-15): depo Mac'e klonlandı, hafıza gözden geçirildi
+Kullanıcı depoyu yeni geliştirme makinesine (macOS 27, arm64) klonlattı ve hafızanın incelenip güncellenmesini istedi.
+`git clone` → `development` dalına geçildi (main'den 1 hafıza commit'i ileride, origin ile eşit). GitHub durumu: v0.2.1
+son sürüm (2026-10-30), açık PR/issue yok, son CI ve Release başarılı. Mac'te UPaste 0.2.1 kurulu ve kullanılıyor.
+Tanı kaydı (`~/Library/Logs/UPaste/main.log`, 2026-10-30 → 11-14) incelendi — 17. turdaki 1. sorunun verisi:
+1. 49 kısayol açılışının 42'si alt panel (sheet), 7'si küçük pencere (popup); imleç yalnız 5'inde bulundu.
+2. Asıl neden: 37 açılışta ilk adım `app` -25212 (kAXErrorNoValue) → odaktaki uygulama alınamıyor, pid 0, sonraki
+   adımlara hiç geçilmiyor. Sistem geneli `AXFocusedApplication` güvenilmez; `NSWorkspace.frontmostApplication`
+   pid'iyle `AXUIElementCreateApplication` yedeği düşünülmeli (henüz yapılmadı).
+3. Uygulama bulunduğunda: AXTextField'da imleç alındı (popup imleç altında); bir AXGroup'ta (pid 2687, tüm ekranları
+   kaplayan 5248×1117 çerçeve — büyük olasılıkla Electron/Chromium) `bounds` -25213, `marker` -25212 → imleç yok;
+   bir AXTextField'da range/bounds 0 dönmesine rağmen caret null (ikinci denemede; incelenmeli).
+4. Alt panel boyutları: çoğu ekran genişliğinde (1728, 1920, -1600 konumlu 1600) ama 6 kez `x:0, width:579` — ana
+   ekranda panel ekranın yalnız üçte biri genişliğinde açılmış olabilir (incelenmeli).
+Açık işler: (a) macOS'ta odaktaki uygulama yedeği, (b) Electron/Chromium AXGroup imleci, (c) 579 px genişlikli alt
+panel, (d) 18. turdaki karar: imleç bulunamayınca fare konumu seçeneği (kullanıcıda), (e) Windows gerçek makinede
+denenmedi.
+Hafıza commit'i (dd47221) kullanıcı onayıyla `development`'a gönderildi (`git -c credential.helper='!gh auth git-credential' push`).
+GitHub MCP denendi: bağlantı çalışıyor (`get_me` → metin-aydin). `gh` CLI de oturum açık.
+
+### 20. tur (2026-11-15): README girişi JumpDesk biçiminde
+İstek: UPaste README'sinin girişi JumpDesk'teki gibi olsun (logo), gerisi aynı kalsın. Yapılan: ortalanmış logo
+(`build/icons/256x256.png`, width 112), `<h1 align="center">`, ortalanmış kısa slogan, ortalanmış HTML rozetler (CI,
+Latest release, MIT), açıklama paragrafı rozetlerin altında. Diğer bölümlere dokunulmadı. Prettier denetimi
+çalıştırılamadı (node_modules kurulu değil, npx indirmesi izin almadı).
+README değişikliği kullanıcı onayıyla `development`'a gönderildi.
+
+### 21. tur (2026-11-15): macOS imleç düzeltmesi başladı
+İstek: 19. turdaki (a) işi. Yapılan (`src/main/platform/darwin-api.ts`):
+1. Sistem geneli `AXFocusedApplication` değer vermezse (-25212) öndeki uygulama `NSWorkspace.sharedWorkspace
+   .frontmostApplication` → `processIdentifier` ile alınır, `AXUIElementCreateApplication(pid)` ile devam edilir.
+   `steps.app` yine ilk hatayı gösterir; ardından `window/element` adımları görünüyorsa yedek çalışmıştır.
+2. `MacFocus.bundle`: öndeki uygulamanın paket kimliği tanı kaydına (`ax {...}`) yazılır → hangi uygulamada imleç
+   bulunamadığı artık görülecek.
+3. 19. turdaki (c) "579 px panel" hata değil: kayıtta o anki tek ekranın kendisi 579×1144 (monitors listesi).
+Doğrulama: typecheck, eslint, prettier, 9 birim test dosyası geçti. frontmostApplication çağrısı bu Mac'te koffi ile
+denendi (pid + paket kimliği doğru; düz node'da AppKit ayrıca yüklenmeli, Electron'da zaten yüklü). Tam AX yolu
+Erişilebilirlik izni olan paketli uygulamada denenmedi → kullanıcı yeni sürümle dener, kayıttaki `ax` satırlarına
+bakılır. Bekleyen: (b) Electron/Chromium AXGroup imleci, sürüm numarası (0.2.2) ve PR.
+
+### 22. tur (2026-11-15): yerel deneme (geliştirme sürümü)
+Kurulu UPaste kapatıldı (tek örnek kilidi + aynı userData), `UPASTE_DEBUG=1 npm run dev` Terminal panelinde.
+`npm ci` Electron ikilisini indirmemişti → `node node_modules/electron/install.js`. Erişilebilirlik izni verildi
+(Claude içinden başlatıldığı için izin Claude/Electron girişine bağlı). Kullanıcı: Claude'da çalışıyor, Chrome'da
+olmadı, "ilk açılışta saçmalıyor sonra düzeliyor".
+Kayıt: geliştirme sürümünde `app` adımı hep 0 (öndeki uygulama yedeğine gerek kalmadı; eski -25212'ler kurulu
+sürümün iznine/sürecine bağlı olabilir). Chrome adres çubuğu: AXTextField, alan {1958,82,1112×24}, AXBoundsForRange
+başarılı ama yüksekliği 0 → caret null; fieldAnchor imleci verdi ama Chrome'un AXFocusedWindow çerçevesi y=152'den
+başlıyor (araç çubuğu dışarıda) → knownCaret "pencere dışında" dedi → alt panel.
+Düzeltme: (1) `paramRect` yüksekliği 0 dikdörtgeni de döndürür, `withHeight` tek satırlık alanda alanın y/yüksekliğiyle
+tamamlar (yatay konum korunur); (2) macos.ts hedef çerçeveyi pencere ∪ metin alanı yapar. typecheck/lint/9 test geçti;
+dev yeniden başlatıldı, kullanıcı Chrome'da yeniden dener. "İlk açılış" sorunu kayıtta görünmüyor → kullanıcıya soruldu.
+Claude'da boş metin kutusunda AXBoundsForRange tüm alan genişliğini veriyor (644 px); küçük pencere alanın sol
+kenarında açılıyor, kabul edilebilir.
+Kullanıcı: Chrome'da artık çalışıyor (adres çubuğu: AXBoundsForRange yine null, ama fieldAnchor + genişletilmiş
+çerçeveyle küçük pencere alanın sol kenarında açılıyor). Sublime Text 4'te (com.sublimetext.4) çalışmıyor: odak
+elemanı AXWindow, AXSelectedTextRange ve AXSelectedTextMarkerRange -25205 (kAXErrorAttributeUnsupported) → metin
+alanı yok, alt panel açılıyor. Sublime macOS'ta da (Linux'taki gibi) dışarıya imleç bildirmiyor; tek yol giriş
+yöntemi (IMK) olmak, çok ağır. Karar kullanıcıya soruldu: alt panel kalsın mı, imleç bulunamayınca fare imlecinin
+yanında mı açılsın (18. turdaki açık soru (d)). "İlk açılış" sorununun tarifi hâlâ bekleniyor.
+Karar (2026-11-15): imleç bulunamayan uygulamalarda (Sublime) **alt panel kalır**; fare imlecinin yanında açma
+seçeneği reddedildi (18. turdaki (d) sorusu kapandı). Kod değişikliği yok.
+
+### 23. tur (2026-11-15): 0.2.2 PR'ı
+Kullanıcı "PR aç" dedi. package.json/lock 0.2.2 (next-version zaten yama artırırdı; 0.2.1'deki gibi elle artırıldı).
+PR metni: Fixed (macOS odaktaki uygulama yedeği, Chrome adres çubuğu imleci), Changed (README logosu, kayıtta uygulama
+kimliği). Claude imzası yazılmaz (CLAUDE.md).
+PR zaten açıktı (metin-aydin/UPaste#3, kullanıcı 21:18'de boş şablonla açmış) → başlık ve sürüm notu `gh pr edit` ile dolduruldu; oturuma bağlı, CI çalışıyor. Geliştirme sürümü kapatıldı, kurulu UPaste 0.2.1 yeniden açıldı. Birleştirme kullanıcıda (= v0.2.2 imzalı yayın).

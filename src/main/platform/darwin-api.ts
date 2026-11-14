@@ -98,6 +98,8 @@ const objc_getClass = objc.func('objc_getClass', 'void *', ['str'])
 const sel_registerName = objc.func('sel_registerName', 'void *', ['str'])
 const sendId = objc.func('objc_msgSend', 'void *', ['void *', 'void *'])
 const sendLong = objc.func('objc_msgSend', 'int64_t', ['void *', 'void *'])
+const sendInt = objc.func('objc_msgSend', 'int32_t', ['void *', 'void *'])
+const sendStr = objc.func('objc_msgSend', 'str', ['void *', 'void *'])
 const sendIdInt = objc.func('objc_msgSend', 'void *', ['void *', 'void *', 'int32_t'])
 const sendBoolUlong = objc.func('objc_msgSend', 'bool', ['void *', 'void *', 'uint64_t'])
 
@@ -150,6 +152,18 @@ export function pasteboardChangeCount(): number {
   return Number(sendLong(board, sel_registerName('changeCount')))
 }
 
+/** Öndeki uygulama (NSWorkspace frontmostApplication): süreç kimliği ve paket kimliği; yoksa null. */
+function frontmostApplication(): { pid: number; bundle: string | null } | null {
+  const workspace = sendId(objc_getClass('NSWorkspace'), sel_registerName('sharedWorkspace'))
+  const app = workspace ? sendId(workspace, sel_registerName('frontmostApplication')) : null
+  if (!app) return null
+  const id = sendId(app, sel_registerName('bundleIdentifier'))
+  return {
+    pid: sendInt(app, sel_registerName('processIdentifier')),
+    bundle: id ? sendStr(id, sel_registerName('UTF8String')) : null
+  }
+}
+
 /** Süreci öne alır (NSRunningApplication activateWithOptions:). */
 export function activateProcess(pid: number): boolean {
   const app = sendIdInt(
@@ -189,7 +203,10 @@ function enableAccessibility(pid: number): void {
   release(app)
 }
 
-/** Parametreli özniteliğin dikdörtgen değeri (ör. bir metin aralığının ekrandaki yeri); yoksa null. */
+/**
+ * Parametreli özniteliğin dikdörtgen değeri (ör. bir metin aralığının ekrandaki yeri); yoksa null. Yüksekliği sıfır
+ * dikdörtgen de döner (Chromium boş aralıkta yalnız yatay konumu verir); çağıran yüksekliği tamamlar.
+ */
 function paramRect(element: unknown, name: string, param: unknown): MacRect | null {
   const out: unknown[] = [null]
   lastError = AXUIElementCopyParameterizedAttributeValue(element, attr(name), param, out)
@@ -197,7 +214,7 @@ function paramRect(element: unknown, name: string, param: unknown): MacRect | nu
   const rect = { origin: { x: 0, y: 0 }, size: { width: 0, height: 0 } }
   const got = AXValueGetRect(out[0], kAXValueCGRectType, rect)
   release(out[0])
-  if (!got || rect.size.height <= 0) return null
+  if (!got || (rect.size.height <= 0 && rect.origin.x === 0 && rect.origin.y === 0)) return null
   return { x: rect.origin.x, y: rect.origin.y, width: rect.size.width, height: rect.size.height }
 }
 
@@ -227,11 +244,27 @@ function elementFrame(element: unknown): MacRect | null {
   return ok && s.height > 0 ? { x: p.x, y: p.y, width: s.width, height: s.height } : null
 }
 
+/**
+ * Yüksekliği olmayan imleç dikdörtgenini metin alanının satırıyla tamamlar (yatay konum alanın içindeyse);
+ * tamamlanamıyorsa null.
+ */
+function withHeight(caret: MacRect | null, field: MacRect | null): MacRect | null {
+  if (!caret || caret.height > 0) return caret
+  if (!field || field.height > SINGLE_LINE_FIELD) return null
+  if (caret.x < field.x || caret.x > field.x + field.width) return null
+  return { x: caret.x, y: field.y, width: caret.width, height: field.height }
+}
+
+/** Bundan alçak metin alanı tek satırlık sayılır. */
+const SINGLE_LINE_FIELD = 64
+
 /** Metin girilen elemanların rolleri. */
 const TEXT_ROLES = new Set(['AXTextField', 'AXTextArea', 'AXComboBox', 'AXSearchField'])
 
 export interface MacFocus {
   pid: number
+  /** Öndeki uygulamanın paket kimliği (tanı kaydı için). */
+  bundle: string | null
   role: string | null
   /** Odaktaki pencerenin çerçevesi. */
   frame: MacRect | null
@@ -245,23 +278,37 @@ export interface MacFocus {
 }
 
 /**
- * Odaktaki uygulama, penceresi, metin alanı ve imleci (ekran noktası; sol üst köşe başlangıç). İmleç önce seçili metin
- * aralığından (Cocoa), yoksa WebKit/Chromium'un metin işaretçisi aralığından okunur. Uygulama odakta değilse null.
+ * Odaktaki uygulama, penceresi, metin alanı ve imleci (ekran noktası; sol üst köşe başlangıç). Uygulama sistem genelinin
+ * AXFocusedApplication özniteliğinden, o değer vermezse (birçok uygulamada kAXErrorNoValue) öndeki uygulamanın süreç
+ * kimliğinden alınır. İmleç önce seçili metin aralığından (Cocoa), yoksa WebKit/Chromium'un metin işaretçisi
+ * aralığından okunur.
  */
 export function focusedElement(): MacFocus | null {
   const steps: Record<string, number> = {}
   const system = AXUIElementCreateSystemWide()
-  const app = copy(system, 'AXFocusedApplication')
+  const front = frontmostApplication()
+  let app = copy(system, 'AXFocusedApplication')
   steps['app'] = lastError
+  if (!app && front && front.pid > 0) app = AXUIElementCreateApplication(front.pid)
   if (!app) {
     release(system)
-    return { pid: 0, role: null, frame: null, field: null, textInput: false, caret: null, steps }
+    return {
+      pid: 0,
+      bundle: front?.bundle ?? null,
+      role: null,
+      frame: null,
+      field: null,
+      textInput: false,
+      caret: null,
+      steps
+    }
   }
   const pid = [0]
   AXUIElementGetPid(app, pid)
   enableAccessibility(pid[0])
   const result: MacFocus = {
     pid: pid[0],
+    bundle: front && front.pid === pid[0] ? front.bundle : null,
     role: null,
     frame: null,
     field: null,
@@ -296,10 +343,13 @@ export function focusedElement(): MacFocus | null {
       result.textInput = true
       const end = Number(range.location) + Number(range.length)
       // Boş seçimde çoğu uygulama imlecin dikdörtgenini verir; vermeyenlerde önceki karakterin sağ kenarı kullanılır.
-      result.caret = rangeBounds(element, { location: end, length: 0 })
+      result.caret = withHeight(rangeBounds(element, { location: end, length: 0 }), result.field)
       steps['bounds'] = lastError
       if (!result.caret && end > 0) {
-        const previous = rangeBounds(element, { location: end - 1, length: 1 })
+        const previous = withHeight(
+          rangeBounds(element, { location: end - 1, length: 1 }),
+          result.field
+        )
         steps['previous'] = lastError
         if (previous)
           result.caret = {
@@ -317,7 +367,10 @@ export function focusedElement(): MacFocus | null {
     steps['marker'] = lastError
     if (marker) {
       result.textInput = true
-      result.caret = paramRect(element, 'AXBoundsForTextMarkerRange', marker)
+      result.caret = withHeight(
+        paramRect(element, 'AXBoundsForTextMarkerRange', marker),
+        result.field
+      )
       steps['markerBounds'] = lastError
       release(marker)
     }
