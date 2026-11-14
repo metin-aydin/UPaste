@@ -19,6 +19,8 @@ export const IPC = {
   popupRequestFocus: 'popup:request-focus',
   popupQuery: 'popup:query',
   popupTyping: 'popup:typing',
+  popupPaint: 'popup:paint',
+  popupPainted: 'popup:painted',
   historyChanged: 'history:changed',
 
   settingsGet: 'settings:get',

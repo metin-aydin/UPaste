@@ -5,7 +5,7 @@
 // Eklenti arama yazımını kendi görünmez giriş kutusunda toplayabiliyorsa (API 3) pencere odaksız (override-redirect)
 // açılır: mutter onu panel ve rıhtım dahil kabuk çubuklarının üstüne koyar, alt panel ekranın tam dibine oturur.
 // Daha eski eklentide pencere yönetilen bir araç çubuğu penceresidir ve aramak için klavyeyi kendisi alır.
-import { app, BrowserWindow, Notification, screen } from 'electron'
+import { app, BrowserWindow, ipcMain, Notification, screen, type IpcMainEvent } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { IPC, type PopupShown } from '@shared/ipc'
@@ -35,6 +35,14 @@ const SHEET_SHADOW = 24
 const TRACK_MS = 120
 /** Klavyeyi aldıktan hemen sonra gelen odak kaybı yok sayılır (pencere yöneticisi odağı geç verebilir). */
 const BLUR_GRACE_MS = 250
+/** Görünmez gösterilen pencerenin ilk karesi en çok bu kadar beklenir. */
+const PAINT_TIMEOUT_MS = 250
+/**
+ * macOS ve Windows'ta pencere saydam gösterilir, arayüz yeni listeyi görünür pencerede çizip yerine oturunca
+ * belirir: gizli pencere kare çizmediği için ilk açılışta boş/eski içerik ve konum zıplaması görünüyordu. Linux'ta
+ * pencere saydamlığı desteklenmez.
+ */
+const REVEAL = process.platform === 'darwin' || process.platform === 'win32'
 const CARET_LINE = 20
 const CARD_GAP = 4
 
@@ -128,6 +136,23 @@ function createWindow(asOverlay: boolean): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL'])
     void created.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/popup.html`)
   else void created.loadFile(join(__dirname, '../renderer/popup.html'))
+}
+
+/** Arayüz görünür pencerede yeni içeriği çizince çözülür; en çok PAINT_TIMEOUT_MS beklenir. */
+function painted(w: BrowserWindow): Promise<void> {
+  return new Promise((resolve) => {
+    const done = (): void => {
+      clearTimeout(timer)
+      ipcMain.removeListener(IPC.popupPainted, onAck)
+      resolve()
+    }
+    const onAck = (e: IpcMainEvent): void => {
+      if (e.sender === w.webContents) done()
+    }
+    const timer = setTimeout(done, PAINT_TIMEOUT_MS)
+    ipcMain.on(IPC.popupPainted, onAck)
+    w.webContents.send(IPC.popupPaint)
+  })
 }
 
 /** Pencereyi eklentinin yeteneğine uygun türde hazırlar (eklenti sürümü değişince yeniden oluşturulur). */
@@ -280,6 +305,7 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
       overlay ? 'overlay' : capture ? 'capture' : 'focus'
     )
 
+    if (REVEAL) win.setOpacity(0)
     win.setBounds(placed.bounds)
     const payload: PopupShown & { items: PopupItem[]; filter: PopupFilter } = {
       mode,
@@ -309,6 +335,10 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
       if (process.platform === 'darwin') win.setBounds(placed.bounds)
       win.focus()
       if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
+    }
+    if (REVEAL && !win.isDestroyed()) {
+      await painted(win)
+      if (!win.isDestroyed()) win.setOpacity(1)
     }
     startTracking()
   } finally {
