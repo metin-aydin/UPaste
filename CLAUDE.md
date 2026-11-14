@@ -69,7 +69,8 @@ Kullanıcı verisi (kopyalanan metin) olduğu gibi kalır.
 - Amaç: Windows'taki Win+V gibi pano geçmişi, tüm masaüstü işletim sistemleri için. Metin girdisine
   odaklanılmışken kısayolla girdinin altında açılır, girdiyi takip eder, seçilen öğeyi yapıştırır; girdi yoksa
   ekranın altında kartlı panel açılır.
-- Platform durumu: Linux (GNOME, Wayland + X11) çalışıyor ve denendi. Windows (Win+V'yi alt düzey klavye kancasıyla
-  devralır) ve macOS (⌘⇧V, Erişilebilirlik izni) yazıldı (`src/main/platform/`, koffi), gerçek makinede henüz
-  denenmedi. Arayüz ve paket metinleri işletim sistemine özgü olmaz (yalnız ilgili sistemde görünen metinler hariç).
+- Platform durumu: Linux (GNOME, Wayland + X11) çalışıyor ve denendi. macOS (⌘⇧V, Erişilebilirlik izni) gerçek
+  Mac'te kullanılıyor (0.2.1); imleç çoğu uygulamada bulunamıyor, açık iş (`memory/features.md` 19. tur). Windows
+  (Win+V'yi alt düzey klavye kancasıyla devralır) yazıldı (`src/main/platform/`, koffi), gerçek makinede henüz
+  denenmedi. Geliştirme makinesi artık macOS; GNOME testleri burada yapılamaz. Arayüz ve paket metinleri işletim sistemine özgü olmaz (yalnız ilgili sistemde görünen metinler hariç).
 - Ayrıntılar: `memory/MEMORY.md`.

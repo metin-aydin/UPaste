@@ -10,8 +10,11 @@ metadata:
 - Kod yorumları değişim geçmişi anlatmaz, yalnızca kodun ne yaptığını anlatır (global kural).
 - Yanıt biçimi: ADHD modu — ilk satır yapılacak iş, numaralı adımlar, en fazla 5 maddelik listeler, somut süre
   tahmini, sonda tek bir sonraki adım.
-- Geliştirme makinesi: Ubuntu, GNOME **Wayland**, farklı yüksekliklerde dizilmiş çok monitör. Başta başka pano
-  araçları kuruluydu (biri Super+V'ye bağlıydı); 5. turda kaldırıldı.
+- Geliştirme makinesi (2026-11-15'ten): **macOS 27 (Apple Silicon, arm64)**, proje `/Users/metin/projects/UPaste`,
+  kurulu UPaste 0.2.1 (`/Applications/UPaste.app`, kayıt `~/Library/Logs/UPaste/main.log`), birden çok ekran.
+  Linux/GNOME testleri (başsız kabuk, gdbus, apt) bu makinede yapılamaz.
+- Önceki geliştirme makinesi (1.–18. tur): Ubuntu, GNOME **Wayland**, farklı yüksekliklerde dizilmiş çok monitör.
+  Başta başka pano araçları kuruluydu (biri Super+V'ye bağlıydı); 5. turda kaldırıldı.
 - Hedef platform: Linux (GNOME), Windows ve macOS. 1. turdaki "yalnız Ubuntu" kararı 4. turda değişti.
 - PR açıklamalarına/sürüm notlarına "Generated with Claude Code", commit mesajlarına "Co-Authored-By: Claude"
   yazılmaz (JumpDesk'teki tercih; CLAUDE.md'de kural).

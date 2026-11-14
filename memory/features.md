@@ -347,3 +347,21 @@ kullanıcıda): hassas içerik algılama (parola/anahtar/kart numarası maskelen
 10:10 kullanıcı "PR aç ve main'e birleştir" dedi: PR #2 zaten açıktı; otomatik birleştirme depoda kapalı (açmak ayar
 değişikliği, sorulmadan yapılmadı); kontroller geçince `gh pr merge 2 --merge` ile birleştirildi (745ece0). Release
 iş akışı v0.2.1 için başladı. `development` main'e ileri sarıldı.
+
+### 19. tur (2026-11-15): depo Mac'e klonlandı, hafıza gözden geçirildi
+Kullanıcı depoyu yeni geliştirme makinesine (macOS 27, arm64) klonlattı ve hafızanın incelenip güncellenmesini istedi.
+`git clone` → `development` dalına geçildi (main'den 1 hafıza commit'i ileride, origin ile eşit). GitHub durumu: v0.2.1
+son sürüm (2026-10-30), açık PR/issue yok, son CI ve Release başarılı. Mac'te UPaste 0.2.1 kurulu ve kullanılıyor.
+Tanı kaydı (`~/Library/Logs/UPaste/main.log`, 2026-10-30 → 11-14) incelendi — 17. turdaki 1. sorunun verisi:
+1. 49 kısayol açılışının 42'si alt panel (sheet), 7'si küçük pencere (popup); imleç yalnız 5'inde bulundu.
+2. Asıl neden: 37 açılışta ilk adım `app` -25212 (kAXErrorNoValue) → odaktaki uygulama alınamıyor, pid 0, sonraki
+   adımlara hiç geçilmiyor. Sistem geneli `AXFocusedApplication` güvenilmez; `NSWorkspace.frontmostApplication`
+   pid'iyle `AXUIElementCreateApplication` yedeği düşünülmeli (henüz yapılmadı).
+3. Uygulama bulunduğunda: AXTextField'da imleç alındı (popup imleç altında); bir AXGroup'ta (pid 2687, tüm ekranları
+   kaplayan 5248×1117 çerçeve — büyük olasılıkla Electron/Chromium) `bounds` -25213, `marker` -25212 → imleç yok;
+   bir AXTextField'da range/bounds 0 dönmesine rağmen caret null (ikinci denemede; incelenmeli).
+4. Alt panel boyutları: çoğu ekran genişliğinde (1728, 1920, -1600 konumlu 1600) ama 6 kez `x:0, width:579` — ana
+   ekranda panel ekranın yalnız üçte biri genişliğinde açılmış olabilir (incelenmeli).
+Açık işler: (a) macOS'ta odaktaki uygulama yedeği, (b) Electron/Chromium AXGroup imleci, (c) 579 px genişlikli alt
+panel, (d) 18. turdaki karar: imleç bulunamayınca fare konumu seçeneği (kullanıcıda), (e) Windows gerçek makinede
+denenmedi.

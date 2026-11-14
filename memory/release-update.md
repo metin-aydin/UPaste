@@ -1,6 +1,6 @@
 ---
 name: release-update
-description: JumpDesk'ten alınan güncelleme ve sürüm akışı (UPaste'te yalnız Linux)
+description: JumpDesk'ten alınan güncelleme ve sürüm akışı (Linux, Windows, macOS)
 metadata:
   type: project
 ---
