@@ -25,6 +25,10 @@ const ACCESSIBILITY_SETTINGS =
 const SINGLE_LINE_MAX = 64
 const LINE_HEIGHT = 20
 
+/** Chromium erişilebilirlik ağacını kurarken odak bu rollerde görünür (ya da hiç görünmez). */
+const UNBUILT_ROLES = new Set<string | null>([null, 'AXGroup', 'AXWebArea'])
+const TREE_SETTLE_MS = 150
+
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
 /**
@@ -116,9 +120,9 @@ export class MacDesktop extends NativeDesktop {
     this.registered = null
   }
 
-  private trigger(): void {
+  private async trigger(): Promise<void> {
     try {
-      this.emit('shortcut', this.focusInfo())
+      this.emit('shortcut', await this.focusInfo())
     } catch (err) {
       console.error('Odak bilgisi alınamadı:', err)
       this.emit('shortcut', null)
@@ -127,7 +131,7 @@ export class MacDesktop extends NativeDesktop {
 
   // --- odak ve imleç ---
 
-  private focusInfo(): FocusInfo {
+  private async focusInfo(): Promise<FocusInfo> {
     const cursor = screen.getCursorScreenPoint()
     const pointer: [number, number] = [cursor.x, cursor.y]
     const monitors = screen.getAllDisplays().map((d) => ({ bounds: d.bounds, work: d.workArea }))
@@ -137,8 +141,15 @@ export class MacDesktop extends NativeDesktop {
       debug('focus', 'accessibility access not granted')
       return base
     }
-    const focus = this.api!.focusedElement()
+    let focus = this.api!.focusedElement()
     debug('ax', JSON.stringify(focus))
+    if (focus && focus.pid && !focus.caret && UNBUILT_ROLES.has(focus.role)) {
+      // Chromium ağacı kapalıyken odak yalnız web alanında ya da onu saran grupta görünür; ağaç açıldıktan sonra bir
+      // kez daha sorulur.
+      await sleep(TREE_SETTLE_MS)
+      focus = this.api!.focusedElement()
+      debug('ax retry', JSON.stringify(focus))
+    }
     if (!focus || !focus.pid) return base
     // Bazı uygulamaların (Chrome) AXFocusedWindow çerçevesi araç çubuğunu dışarıda bırakır; metin alanı da pencereye
     // dahil sayılsın diye çerçeve alanı kapsayacak kadar genişletilir.
