@@ -1,25 +1,13 @@
 // Geçmiş öğesinin kartı: üstte tür, zaman ve işlemler; ortada metin ya da resim; altta uzunluk ya da boyut. Küçük
 // pencerede kartlar alt alta, alt panelde yan yana dizilir.
-import { useLayoutEffect, useRef, type CSSProperties } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { ImageIcon, PinIcon, PinOffIcon, TextIcon, Trash2Icon } from 'lucide-react'
 import type { PopupItem } from '@shared/types'
 import { formatBytes, formatNumber, relativeTime } from '@/lib/format'
 import type { useUi } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
+import { thumbStyle } from './cardSize'
 import { Highlighted, IconButton } from './parts'
-
-/** Küçük penceredeki resmin yüksekliği (Tailwind max-h-32). */
-const THUMB_MAX_HEIGHT = 128
-
-/**
- * Resim yüklenmeden önce de yerini tutan boyut: en-boy oranı korunur, genişlik kartı, alanı ve en çok yüksekliği
- * aşmaz (resmin kendiliğinden aldığı boyutla aynı).
- */
-function thumbStyle(width: number, height: number): CSSProperties | undefined {
-  if (!(width > 0 && height > 0)) return undefined
-  const fit = Math.round((THUMB_MAX_HEIGHT * width) / height)
-  return { aspectRatio: `${width} / ${height}`, width: `min(100%, ${width}px, ${fit}px)` }
-}
 
 export interface ItemCardProps {
   item: PopupItem
@@ -48,6 +36,8 @@ export function ItemCard({
   t
 }: ItemCardProps): React.ReactNode {
   const sheet = variant === 'sheet'
+  // Resim çözülene dek yerini tam boyutlu bir iskelet tutar.
+  const [loaded, setLoaded] = useState<string | null>(null)
   const textRef = useRef<HTMLParagraphElement>(null)
   // Sığmayan metnin sonu alta doğru saydamlaşarak kesilir; sığan metin olduğu gibi görünür.
   useLayoutEffect(() => {
@@ -113,8 +103,15 @@ export function ItemCard({
             alt={t('popup.image')}
             draggable={false}
             decoding="async"
+            ref={(img) => {
+              if (img?.complete && img.naturalWidth > 0 && loaded !== item.id) setLoaded(item.id)
+            }}
+            onLoad={() => setLoaded(item.id)}
             className={cn(
-              'rounded-md bg-[repeating-conic-gradient(var(--muted)_0_25%,transparent_0_50%)] bg-size-[12px_12px] object-contain',
+              'rounded-md object-contain',
+              loaded === item.id
+                ? 'bg-[repeating-conic-gradient(var(--muted)_0_25%,transparent_0_50%)] bg-size-[12px_12px]'
+                : 'animate-pulse bg-muted',
               sheet ? 'size-full' : 'max-h-32 max-w-full'
             )}
           />
