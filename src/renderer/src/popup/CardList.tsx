@@ -3,7 +3,13 @@ import { useLayoutEffect, useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { PopupItem } from '@shared/types'
 import type { useUi } from '@/lib/i18n'
+import { cardHeight } from './cardSize'
 import { ItemCard } from './ItemCard'
+
+/** Kartlar arası boşluk (pb-2). */
+const ROW_GAP = 8
+/** Küçük pencerenin varsayılan genişliği (ölçülemezse). */
+const LIST_WIDTH = 380
 
 export interface ListProps {
   items: PopupItem[]
@@ -38,7 +44,10 @@ export function CardList({
   const virtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => 120,
+    // Kart genişliği: liste dolgusu (p-2) düşülmüş görünür genişlik; pencere henüz ölçülmediyse küçük pencerenin genişliği.
+    estimateSize: (i) =>
+      (items[i] ? cardHeight(items[i], (scrollRef.current?.clientWidth ?? LIST_WIDTH) - 16) : 120) +
+      ROW_GAP,
     overscan: 4,
     getItemKey: (i) => items[i]?.id ?? i
   })

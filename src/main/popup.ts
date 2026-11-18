@@ -36,7 +36,7 @@ const TRACK_MS = 120
 /** Klavyeyi aldıktan hemen sonra gelen odak kaybı yok sayılır (pencere yöneticisi odağı geç verebilir). */
 const BLUR_GRACE_MS = 250
 /** Görünmez gösterilen pencerenin ilk karesi en çok bu kadar beklenir. */
-const PAINT_TIMEOUT_MS = 250
+const PAINT_TIMEOUT_MS = 400
 /**
  * macOS ve Windows'ta pencere saydam gösterilir, arayüz yeni listeyi görünür pencerede çizip yerine oturunca
  * belirir: gizli pencere kare çizmediği için ilk açılışta boş/eski içerik ve konum zıplaması görünüyordu. Linux'ta

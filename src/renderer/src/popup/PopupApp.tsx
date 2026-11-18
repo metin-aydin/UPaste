@@ -99,15 +99,20 @@ export function PopupApp(): React.ReactNode {
     }
   }, [openCount])
 
-  // Pencere saydam gösterildi: giriş animasyonu görünür karede baştan başlar, iki kare sonra pencere belirir.
+  // Pencere saydam gösterildi: listedeki küçük resimler çözülünce (ilk açılışta ya da uzun süre gizli kaldıktan sonra
+  // boş başlayıp sonradan belirmesinler) giriş animasyonu baştan başlar, iki kare sonra pencere belirir. Ana süreç en
+  // çok PAINT_TIMEOUT_MS bekler; yetişmeyen resim iskeletiyle görünür.
   useEffect(
     () =>
       api.onPopupPaint(() => {
-        for (const animation of panelRef.current?.getAnimations() ?? []) {
-          animation.cancel()
-          animation.play()
-        }
-        requestAnimationFrame(() => requestAnimationFrame(() => api.popupPainted()))
+        const images = Array.from(panelRef.current?.querySelectorAll('img') ?? [])
+        void Promise.all(images.map((img) => img.decode().catch(() => undefined))).then(() => {
+          for (const animation of panelRef.current?.getAnimations() ?? []) {
+            animation.cancel()
+            animation.play()
+          }
+          requestAnimationFrame(() => requestAnimationFrame(() => api.popupPainted()))
+        })
       }),
     []
   )

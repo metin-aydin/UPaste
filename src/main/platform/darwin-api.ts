@@ -203,18 +203,16 @@ export function sendPaste(): void {
   }
 }
 
-const electronApps = new Set<number>()
-
 /**
- * Chromium tabanlı uygulamalar (Electron, Chrome) erişilebilirlik ağacını ancak istenince kurar: bir kez
- * AXManualAccessibility açılır; ağaç sonraki sorgularda hazırdır.
+ * Chromium tabanlı uygulamalar (Electron) erişilebilirlik ağacını ancak istenince kurar ve bir süre sorgu gelmezse
+ * yeniden kapatır; bu yüzden AXManualAccessibility her sorgudan önce açılır (Chrome desteklemez, ağacı ilk sorgulardan
+ * sonra kendisi açar). Dönen değer AX hata kodudur (tanı kaydı için).
  */
-function enableAccessibility(pid: number): void {
-  if (electronApps.has(pid)) return
-  electronApps.add(pid)
+function enableAccessibility(pid: number): number {
   const app = AXUIElementCreateApplication(pid)
-  AXUIElementSetAttributeValue(app, attr('AXManualAccessibility'), kCFBooleanTrue)
+  const err = AXUIElementSetAttributeValue(app, attr('AXManualAccessibility'), kCFBooleanTrue)
   release(app)
+  return err
 }
 
 /**
@@ -294,6 +292,9 @@ function markerCaret(element: unknown, marker: unknown, field: MacRect | null): 
   return caret
 }
 
+/** Bundan alçak alan ya da imleç görünmez sayılır. */
+const MIN_VISIBLE = 4
+
 /** Bundan alçak metin alanı tek satırlık sayılır. */
 const SINGLE_LINE_FIELD = 64
 
@@ -344,7 +345,7 @@ export function focusedElement(): MacFocus | null {
   }
   const pid = [0]
   AXUIElementGetPid(app, pid)
-  enableAccessibility(pid[0])
+  steps['manual'] = enableAccessibility(pid[0])
   const result: MacFocus = {
     pid: pid[0],
     bundle: front && front.pid === pid[0] ? front.bundle : null,
@@ -373,7 +374,11 @@ export function focusedElement(): MacFocus | null {
   const role = copy(element, 'AXRole')
   result.role = text(role)
   release(role)
-  result.field = elementFrame(element)
+  // Görünmez yardımcı düzenleyiciler (ör. Google E-Tablolar'da hücre seçiliyken pencerenin köşesindeki 1 px'lik alan)
+  // konum vermez; alan ve imleci yok sayılır.
+  const frame = elementFrame(element)
+  const hidden = !!frame && frame.height < MIN_VISIBLE
+  result.field = hidden ? null : frame
   const selected = copy(element, 'AXSelectedTextRange')
   steps['range'] = lastError
   if (selected) {
@@ -411,6 +416,7 @@ export function focusedElement(): MacFocus | null {
       release(marker)
     }
   }
+  if (hidden || (result.caret && result.caret.height < MIN_VISIBLE)) result.caret = null
   if (result.role && TEXT_ROLES.has(result.role)) result.textInput = true
   release(element)
   return result

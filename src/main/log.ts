@@ -4,7 +4,7 @@
 // aynı satırlar standart çıktıya da yazılır.
 import { app } from 'electron'
 import { appendFileSync, mkdirSync, renameSync, statSync } from 'fs'
-import { join } from 'path'
+import { dirname, join } from 'path'
 
 const echo = process.env['UPASTE_DEBUG'] === '1'
 const MAX_BYTES = 1024 * 1024
@@ -32,7 +32,8 @@ export function debug(...args: unknown[]): void {
     try {
       if (statSync(path).size > MAX_BYTES) renameSync(path, `${path}.1`)
     } catch {
-      // Dosya henüz yok.
+      // Dosya henüz yok; klasör de silinmiş olabilir (ör. temizlik araçları ~/Library/Logs'u boşaltır).
+      mkdirSync(dirname(path), { recursive: true })
     }
     appendFileSync(path, `${new Date().toISOString()} ${line}\n`)
   } catch {
