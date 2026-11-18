@@ -455,3 +455,57 @@ package.json/lock 0.2.3 (`npm version --no-git-tag-version`, elle). PR metin-ayd
 taslak değil): "UPaste 0.2.3: selected text and first-open fixes"; Fixed: ⌘A seçiminde alt panel, ilk açılışta
 boş/zıplama, resim önizlemesi yüklenirken liste kayması. Claude imzası yok. Oturuma bağlı, CI (6 kontrol) çalışıyor.
 Birleştirme kullanıcıda (= v0.2.3 imzalı yayın). Sonraki tur: `git checkout development && git pull && git merge --ff-only origin/main`.
+
+### 27. tur (2026-11-19): Docker Desktop ve tarayıcı girdilerinde alt panel / yanlış konum
+Kullanıcı (ekran görüntüleri): Google E-Tablolar hücresinde alt panel; Docker Desktop arama kutusunda küçük pencere
+kutunun altında değil, web alanının sol üstünde (y≈75) açılıyor. Soru: Erişilebilirlik izniyle daha net konum mümkün mü?
+Not: izin zaten kullanılıyor (AX yolu); sorun izin değil, Chromium ağacının kurulması.
+Bulgular (scratchpad'deki koffi yoklama betiğiyle, kurulu 0.2.3 yerine doğrudan AX):
+1. `~/Library/Logs/UPaste/` silinmiş (temizlik aracı); uygulama klasörü önbelleklediği için kayıt yazılmıyor →
+   `log.ts` her yazımda `mkdirSync` yapmalı (yapılmadı).
+2. Chrome `AXManualAccessibility`'yi desteklemiyor (-25205), `AXEnhancedUserInterface` uygulama düzeyinde -25208.
+   İlk sorguda odak elemanı -25212 (yok); birkaç sorgu sonra Chrome ağacı kendiliğinden açıyor ve web girdisinde
+   AXTextField + AXSelectedTextRange + AXBoundsForRange doğru imleci veriyor (yükseklik 22). → "ilk açılışta yok,
+   sonra var" deseni; ilk sorguda kısa bekleyip yeniden denemek çözüm adayı.
+3. Electron (Postman): AXManualAccessibility = 0 (başarılı), odaktaki AXTextArea'da imleç doğru.
+4. Docker Desktop (Electron, pid'li sorgu) arka plandayken AXFocusedUIElement -25204; öndeyken denenmeli.
+   Ekran görüntüsündeki konum, odak elemanının girdi değil AXWebArea/AXGroup olduğunu düşündürüyor (fieldAnchor web
+   alanının sol üstü).
+Açık: Docker öndeyken yoklama (kullanıcı arama kutusuna tıklayacak), E-Tablolar gizli düzenleyicisi, düzeltme.
+Yoklama sonuçları (00:25, E-Tablolar, Chrome): (a) metin kutusu (AXTextArea 579×15, büyük olasılıkla formül çubuğu ya da
+hücre düzenleyicisi): AXBoundsForRange anlamsız {0,1117,0×0} ama AXBoundsForTextMarkerRange doğru {1801,573,0×15}
+→ bugünkü kod imleci bulur. (b) Hücre seçiliyken odak, pencerenin sol üstündeki gizli 0×1 AXTextArea (E-Tablolar'ın
+gizli düzenleyicisi); işaretçi sınırı {1732,152,0×1} → bugünkü kod bunu imleç sayıp pencereyi sol üste koyar.
+Düzeltme adayı: alanı/imleci 2 px'ten alçak olanı imleç sayma → alt panel. Docker'ın pencere süreci kimliği
+`com.electron.dockerdesktop` (com.docker.docker değil); yoklama yeniden başlatıldı.
+Docker yoklaması (öndeyken): odak AXSearchField {320,253,290×21}, boş kutuda AXBoundsForRange/Marker anlamsız
+{0,33,0×0} → kod fieldAnchor ile doğru yere koyar. Ekran görüntüsündeki sol üst konum kutuyu saran AXGroup'un
+{240,75} köşesiyle örtüşüyor → o anda ağaç kapalıydı. Neden: Chromium ağacı bir süre sorgu gelmezse kapatıyor;
+UPaste AXManualAccessibility'yi her pid'e yalnız bir kez açıyordu.
+Düzeltme (commit yok): (1) `darwin-api.ts` AXManualAccessibility her sorguda açılır (`steps.manual` kayıtta);
+(2) `macos.ts` focusInfo async: imleç yok ve rol null/AXGroup/AXWebArea ise 150 ms bekleyip bir kez yeniden sorar
+(`ax retry` satırı); (3) 4 px'ten alçak alan (E-Tablolar gizli düzenleyicisi) ve imleç yok sayılır → alt panel;
+(4) `log.ts` kayıt klasörü silinince yeniden oluşturulur. typecheck/eslint/prettier/9 test geçti. Kurulu UPaste
+kapatıldı, `UPASTE_DEBUG=1 npm run dev` Terminal panelinde (sekme "upaste dev"); kullanıcı Docker/Chrome'da dener.
+
+### 28. tur (2026-11-19): resimli listede açılış zıplaması
+Kullanıcı: resim varken ilk kez tıklanan girdide ya da uzun süre sonra açılışta zıplama; küçük resim ve en büyük
+boyutta iskelet önerdi. Not: küçük resim zaten var (`images/<id>.thumb.png`, `upaste-img://thumb/<id>`) ve kartta
+`thumbStyle` ile yer ayrılıyordu. Bulunan nedenler: (1) pencere iki kare sonra beliriyor, resim çözülmesini
+beklemiyordu (gizli kalan pencerede çözülmüş resimler atılıyor → boş başlayıp beliriyor); (2) CardList sanallaştırıcısı
+her kartı 120 px tahmin ediyordu, resimli kart ~216 px → ölçüm gelince alttaki kartlar kayıyordu.
+Düzeltme (commit yok): PopupApp `onPopupPaint` paneldeki `img.decode()`'ları bekler, sonra animasyon + 2 rAF;
+`PAINT_TIMEOUT_MS` 250 → 400. Yeni `popup/cardSize.ts`: `thumbStyle` + `cardHeight` (resimde kesin, metinde satır
+sonlarından tahmin); CardList `estimateSize` bunu kullanır. ItemCard: resim yüklenene dek `animate-pulse bg-muted`
+iskelet (aynı ayrılmış boyutta; alt panelde içerik alanının tamamı), sonra dama deseni. typecheck/eslint/9 test geçti.
+Dev yeniden başlatıldı (27. turun AX düzeltmeleriyle birlikte); kullanıcı dener. 27. turun Docker/Chrome denemesi de
+henüz sonuçlanmadı.
+Kullanıcı: resimli açılış zıplaması **gitti** (onaylandı, 2026-11-19). Commit yok; 27. turun Docker/Chrome konum
+denemesinin sonucu henüz bildirilmedi.
+Kullanıcı: Docker arama kutusunda ve Chrome girdisinde küçük pencere **doğru yerde** (27. tur düzeltmesi onaylandı,
+2026-11-19). Commit bekliyor (kullanıcı onayıyla).
+
+### 29. tur (2026-11-19): 0.2.4 yayını
+Kullanıcı: gönder, main'e birleştir, yeni sürüm çıksın. development origin/main'e (608ef16) ileri sarıldı; 0.2.4
+(`npm version patch --no-git-tag-version`). Commit'ler: c89434b (macOS Electron imleci), c20a78a (resim zıplaması),
+3ddc282 (sürüm). Kullanıcı bu kez birleştirmeyi Claude'dan istedi (CI geçince).
