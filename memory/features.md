@@ -509,3 +509,8 @@ Kullanıcı: Docker arama kutusunda ve Chrome girdisinde küçük pencere **doğ
 Kullanıcı: gönder, main'e birleştir, yeni sürüm çıksın. development origin/main'e (608ef16) ileri sarıldı; 0.2.4
 (`npm version patch --no-git-tag-version`). Commit'ler: c89434b (macOS Electron imleci), c20a78a (resim zıplaması),
 3ddc282 (sürüm). Kullanıcı bu kez birleştirmeyi Claude'dan istedi (CI geçince).
+PR metin-aydin/UPaste#5 açıldı; depoda auto-merge kapalı (GitHub ayarı) → CI arka planda beklendi, tüm kontroller
+geçince Claude `gh pr merge 5 --merge` ile birleştirdi (b08be84). Release iş akışı 44406636586 başladı.
+development origin/main'e ileri sarıldı.
+22:09 v0.2.4 yayımlandı (Latest; macOS imzalı + onaylı, Windows, Linux; iş akışı başarılı). Dev sürümü kapatıldı,
+kurulu UPaste yeniden açıldı (güncellemeyi kendisi bulur). 27–28. tur işleri kapandı.
