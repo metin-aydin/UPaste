@@ -107,6 +107,13 @@ const sendLong = objc.func('objc_msgSend', 'int64_t', ['void *', 'void *'])
 const sendInt = objc.func('objc_msgSend', 'int32_t', ['void *', 'void *'])
 const sendStr = objc.func('objc_msgSend', 'str', ['void *', 'void *'])
 const sendIdInt = objc.func('objc_msgSend', 'void *', ['void *', 'void *', 'int32_t'])
+const sendPerformAfter = objc.func('objc_msgSend', 'void', [
+  'void *',
+  'void *',
+  'void *',
+  'void *',
+  'double'
+])
 const sendBoolUlong = objc.func('objc_msgSend', 'bool', ['void *', 'void *', 'uint64_t'])
 
 const strings = new Map<string, unknown>()
@@ -193,6 +200,27 @@ export function activateProcess(pid: number): boolean {
   )
 }
 
+/**
+ * Panel penceresini uygulamayı etkinleştirmeden anahtar pencere yapar (makeKeyAndOrderFront:). Etkinleşmeyen panel
+ * (NSWindowStyleMaskNonactivatingPanel) tuşları alır, öndeki uygulama etkin kalır ve onun metin alanındaki imleç
+ * yanıp sönmeyi sürdürür. AppKit anahtar pencere olurken Electron'un `focus` olayını eşzamanlı yayar; bu FFI çağrısının
+ * içinde JS'e geri girer ve süreci çökertir. Bu yüzden çağrı performSelector:withObject:afterDelay: ile bir sonraki
+ * çalışma döngüsüne bırakılır. `handle` Electron'un getNativeWindowHandle() değeridir (NSView *).
+ */
+export function makeKeyPanel(handle: Buffer): boolean {
+  const view = koffi.decode(handle, 'void *')
+  const window = view ? sendId(view, sel_registerName('window')) : null
+  if (!window) return false
+  sendPerformAfter(
+    window,
+    sel_registerName('performSelector:withObject:afterDelay:'),
+    sel_registerName('makeKeyAndOrderFront:'),
+    null,
+    0
+  )
+  return true
+}
+
 /** ⌘V gönderir (Erişilebilirlik izni gerekir). */
 export function sendPaste(): void {
   for (const down of [true, false]) {
@@ -213,6 +241,15 @@ function enableAccessibility(pid: number): number {
   const err = AXUIElementSetAttributeValue(app, attr('AXManualAccessibility'), kCFBooleanTrue)
   release(app)
   return err
+}
+
+/**
+ * Öndeki uygulamanın erişilebilirlik ağacını önceden açar: Electron uygulaması ağacı ilk istekten sonra yüzlerce
+ * milisaniyede kurar, kısayola basıldığında hazır olsun diye öne gelen uygulamada şimdiden istenir.
+ */
+export function warmAccessibility(): void {
+  const front = frontmostApplication()
+  if (front && front.pid > 0 && front.pid !== process.pid) enableAccessibility(front.pid)
 }
 
 /**

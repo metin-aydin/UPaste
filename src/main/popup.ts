@@ -43,6 +43,13 @@ const PAINT_TIMEOUT_MS = 400
  * pencere saydamlığı desteklenmez.
  */
 const REVEAL = process.platform === 'darwin' || process.platform === 'win32'
+/** macOS'ta geçmiş penceresi etkinleşmeyen paneldir (`type: 'panel'`); gösterilirken uygulama etkinleştirilmez. */
+const MAC_PANEL = process.platform === 'darwin'
+/**
+ * Windows'ta arama yazılırken de hedef pencere önde kalır: öndeki pencere değişirse (Alt+Tab) kullanıcı başka
+ * pencereye geçmiştir.
+ */
+const TYPING_KEEPS_TARGET = process.platform === 'win32'
 const CARET_LINE = 20
 const CARD_GAP = 4
 
@@ -92,7 +99,8 @@ function createWindow(asOverlay: boolean): void {
     fullscreenable: false,
     skipTaskbar: true,
     alwaysOnTop: true,
-    // Odaksız pencere Linux'ta pencere yöneticisinin dışında kalır ve kabuk çubuklarının üstünde çizilir. Yönetilen
+    // Odaksız pencere Linux'ta pencere yöneticisinin dışında kalır ve kabuk çubuklarının üstünde çizilir; Windows'ta
+    // etkinleşmez (WS_EX_NOACTIVATE), hedef pencere önde kalır ve tuşlar kancayla yakalanır. Yönetilen
     // pencere araç çubuğu türündedir: pencere yöneticisi onu açılışta odaklamaz ve "hazır" bildirimi göstermez;
     // Windows'ta görev çubuğunda ve Alt+Tab'da görünmez. macOS'ta panel türü tam ekran uygulamaların da üstünde açılır.
     ...(asOverlay
@@ -153,6 +161,17 @@ function painted(w: BrowserWindow): Promise<void> {
     ipcMain.on(IPC.popupPainted, onAck)
     w.webContents.send(IPC.popupPaint)
   })
+}
+
+/**
+ * macOS: paneli uygulamayı etkinleştirmeden anahtar pencere yapar. Erişilebilirlik API'si yüklenemediyse uygulama
+ * etkinleştirilerek odak verilir.
+ */
+async function focusPopup(): Promise<void> {
+  if (!win) return
+  if (desktop.active && (await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false))) return
+  app.focus({ steal: true })
+  win.focus()
 }
 
 /** Pencereyi eklentinin yeteneğine uygun türde hazırlar (eklenti sürümü değişince yeniden oluşturulur). */
@@ -327,14 +346,18 @@ export async function togglePopup(info: FocusInfo | null): Promise<void> {
       }
       watchOutsideClicks(placed.bounds, mode)
     } else {
-      // macOS'ta menü çubuğu uygulaması klavyeyi ancak etkinleşince alır; yapıştırırken hedef uygulama yeniden öne
-      // alınır.
-      if (process.platform === 'darwin') app.focus({ steal: true })
-      win.show()
-      // macOS gizli pencerenin konumunu gösterilirken yeniden belirleyebilir; yer gösterildikten sonra yeniden verilir.
-      if (process.platform === 'darwin') win.setBounds(placed.bounds)
-      win.focus()
-      if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
+      if (MAC_PANEL) {
+        // Etkinleşmeyen panel (Raycast, Paste gibi): UPaste etkin uygulama olmaz, panel yalnız anahtar pencere olup
+        // tuşları alır. Hedef uygulama önde kalır, metin alanındaki imleç yanıp sönmeyi sürdürür.
+        win.showInactive()
+        // macOS gizli pencerenin konumunu gösterilirken yeniden belirleyebilir; yer gösterildikten sonra yeniden verilir.
+        win.setBounds(placed.bounds)
+        await focusPopup()
+      } else {
+        win.show()
+        win.focus()
+        if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
+      }
     }
     if (REVEAL && !win.isDestroyed()) {
       await painted(win)
@@ -374,8 +397,11 @@ async function enterFocusMode(replay?: { keycode: number; modifiers: number }): 
     await desktop.captureKeys(false).catch(() => {})
   }
   shownAt = Date.now()
-  win.focus()
-  if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
+  if (MAC_PANEL) await focusPopup()
+  else {
+    win.focus()
+    if (desktop.active) await desktop.focusOwnWindow(POPUP_TITLE).catch(() => false)
+  }
   win.webContents.send(IPC.popupFocus)
   if (replay) {
     await new Promise((r) => setTimeout(r, 30))
@@ -441,7 +467,7 @@ function startTracking(): void {
       }
       if (
         !focusMode &&
-        !typing &&
+        (!typing || TYPING_KEEPS_TARGET) &&
         info.focused === false &&
         !win.isFocused() &&
         focusMovedAway(info)
