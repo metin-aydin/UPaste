@@ -53,3 +53,10 @@ metadata:
     `win32-api.ts`/`darwin-api.ts` yalnız kendi sisteminde `await import` ile yüklenir (electron-vite ayrı parça
     üretir). Yapı tanımları ayrı dosyada (`*-types.ts`), boyutları her platformda birim testinde denetlenir.
     Windows'ta Win+V Explorer'a ayrılmış olduğu için alt düzey klavye kancası; macOS varsayılanı ⌘⇧V (⌘V yapıştırma).
+12. **macOS'ta etkinleşmeyen panel (30. tur, 2026-11-23):** geçmiş penceresi `type: 'panel'` NSPanel'dir ve
+    gösterilirken uygulama etkinleştirilmez (`showInactive` + objc `makeKeyAndOrderFront:`); Electron'un `show()`/
+    `focus()` uygulamayı etkinleştirdiği için macOS'ta kullanılmaz. Raycast/Paste yöntemi: hedef uygulama önde kalır.
+13. **Windows'ta odaksız katman (30. tur, 2026-11-23, denenmedi):** geçmiş penceresi `focusable: false`
+    (WS_EX_NOACTIVATE); GNOME eklentisinin işleri (tuş yakalama, görünmez arama kutusu, dışarı tıklama) `windows.ts`'te
+    alt düzey klavye/fare kancalarıyla yapılır, arama metni ana süreçte ToUnicodeEx ile oluşur. Böylece üç sistemde de
+    hedef uygulama önde kalır ve imleci yanıp söner.

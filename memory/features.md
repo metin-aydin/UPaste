@@ -514,3 +514,56 @@ geçince Claude `gh pr merge 5 --merge` ile birleştirdi (b08be84). Release iş 
 development origin/main'e ileri sarıldı.
 22:09 v0.2.4 yayımlandı (Latest; macOS imzalı + onaylı, Windows, Linux; iş akışı başarılı). Dev sürümü kapatıldı,
 kurulu UPaste yeniden açıldı (güncellemeyi kendisi bulur). 27–28. tur işleri kapandı.
+
+### 30. tur (2026-11-23): macOS'ta hedef uygulama odağını kaybetmesin (Raycast/Paste gibi)
+İstek: Raycast ve Paste gibi geçmiş açıkken hedef girdideki imleç yanıp sönmeye devam etsin, arama kutusuna yazılabilsin.
+Neden: `popup.ts` macOS'ta `app.focus({ steal: true })` + `win.show()`/`win.focus()` ile UPaste'i etkin uygulama
+yapıyordu (Electron'un show/focus'u `activateIgnoringOtherApps` çağırır) → hedef uygulama etkinliği kaybediyordu.
+Düzeltme (commit yok): pencere zaten `type: 'panel'` (NSPanel + NonactivatingPanel). macOS'ta artık `showInactive()`
++ `darwin-api.ts` `makeKeyPanel(getNativeWindowHandle())` (`[[view window] makeKeyAndOrderFront:nil]`, uygulama
+etkinleşmez) + `webContents.focus()`; `MacDesktop.focusOwnWindow(title)` bunu yapar, başarısızsa eski yol
+(`focusPopup` yedeği). `enterFocusMode` de aynı yolu kullanır. typecheck/eslint/prettier/9 test geçti. Kurulu UPaste
+kapatıldı, `UPASTE_DEBUG=1 npm run dev` Terminal panelinde (sekme "upaste dev"). Gerçek davranış (tuşlar panele geliyor
+mu, hedefte imleç yanıyor mu, dışarı tıklayınca kapanıyor mu, yapıştırma) kullanıcıda denenecek.
+Kullanıcı isteğiyle dev yeniden başlatıldı (aynı sekme). Önceki denemenin kaydında Chrome adres çubuğunda popup doğru yerde açıldı (y=82, `focus` kipi); kullanıcının gözlemi henüz bildirilmedi.
+Kullanıcı: kısayola (Ctrl+Shift+V'ye değiştirmiş) basınca uygulama **çöktü**. Çökme raporu
+(`~/Library/Logs/DiagnosticReports/Electron-*.ips`): EXC_BREAKPOINT, yığın `-[NSWindow becomeKeyWindow]` →
+NSNotificationCenter → Electron `focus` olayı → V8. Neden: koffi'yle eşzamanlı `makeKeyAndOrderFront:` çağrısının
+içinde AppKit Electron'un JS olayını tetikliyor (FFI içinden JS'e yeniden giriş = çökme).
+Ölçüm (scratchpad'deki küçük Electron betiği): Electron'un `focus()`/`show()`'u `type: 'panel'`de bile öndeki
+uygulamayı değiştiriyor (Chrome önde kalmıyor) → Electron API'si yetmez. `performSelector:withObject:afterDelay:0`
+ile ertelenen makeKeyAndOrderFront: çökmüyor, Chrome önde kalıyor, panel tuşları alıyor (doğrulandı).
+Düzeltme: `makeKeyPanel` ertelenmiş çağrı; `MacDesktop.focusOwnWindow` `focus` olayını en çok 200 ms bekler, sonra
+`webContents.focus()`. Denetimler geçti, dev yeniden başlatıldı; kullanıcı dener.
+Kullanıcı: istenen davranış **oldu** (hedefte imleç yanıyor, arama yazılıyor). Yeni sorun: Claude'a ilk kez tıklayıp
+kısayola basınca alt panel açıldı. Kayıt: ilk sorguda `role: null`, `element -25212`, `manual 0` (AXManualAccessibility o an
+ilk kez açıldı); 150 ms'lik tek yeniden deneme de boş → sheet. 5 s sonra aynı kutu AXTextArea + imleç veriyor.
+Düzeltme: (1) `darwin-api.ts` `warmAccessibility()` — öndeki uygulamaya AXManualAccessibility; `macos.ts` izin varken
+250 ms.de bir çağırır (ağaç kısayoldan önce hazır, açık tutulur; önce 1 s idi, kullanıcı isteğiyle kısaltıldı); (2) yeniden deneme 150/200/250 ms (toplam ~600 ms).
+Denetimler geçti, dev yeniden başlatıldı; kullanıcı yeni açılmış/ilk kez tıklanan Claude'da dener. Commit yok.
+Soru: neden 1–2 s beklenmeli? Yanıt: bekleme şart değil; 1 s'lik ısıtma aralığını kesin kapsamak içindi. Hemen basışta ~600 ms'lik yeniden deneme devreye girer, yetip yetmediği ölçülmedi; yetmezse ısıtma aralığı kısaltılır (ör. 250 ms) ya da NSWorkspace etkinleşme bildirimi dinlenir.
+Kullanıcı isteğiyle `WARM_POLL_MS` 1000 → 250. Denetimler geçti, dev yeniden başlatıldı.
+Soru: diğer sistemlerde de böyle mi? Yanıt: GNOME'da zaten odak almayan katman (eklenti tuşları/aramayı alır,
+hedef odakta kalır; AX ağacı sorunu yok, IME kullanılır). Windows'ta geçmiş penceresi hâlâ odağı alıyor (hedefte imleç
+durur); karşılığı WS_EX_NOACTIVATE pencere + tuşların mevcut alt düzey klavye kancasıyla yakalanması olur. Windows'ta
+Chromium da erişilebilirliği ilk WM_GETOBJECT'te açtığı için ilk sorguda imleç gelmeyebilir. Windows gerçek makinede
+denenmediği için yapılmadı; kullanıcıya soruldu.
+Kullanıcı: "Windows'u da yap" (amaç ilk mesajdaki gibi: hedef girdide imleç yanıp sönerken UPaste kullanılabilsin).
+Yapılan (commit yok, Windows'ta DENENMEDİ — makine yok):
+1. `native.ts`: canCapture/canType/canWatchClicks alan yerine getter (alt sınıf ezebilsin).
+2. `windows.ts`: getter'lar `active`'e bağlı → popup.ts Windows'ta odaksız katman (`focusable: false` =
+   WS_EX_NOACTIVATE) yolunu kullanır. Kanca kipleri `idle | capture | typing`; kanca yalnız gerektiğinde kurulu
+   (`syncHook`: Win'li kısayol, kip ya da yutulup henüz bırakılmamış tuş). Yakalama: gezinme tuşları GNOME NAV_KEYS
+   adlarıyla `key` olayı, yazı tuşu `keyText` ile `text` (+ pendingText); yazım: arama metni ana süreçte (`search`
+   olayı), Backspace, Ctrl+Backspace (sözcük), Ctrl+V (pano metni), Esc önce temizler, oklar/Home/End GNOME
+   `_onTypingKey` kurallarıyla. Geçen tuşlar: Win'li, Alt (AltGr değil), durum değiştiriciler, Win'siz kısayolun kendisi
+   (globalShortcut alabilsin). Yutulan tuşun bırakılması da yutulur. Dışarı tıklama: WH_MOUSE_LL, fiziksel nokta
+   `screenToDipPoint`. `windowInfo` öndeki pencereyi `focus` olarak bildirir.
+3. `win32-api.ts`: `installMouseHook`, `keyText` (ToUnicodeEx, öndeki pencerenin düzeni, durum değiştiriciler
+   GetAsyncKeyState'ten, Caps Lock GetKeyState, bayrak 0x4 = ölü tuş durumuna dokunma; ölü tuşla birleşik harf YOK).
+   `win32-types.ts` MSLLHOOKSTRUCT (32 bayt, testte).
+4. `popup.ts`: `TYPING_KEEPS_TARGET` (win32) → yazarken de öndeki pencere değişirse geçmiş kapanır.
+Denetimler: typecheck, lint (eski 2 uyarı), prettier, 9 birim testi, i18n geçti. macOS dev yeniden başlatıldı.
+Açık: Windows gerçek makine denemesi (CI `native` işi kancaları kurup bırakır); ölü tuşlar; Electron 44'te
+`clipboard.readText` Promise döner (Ctrl+V'de await edildi).
+Soru: Ubuntu'da da aynı mı? Yanıt: GNOME'da (Wayland+X11) bu davranış 4.–7. turdan beri var (eklenti, odaksız katman); bu turun değişiklikleri Linux yolunu değiştirmiyor (popup.ts'tekiler darwin/win32 koşullu, ShellBridge kendi getter'larını kullanıyor). Koşul: eklenti API ≥ 3 ve oturum yenilenmiş olmalı; GNOME dışı masaüstlerinde (KDE vb.) eklenti yok → odak alan pencere. Bu Mac'te Linux denemesi yapılamadı.
