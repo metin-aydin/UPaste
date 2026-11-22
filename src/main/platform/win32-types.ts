@@ -33,6 +33,15 @@ export const KBDLLHOOKSTRUCT = koffi.struct('UPASTE_KBDLLHOOKSTRUCT', {
   dwExtraInfo: 'uintptr_t'
 })
 
+/** Alt düzey fare kancasının (WH_MOUSE_LL) her fare olayında aldığı yapı; konum fiziksel pikseldir. */
+export const MSLLHOOKSTRUCT = koffi.struct('UPASTE_MSLLHOOKSTRUCT', {
+  pt: POINT,
+  mouseData: 'uint32_t',
+  flags: 'uint32_t',
+  time: 'uint32_t',
+  dwExtraInfo: 'uintptr_t'
+})
+
 const KEYBDINPUT = koffi.struct('UPASTE_KEYBDINPUT', {
   wVk: 'uint16_t',
   wScan: 'uint16_t',
@@ -74,7 +83,7 @@ export const VARIANT = koffi.struct('UPASTE_VARIANT', {
   record: 'uint64_t'
 })
 
-/** LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam → KBDLLHOOKSTRUCT). */
+/** LRESULT CALLBACK LowLevelKeyboardProc / LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam). */
 export const HOOKPROC = koffi.proto('__stdcall', 'UPASTE_HOOKPROC', 'intptr_t', [
   'int',
   'uintptr_t',
