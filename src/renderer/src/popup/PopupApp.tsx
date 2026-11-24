@@ -8,7 +8,7 @@ import { Kbd } from '@/components/ui/kbd'
 import { CardList } from './CardList'
 import { SheetList } from './SheetList'
 import { FILTERS } from './filters'
-import { EmptyState, FilterChips, IconButton, SearchBox } from './parts'
+import { ClearButton, EmptyState, FilterChips, IconButton, SearchBox } from './parts'
 
 const SEARCH_DEBOUNCE_MS = 60
 
@@ -168,6 +168,11 @@ export function PopupApp(): React.ReactNode {
     [refresh]
   )
 
+  const clearUnpinned = useCallback(async () => {
+    await api.clearHistory(false)
+    await refresh()
+  }, [refresh])
+
   /** Tuş adını işler; işlendiyse true. Hem eklentiden gelen tuşlar hem odaktaki DOM tuşları buradan geçer. */
   const handleKey = useCallback(
     (key: string): boolean => {
@@ -296,6 +301,7 @@ export function PopupApp(): React.ReactNode {
               </span>
             </div>
             <div className="flex items-center gap-1">
+              <ClearButton onClear={() => void clearUnpinned()} resetKey={openCount} t={t} />
               <IconButton label={t('popup.settings')} onClick={() => api.openSettings()}>
                 <Settings2Icon />
               </IconButton>
@@ -328,6 +334,7 @@ export function PopupApp(): React.ReactNode {
       >
         <div className="flex h-12 shrink-0 items-center gap-2 border-b ps-3.5 pe-2">
           {search}
+          <ClearButton onClear={() => void clearUnpinned()} resetKey={openCount} t={t} />
           <IconButton label={t('popup.settings')} onClick={() => api.openSettings()}>
             <Settings2Icon />
           </IconButton>

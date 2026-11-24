@@ -19,6 +19,8 @@ export const hi: Messages = {
   'popup.paste': 'पेस्ट करें',
   'popup.close': 'बंद करें',
   'popup.settings': 'सेटिंग्स',
+  'popup.clearUnpinned': 'पिन किए गए को छोड़कर सब हटाएँ',
+  'popup.clearConfirm': 'हटाने के लिए फिर से क्लिक करें',
 
   'notify.copiedTitle': 'क्लिपबोर्ड पर कॉपी किया गया',
   'notify.relogin':

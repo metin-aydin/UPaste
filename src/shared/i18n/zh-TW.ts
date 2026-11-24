@@ -19,6 +19,8 @@ export const zhTW: Messages = {
   'popup.paste': '貼上',
   'popup.close': '關閉',
   'popup.settings': '設定',
+  'popup.clearUnpinned': '刪除釘選以外的全部項目',
+  'popup.clearConfirm': '再次按一下以刪除',
 
   'notify.copiedTitle': '已複製到剪貼簿',
   'notify.relogin': 'UPaste 的 GNOME 擴充功能已更新。請登出後再重新登入以完成更新。',

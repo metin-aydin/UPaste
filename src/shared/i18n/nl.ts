@@ -19,6 +19,8 @@ export const nl: Messages = {
   'popup.paste': 'Plakken',
   'popup.close': 'Sluiten',
   'popup.settings': 'Instellingen',
+  'popup.clearUnpinned': 'Alles Verwijderen Behalve Vastgemaakte',
+  'popup.clearConfirm': 'Klik Opnieuw om te Verwijderen',
 
   'notify.copiedTitle': 'Gekopieerd naar het klembord',
   'notify.relogin':

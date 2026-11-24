@@ -19,6 +19,8 @@ export const de: Messages = {
   'popup.paste': 'Einfügen',
   'popup.close': 'Schließen',
   'popup.settings': 'Einstellungen',
+  'popup.clearUnpinned': 'Alle außer Angehefteten Löschen',
+  'popup.clearConfirm': 'Zum Löschen Erneut Klicken',
 
   'notify.copiedTitle': 'In die Zwischenablage kopiert',
   'notify.relogin':

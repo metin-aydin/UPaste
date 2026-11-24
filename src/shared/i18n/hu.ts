@@ -19,6 +19,8 @@ export const hu: Messages = {
   'popup.paste': 'Beillesztés',
   'popup.close': 'Bezárás',
   'popup.settings': 'Beállítások',
+  'popup.clearUnpinned': 'Az Összes Törlése a Rögzítettek Kivételével',
+  'popup.clearConfirm': 'Kattintson Újra a Törléshez',
 
   'notify.copiedTitle': 'Vágólapra másolva',
   'notify.relogin':

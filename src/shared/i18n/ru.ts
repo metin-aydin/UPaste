@@ -19,6 +19,8 @@ export const ru: Messages = {
   'popup.paste': 'Вставить',
   'popup.close': 'Закрыть',
   'popup.settings': 'Настройки',
+  'popup.clearUnpinned': 'Удалить Всё, Кроме Закреплённых',
+  'popup.clearConfirm': 'Нажмите Ещё Раз для Удаления',
 
   'notify.copiedTitle': 'Скопировано в буфер обмена',
   'notify.relogin':

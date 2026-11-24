@@ -19,6 +19,8 @@ export const it: Messages = {
   'popup.paste': 'Incolla',
   'popup.close': 'Chiudi',
   'popup.settings': 'Impostazioni',
+  'popup.clearUnpinned': 'Elimina Tutto Tranne i Fissati',
+  'popup.clearConfirm': 'Fai Clic di Nuovo per Eliminare',
 
   'notify.copiedTitle': 'Copiato negli appunti',
   'notify.relogin':

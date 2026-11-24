@@ -19,6 +19,8 @@ export const ptBR: Messages = {
   'popup.paste': 'Colar',
   'popup.close': 'Fechar',
   'popup.settings': 'Configurações',
+  'popup.clearUnpinned': 'Excluir Tudo Exceto os Fixados',
+  'popup.clearConfirm': 'Clique de Novo para Excluir',
 
   'notify.copiedTitle': 'Copiado para a área de transferência',
   'notify.relogin':

@@ -19,6 +19,8 @@ export const cs: Messages = {
   'popup.paste': 'Vložit',
   'popup.close': 'Zavřít',
   'popup.settings': 'Nastavení',
+  'popup.clearUnpinned': 'Smazat Vše Kromě Připnutých',
+  'popup.clearConfirm': 'Klikněte Znovu pro Smazání',
 
   'notify.copiedTitle': 'Zkopírováno do schránky',
   'notify.relogin':

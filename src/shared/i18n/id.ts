@@ -19,6 +19,8 @@ export const id: Messages = {
   'popup.paste': 'Tempel',
   'popup.close': 'Tutup',
   'popup.settings': 'Pengaturan',
+  'popup.clearUnpinned': 'Hapus Semua Kecuali yang Disematkan',
+  'popup.clearConfirm': 'Klik Lagi untuk Menghapus',
 
   'notify.copiedTitle': 'Disalin ke papan klip',
   'notify.relogin':

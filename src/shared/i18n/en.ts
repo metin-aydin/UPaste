@@ -19,6 +19,8 @@ export const en = {
   'popup.paste': 'Paste',
   'popup.close': 'Close',
   'popup.settings': 'Settings',
+  'popup.clearUnpinned': 'Delete All Except Pinned',
+  'popup.clearConfirm': 'Click Again to Delete',
 
   'notify.copiedTitle': 'Copied to the clipboard',
   'notify.relogin': "UPaste's GNOME extension was updated. Log out and back in to finish.",

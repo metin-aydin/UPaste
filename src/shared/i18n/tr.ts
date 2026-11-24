@@ -19,6 +19,8 @@ export const tr: Messages = {
   'popup.paste': 'Yapıştır',
   'popup.close': 'Kapat',
   'popup.settings': 'Ayarlar',
+  'popup.clearUnpinned': 'Sabitlenenler Hariç Tümünü Sil',
+  'popup.clearConfirm': 'Silmek İçin Yeniden Tıkla',
 
   'notify.copiedTitle': 'Panoya kopyalandı',
   'notify.relogin':

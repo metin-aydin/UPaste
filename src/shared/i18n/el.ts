@@ -19,6 +19,8 @@ export const el: Messages = {
   'popup.paste': 'Επικόλληση',
   'popup.close': 'Κλείσιμο',
   'popup.settings': 'Ρυθμίσεις',
+  'popup.clearUnpinned': 'Διαγραφή Όλων Εκτός των Καρφιτσωμένων',
+  'popup.clearConfirm': 'Κάντε Ξανά Κλικ για Διαγραφή',
 
   'notify.copiedTitle': 'Αντιγράφηκε στο πρόχειρο',
   'notify.relogin':

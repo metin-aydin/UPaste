@@ -19,6 +19,8 @@ export const ja: Messages = {
   'popup.paste': '貼り付け',
   'popup.close': '閉じる',
   'popup.settings': '設定',
+  'popup.clearUnpinned': '固定以外をすべて削除',
+  'popup.clearConfirm': 'もう一度クリックして削除',
 
   'notify.copiedTitle': 'クリップボードにコピーしました',
   'notify.relogin':

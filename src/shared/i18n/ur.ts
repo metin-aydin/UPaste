@@ -19,6 +19,8 @@ export const ur: Messages = {
   'popup.paste': 'پیسٹ کریں',
   'popup.close': 'بند کریں',
   'popup.settings': 'ترتیبات',
+  'popup.clearUnpinned': 'پن کیے گئے کے سوا سب حذف کریں',
+  'popup.clearConfirm': 'حذف کرنے کے لیے دوبارہ کلک کریں',
 
   'notify.copiedTitle': 'کلپ بورڈ پر کاپی ہو گیا',
   'notify.relogin':

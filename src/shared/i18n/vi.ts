@@ -19,6 +19,8 @@ export const vi: Messages = {
   'popup.paste': 'Dán',
   'popup.close': 'Đóng',
   'popup.settings': 'Cài đặt',
+  'popup.clearUnpinned': 'Xóa Tất Cả Trừ Mục Đã Ghim',
+  'popup.clearConfirm': 'Nhấp Lần Nữa Để Xóa',
 
   'notify.copiedTitle': 'Đã sao chép vào bảng nhớ tạm',
   'notify.relogin':

@@ -19,6 +19,8 @@ export const es: Messages = {
   'popup.paste': 'Pegar',
   'popup.close': 'Cerrar',
   'popup.settings': 'Configuración',
+  'popup.clearUnpinned': 'Eliminar Todo Excepto los Anclados',
+  'popup.clearConfirm': 'Haz Clic de Nuevo para Eliminar',
 
   'notify.copiedTitle': 'Copiado en el portapapeles',
   'notify.relogin':
