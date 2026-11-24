@@ -582,3 +582,4 @@ Yapılan (4d07dd9, development'a gönderildi, açık PR metin-aydin/UPaste#6'ya 
 Denetimler: typecheck, lint (eski 2 uyarı), prettier, 9 birim testi, i18n geçti. Uygulamada görsel olarak DENENMEDİ.
 Issue #7 yorumla kapatıldı (sürüm 0.2.5'te çıkacak dendi).
 Tuzak: Bash'te girdisiz `cat > dosya` stdin bekleyip komutu asılı bırakır.
+Soru: Windows'ta da çalışır mı? Yanıt: kodca evet — silme ana süreçte platformdan bağımsız (`history.clear(false)`), düğme diğer IconButton'larla (Ayarlar, sabitle, sil) aynı; Windows odaksız katmanında WH_MOUSE_LL kancası pencere içi tıklamaları yutmaz (`onClick` alan içindeyse döner, CallNextHookEx). Windows gerçek makinede hiç denenmediği için doğrulanmadı.
