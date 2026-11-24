@@ -567,3 +567,18 @@ Denetimler: typecheck, lint (eski 2 uyarı), prettier, 9 birim testi, i18n geçt
 Açık: Windows gerçek makine denemesi (CI `native` işi kancaları kurup bırakır); ölü tuşlar; Electron 44'te
 `clipboard.readText` Promise döner (Ctrl+V'de await edildi).
 Soru: Ubuntu'da da aynı mı? Yanıt: GNOME'da (Wayland+X11) bu davranış 4.–7. turdan beri var (eklenti, odaksız katman); bu turun değişiklikleri Linux yolunu değiştirmiyor (popup.ts'tekiler darwin/win32 koşullu, ShellBridge kendi getter'larını kullanıyor). Koşul: eklenti API ≥ 3 ve oturum yenilenmiş olmalı; GNOME dışı masaüstlerinde (KDE vb.) eklenti yok → odak alan pencere. Bu Mac'te Linux denemesi yapılamadı.
+Kullanıcı: pushla ve main'e birleştir. Commit'ler 47f6897 (macOS panel), a255f4c (Windows odaksız), 272e6dd (0.2.5), fd18612 (hafıza); development gönderildi, PR metin-aydin/UPaste#6 açıldı (Changed: macOS/Windows hedef odakta kalır; Fixed: Claude ilk açılış). CI arka planda bekleniyor, geçince Claude `gh pr merge 6 --merge` ile birleştirir.
+
+## 31. tur (2026-11-24) — GitHub issue #7: sabitlenenler hariç tümünü sil
+Kullanıcı: "github'daki issue'lara bak, yeni bir şey varsa çöz ve kapat". Tek açık issue metin-aydin/UPaste#7
+(eetaskin, İngilizce): geçmiş penceresine sabitlenenler hariç "Delete All". Ayarlar → Geçmiş → Geçmişi Temizle bunu
+zaten yapıyordu (sabitlenenler varsayılan korunur) ama pencerede yoktu.
+Yapılan (4d07dd9, development'a gönderildi, açık PR metin-aydin/UPaste#6'ya eklendi; PR açıklamasına "## New" bölümü yazıldı):
+- `parts.tsx` `ClearButton` (ListXIcon): pencere odak almadığı için onay kutusu yok; ilk tıklama düğmeyi kırmızı
+  (CheckIcon, başlık "Silmek İçin Yeniden Tıkla") yapar, 3 s içinde ikinci tıklama `api.clearHistory(false)`.
+  Onay `armedFor === resetKey(openCount)` ile tutulur (pencere yeniden açılınca düşer; efekt içinde setState lint hatası verdiği için).
+- `PopupApp.tsx`: iki biçimde de (küçük pencere başlığı ve alt panel) Ayarlar düğmesinin soluna eklendi.
+- i18n: `popup.clearUnpinned`, `popup.clearConfirm` 33 dilde (`popup.settings` sonrasına).
+Denetimler: typecheck, lint (eski 2 uyarı), prettier, 9 birim testi, i18n geçti. Uygulamada görsel olarak DENENMEDİ.
+Issue #7 yorumla kapatıldı (sürüm 0.2.5'te çıkacak dendi).
+Tuzak: Bash'te girdisiz `cat > dosya` stdin bekleyip komutu asılı bırakır.
