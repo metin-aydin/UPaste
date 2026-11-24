@@ -583,3 +583,4 @@ Denetimler: typecheck, lint (eski 2 uyarı), prettier, 9 birim testi, i18n geçt
 Issue #7 yorumla kapatıldı (sürüm 0.2.5'te çıkacak dendi).
 Tuzak: Bash'te girdisiz `cat > dosya` stdin bekleyip komutu asılı bırakır.
 Soru: Windows'ta da çalışır mı? Yanıt: kodca evet — silme ana süreçte platformdan bağımsız (`history.clear(false)`), düğme diğer IconButton'larla (Ayarlar, sabitle, sil) aynı; Windows odaksız katmanında WH_MOUSE_LL kancası pencere içi tıklamaları yutmaz (`onClick` alan içindeyse döner, CallNextHookEx). Windows gerçek makinede hiç denenmediği için doğrulanmadı.
+Kullanıcı: "main'e birleştir ve issue'yu kapat". CI: push çalıştırmasındaki native (macos-latest) adım çalışmadan 18 dk sonra iptal oldu (makine atanmadı) → PR BLOCKED; `gh run rerun <id> --failed` ile geçti. PR #6 birleştirildi (60693a4), Release akışı 45441738511 başladı (0.2.5). Issue #7 zaten kapalıydı; açık issue yok. development ff ile main'e hizalandı.
