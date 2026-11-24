@@ -19,6 +19,8 @@ export const ko: Messages = {
   'popup.paste': '붙여넣기',
   'popup.close': '닫기',
   'popup.settings': '설정',
+  'popup.clearUnpinned': '고정 항목 외 모두 삭제',
+  'popup.clearConfirm': '삭제하려면 다시 클릭',
 
   'notify.copiedTitle': '클립보드에 복사됨',
   'notify.relogin':

@@ -2,7 +2,7 @@
 // Linux'ta GNOME Shell eklentisinin köprüsü (shell.ts), Windows'ta ve macOS'ta yerel API köprüleri.
 //
 // Olaylar: `shortcut` (FocusInfo | null), `clipboard-changed`, `key` (CapturedKey), `search` (metin),
-// `clicked-outside`. Son üçünü yalnız odak almayan pencereyi destekleyen GNOME köprüsü üretir.
+// `clicked-outside`. Son üçünü yalnız odak almayan pencereyi destekleyen köprüler (GNOME, Windows) üretir.
 import type { EventEmitter } from 'events'
 import type { IntegrationState } from '@shared/types'
 import type { Rect } from '@shared/placement'

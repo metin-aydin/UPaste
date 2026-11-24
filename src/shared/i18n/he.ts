@@ -19,6 +19,8 @@ export const he: Messages = {
   'popup.paste': 'הדבקה',
   'popup.close': 'סגירה',
   'popup.settings': 'הגדרות',
+  'popup.clearUnpinned': 'מחיקת הכול מלבד המוצמדים',
+  'popup.clearConfirm': 'יש ללחוץ שוב כדי למחוק',
 
   'notify.copiedTitle': 'הועתק ללוח',
   'notify.relogin': 'התוסף של UPaste ל־GNOME עודכן. כדי לסיים, התנתקו והתחברו מחדש.',

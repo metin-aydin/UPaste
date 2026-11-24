@@ -19,6 +19,8 @@ export const ro: Messages = {
   'popup.paste': 'Lipește',
   'popup.close': 'Închide',
   'popup.settings': 'Setări',
+  'popup.clearUnpinned': 'Șterge Tot în Afară de Cele Fixate',
+  'popup.clearConfirm': 'Faceți Clic din Nou pentru a Șterge',
 
   'notify.copiedTitle': 'Copiat în clipboard',
   'notify.relogin':

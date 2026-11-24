@@ -1,5 +1,5 @@
-// Windows ve macOS köprülerinin ortak kısmı. Bu sistemlerde geçmiş penceresi odağı alır ve tuşları kendisi işler;
-// GNOME'daki odak almayan katmanın işlemleri (tuş yakalama, görünmez arama kutusu, dışarı tıklama izleme) ile
+// Windows ve macOS köprülerinin ortak kısmı. Varsayılan olarak geçmiş penceresi tuşları kendisi işler; odak almayan
+// katmanın işlemlerini (tuş yakalama, arama metni, dışarı tıklama izleme) destekleyen köprü (Windows) bunları ezer.
 // Linux'a özgü kurulum işlemlerinin (eklenti, kısayol devralma, oturum kapatma) karşılığı yoktur.
 import { EventEmitter } from 'events'
 import type { IntegrationState } from '@shared/types'
@@ -7,9 +7,15 @@ import type { FocusInfo, PasteKeys } from '../shell'
 import type { AppHooks, DesktopBridge, Integration } from './bridge'
 
 export abstract class NativeDesktop extends EventEmitter implements DesktopBridge, Integration {
-  readonly canCapture = false
-  readonly canType = false
-  readonly canWatchClicks = false
+  get canCapture(): boolean {
+    return false
+  }
+  get canType(): boolean {
+    return false
+  }
+  get canWatchClicks(): boolean {
+    return false
+  }
 
   abstract get active(): boolean
   abstract start(hooks: AppHooks): Promise<void>

@@ -19,6 +19,8 @@ export const nb: Messages = {
   'popup.paste': 'Lim inn',
   'popup.close': 'Lukk',
   'popup.settings': 'Innstillinger',
+  'popup.clearUnpinned': 'Slett Alt Unntatt Festede',
+  'popup.clearConfirm': 'Klikk Igjen for å Slette',
 
   'notify.copiedTitle': 'Kopiert til utklippstavlen',
   'notify.relogin':

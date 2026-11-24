@@ -19,6 +19,8 @@ export const ar: Messages = {
   'popup.paste': 'لصق',
   'popup.close': 'إغلاق',
   'popup.settings': 'الإعدادات',
+  'popup.clearUnpinned': 'حذف الكل باستثناء المثبّتة',
+  'popup.clearConfirm': 'انقر مرة أخرى للحذف',
 
   'notify.copiedTitle': 'تم النسخ إلى الحافظة',
   'notify.relogin':

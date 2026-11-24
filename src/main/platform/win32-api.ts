@@ -7,6 +7,7 @@ import {
   HOOKPROC,
   INPUT,
   KBDLLHOOKSTRUCT,
+  MSLLHOOKSTRUCT,
   POINT,
   RECT,
   RELEASE
@@ -18,6 +19,11 @@ const oleacc = koffi.load('oleacc.dll')
 const ole32 = koffi.load('ole32.dll')
 
 export const WH_KEYBOARD_LL = 13
+const WH_MOUSE_LL = 14
+const WM_LBUTTONDOWN = 0x201
+const WM_RBUTTONDOWN = 0x204
+const WM_MBUTTONDOWN = 0x207
+const WM_XBUTTONDOWN = 0x20b
 export const WM_KEYDOWN = 0x100
 export const WM_KEYUP = 0x101
 export const WM_SYSKEYDOWN = 0x104
@@ -29,6 +35,12 @@ export const VK_MENU = 0x12
 export const VK_LWIN = 0x5b
 export const VK_RWIN = 0x5c
 export const VK_V = 0x56
+const VK_CAPITAL = 0x14
+const VK_LSHIFT = 0xa0
+const VK_LCONTROL = 0xa2
+const VK_LMENU = 0xa4
+/** ToUnicodeEx: klavye durumu (ölü tuş) değiştirilmez, hedef uygulamanın yazımı bozulmaz (Windows 10 1607+). */
+const TOUNICODE_NO_STATE = 0x4
 const INPUT_KEYBOARD = 1
 const KEYEVENTF_KEYUP = 0x2
 const DWMWA_EXTENDED_FRAME_BOUNDS = 9
@@ -56,6 +68,17 @@ const SendInput = user32.func('__stdcall', 'SendInput', 'uint32_t', [
   'int'
 ])
 const GetAsyncKeyState = user32.func('__stdcall', 'GetAsyncKeyState', 'int16_t', ['int'])
+const GetKeyState = user32.func('__stdcall', 'GetKeyState', 'int16_t', ['int'])
+const GetKeyboardLayout = user32.func('__stdcall', 'GetKeyboardLayout', 'uintptr_t', ['uint32_t'])
+const ToUnicodeEx = user32.func('__stdcall', 'ToUnicodeEx', 'int', [
+  'uint32_t',
+  'uint32_t',
+  'uint8_t *',
+  'void *',
+  'int',
+  'uint32_t',
+  'uintptr_t'
+])
 const GetForegroundWindow = user32.func('__stdcall', 'GetForegroundWindow', 'uintptr_t', [])
 const SetForegroundWindow = user32.func('__stdcall', 'SetForegroundWindow', 'bool', ['uintptr_t'])
 const IsWindow = user32.func('__stdcall', 'IsWindow', 'bool', ['uintptr_t'])
@@ -120,6 +143,7 @@ export interface WinRect {
 
 export interface KeyEvent {
   vkCode: number
+  scanCode: number
   flags: number
 }
 
@@ -156,6 +180,64 @@ export function installKeyboardHook(
     UnhookWindowsHookEx(hook)
     koffi.unregister(callback)
   }
+}
+
+/**
+ * Alt düzey fare kancası kurar: düğmeye basıldığında fiziksel piksel konumuyla `handle` çağrılır. Olay yalnız gözlenir,
+ * altındaki pencereye olduğu gibi ulaşır.
+ */
+export function installMouseHook(handle: (x: number, y: number) => void): () => void {
+  let hook = 0
+  const callback = koffi.register((code: number, wParam: number, lParam: unknown) => {
+    if (
+      code === 0 &&
+      (wParam === WM_LBUTTONDOWN ||
+        wParam === WM_RBUTTONDOWN ||
+        wParam === WM_MBUTTONDOWN ||
+        wParam === WM_XBUTTONDOWN)
+    ) {
+      const event = koffi.decode(lParam, MSLLHOOKSTRUCT) as { pt: { x: number; y: number } }
+      handle(event.pt.x, event.pt.y)
+    }
+    return CallNextHookEx(hook, code, wParam, lParam)
+  }, koffi.pointer(HOOKPROC))
+  hook = Number(SetWindowsHookExW(WH_MOUSE_LL, callback, 0, 0))
+  if (!hook) {
+    koffi.unregister(callback)
+    throw new Error('SetWindowsHookExW failed')
+  }
+  return () => {
+    UnhookWindowsHookEx(hook)
+    koffi.unregister(callback)
+  }
+}
+
+/**
+ * Tuşun öndeki pencerenin klavye düzeninde ürettiği metin (Shift, AltGr ve Caps Lock dahil); yazı üretmeyen tuşta
+ * (denetim karakteri, ölü tuş) null. Kancada kendi iş parçacığımızın klavye durumu güncel olmadığı için durum
+ * değiştirici tuşların fiziksel hâlinden kurulur.
+ */
+export function keyText(vk: number, scanCode: number): string | null {
+  const state = Buffer.alloc(256)
+  for (const key of [VK_SHIFT, VK_CONTROL, VK_MENU]) if (keyDown(key)) state[key] = 0x80
+  for (const key of [
+    VK_LSHIFT,
+    VK_LSHIFT + 1,
+    VK_LCONTROL,
+    VK_LCONTROL + 1,
+    VK_LMENU,
+    VK_LMENU + 1
+  ])
+    if (keyDown(key)) state[key] = 0x80
+  if (GetKeyState(VK_CAPITAL) & 1) state[VK_CAPITAL] = 0x01
+  const thread = GetWindowThreadProcessId(GetForegroundWindow(), [0])
+  const layout = GetKeyboardLayout(thread)
+  const buf = Buffer.alloc(16)
+  const count = ToUnicodeEx(vk, scanCode, state, buf, 8, TOUNICODE_NO_STATE, layout)
+  if (count <= 0) return null
+  const text = buf.toString('utf16le', 0, count * 2)
+  // eslint-disable-next-line no-control-regex
+  return /[\u0000-\u001f\u007f]/.test(text) ? null : text
 }
 
 /** Tuş şu an basılı mı (fiziksel durum). */

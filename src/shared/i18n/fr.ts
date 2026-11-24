@@ -19,6 +19,8 @@ export const fr: Messages = {
   'popup.paste': 'Coller',
   'popup.close': 'Fermer',
   'popup.settings': 'Paramètres',
+  'popup.clearUnpinned': 'Tout Supprimer Sauf les Éléments Épinglés',
+  'popup.clearConfirm': 'Cliquer à Nouveau pour Supprimer',
 
   'notify.copiedTitle': 'Copié dans le presse-papiers',
   'notify.relogin':

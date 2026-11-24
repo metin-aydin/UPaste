@@ -98,3 +98,7 @@ metadata:
   -25213 kAXErrorParameterizedAttributeUnsupported (ör. AXBoundsForRange desteklenmiyor), -25204 kAXErrorCannotComplete,
   -25211 kAXErrorAPIDisabled (Erişilebilirlik izni yok). Kayıt satırları: `ax {...}`, `popup <sheet|popup> {bounds}`,
   `capture types ...` (içerik yazılmaz).
+- **macOS FFI tuzağı (30. tur):** koffi'yle çağrılan AppKit yöntemi eşzamanlı olarak Electron olayı yayarsa
+  (ör. `makeKeyAndOrderFront:` → `focus`) süreç V8 SIGTRAP ile çöker. Böyle çağrılar
+  `performSelector:withObject:afterDelay:0` ile bir sonraki çalışma döngüsüne ertelenir. Electron'un `focus()`/`show()`
+  panel türünde de öndeki uygulamayı değiştirir; etkinleşmeden odak için yerel çağrı gerekir.

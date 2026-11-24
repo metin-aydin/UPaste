@@ -19,6 +19,8 @@ export const bn: Messages = {
   'popup.paste': 'পেস্ট করুন',
   'popup.close': 'বন্ধ করুন',
   'popup.settings': 'সেটিংস',
+  'popup.clearUnpinned': 'পিন করা ছাড়া সব মুছুন',
+  'popup.clearConfirm': 'মুছতে আবার ক্লিক করুন',
 
   'notify.copiedTitle': 'ক্লিপবোর্ডে কপি হয়েছে',
   'notify.relogin': 'UPaste-এর GNOME এক্সটেনশন আপডেট হয়েছে। শেষ করতে লগ আউট করে আবার লগ ইন করুন।',

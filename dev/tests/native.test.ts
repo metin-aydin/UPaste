@@ -6,6 +6,7 @@ import {
   GUITHREADINFO,
   INPUT,
   KBDLLHOOKSTRUCT,
+  MSLLHOOKSTRUCT,
   POINT,
   RECT,
   VARIANT
@@ -18,6 +19,7 @@ test('Windows yapı boyutları (64 bit)', () => {
   eq(koffi.sizeof(POINT), 8)
   eq(koffi.sizeof(GUITHREADINFO), 72)
   eq(koffi.sizeof(KBDLLHOOKSTRUCT), 24)
+  eq(koffi.sizeof(MSLLHOOKSTRUCT), 32)
   eq(koffi.sizeof(INPUT), 40)
   eq(koffi.offsetof(INPUT, 'u'), 8)
   eq(koffi.sizeof(GUID), 16)
@@ -48,6 +50,11 @@ if (process.platform === 'win32') {
     // Kanca kurulup hemen bırakılır (tuş olayı gönderilmez).
     const unhook = api.installKeyboardHook(() => false)
     unhook()
+    const unhookMouse = api.installMouseHook(() => {})
+    unhookMouse()
+    // A tuşu (VK 0x41, tarama kodu 0x1e): düzene göre bir harf ya da null; çökmemeli.
+    const text = api.keyText(0x41, 0x1e)
+    ok(text === null || typeof text === 'string')
   })
 }
 

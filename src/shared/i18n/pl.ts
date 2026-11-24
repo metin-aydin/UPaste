@@ -19,6 +19,8 @@ export const pl: Messages = {
   'popup.paste': 'Wklej',
   'popup.close': 'Zamknij',
   'popup.settings': 'Ustawienia',
+  'popup.clearUnpinned': 'Usuń Wszystko Oprócz Przypiętych',
+  'popup.clearConfirm': 'Kliknij Ponownie, Aby Usunąć',
 
   'notify.copiedTitle': 'Skopiowano do schowka',
   'notify.relogin':

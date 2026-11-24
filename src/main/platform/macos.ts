@@ -2,7 +2,7 @@
 // Odaktaki uygulama, penceresi ve metin imleci Erişilebilirlik API'sinden okunur; seçilen öğe hedef uygulama yeniden
 // öne alındıktan sonra ⌘V ile yapıştırılır. İkisi de Erişilebilirlik izni ister: izin yokken geçmiş ekranın altındaki
 // panelde açılır ve seçilen öğe yalnız panoya kopyalanır.
-import { globalShortcut, screen, shell, systemPreferences } from 'electron'
+import { BrowserWindow, globalShortcut, screen, shell, systemPreferences } from 'electron'
 import type { IntegrationState } from '@shared/types'
 import type { Rect } from '@shared/placement'
 import { electronAccelerator } from '@shared/accelerator'
@@ -18,6 +18,7 @@ const CLIPBOARD_POLL_MS = 300
 /** İzin Sistem Ayarları'ndan verilince Kurulum bölümü kendiliğinden güncellensin diye izin durumu yoklanır. */
 const TRUST_POLL_MS = 2000
 const ACTIVATE_SETTLE_MS = 120
+const KEY_WINDOW_TIMEOUT_MS = 200
 const ACCESSIBILITY_SETTINGS =
   'x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility'
 
@@ -27,7 +28,10 @@ const LINE_HEIGHT = 20
 
 /** Chromium erişilebilirlik ağacını kurarken odak bu rollerde görünür (ya da hiç görünmez). */
 const UNBUILT_ROLES = new Set<string | null>([null, 'AXGroup', 'AXWebArea'])
-const TREE_SETTLE_MS = 150
+/** Ağaç kurulurken odak bu aralıklarla yeniden sorulur (toplam ~600 ms). */
+const TREE_RETRY_MS = [150, 200, 250]
+/** Öne gelen uygulamanın erişilebilirlik ağacı bu aralıkla açık tutulur. */
+const WARM_POLL_MS = 250
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
@@ -93,7 +97,10 @@ export class MacDesktop extends NativeDesktop {
         if (trusted === this.trusted) return
         this.trusted = trusted
         this.emit('changed')
-      }, TRUST_POLL_MS)
+      }, TRUST_POLL_MS),
+      setInterval(() => {
+        if (this.trusted) this.api!.warmAccessibility()
+      }, WARM_POLL_MS)
     )
   }
 
@@ -143,10 +150,11 @@ export class MacDesktop extends NativeDesktop {
     }
     let focus = this.api!.focusedElement()
     debug('ax', JSON.stringify(focus))
-    if (focus && focus.pid && !focus.caret && UNBUILT_ROLES.has(focus.role)) {
-      // Chromium ağacı kapalıyken odak yalnız web alanında ya da onu saran grupta görünür; ağaç açıldıktan sonra bir
-      // kez daha sorulur.
-      await sleep(TREE_SETTLE_MS)
+    // Chromium ağacı kapalıyken odak hiç görünmez ya da yalnız web alanında/onu saran grupta görünür; ağaç kurulana
+    // dek birkaç kez yeniden sorulur.
+    for (const wait of TREE_RETRY_MS) {
+      if (!focus || !focus.pid || focus.caret || !UNBUILT_ROLES.has(focus.role)) break
+      await sleep(wait)
       focus = this.api!.focusedElement()
       debug('ax retry', JSON.stringify(focus))
     }
@@ -180,6 +188,31 @@ export class MacDesktop extends NativeDesktop {
     }
     const cursor = screen.getCursorScreenPoint()
     return { pointer: [cursor.x, cursor.y], id, frame: this.targetFrame, focused: true }
+  }
+
+  /** Geçmiş paneli uygulama etkinleşmeden tuşları alır; hedef uygulama önde ve imleci yanıp sönmeye devam eder. */
+  async focusOwnWindow(title?: string): Promise<boolean> {
+    const own = BrowserWindow.getAllWindows().find(
+      (w) => !w.isDestroyed() && w.getTitle() === title
+    )
+    if (!own || !this.api) return false
+    if (!own.isFocused()) {
+      // Panel bir sonraki çalışma döngüsünde anahtar pencere olur; `focus` olayı beklenir.
+      const keyed = new Promise<void>((resolve) => {
+        const timer = setTimeout(done, KEY_WINDOW_TIMEOUT_MS)
+        function done(): void {
+          clearTimeout(timer)
+          own!.removeListener('focus', done)
+          resolve()
+        }
+        own.once('focus', done)
+      })
+      if (!this.api.makeKeyPanel(own.getNativeWindowHandle())) return false
+      await keyed
+    }
+    if (own.isDestroyed()) return false
+    own.webContents.focus()
+    return own.isFocused()
   }
 
   // --- yapıştırma ---

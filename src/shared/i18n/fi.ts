@@ -19,6 +19,8 @@ export const fi: Messages = {
   'popup.paste': 'Liitä',
   'popup.close': 'Sulje',
   'popup.settings': 'Asetukset',
+  'popup.clearUnpinned': 'Poista Kaikki Paitsi Kiinnitetyt',
+  'popup.clearConfirm': 'Poista Napsauttamalla Uudelleen',
 
   'notify.copiedTitle': 'Kopioitu leikepöydälle',
   'notify.relogin':

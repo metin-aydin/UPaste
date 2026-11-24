@@ -1,5 +1,14 @@
 // Geçmiş penceresinin iki biçiminde (küçük pencere ve alt panel) ortak kullanılan parçalar.
-import { ClipboardIcon, PinIcon, SearchIcon, SearchXIcon, XIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import {
+  CheckIcon,
+  ClipboardIcon,
+  ListXIcon,
+  PinIcon,
+  SearchIcon,
+  SearchXIcon,
+  XIcon
+} from 'lucide-react'
 import type { Range } from '@shared/search'
 import type { PopupFilter } from '@shared/types'
 import type { useUi } from '@/lib/i18n'
@@ -54,6 +63,48 @@ export function IconButton({
     >
       {children}
     </button>
+  )
+}
+
+const CLEAR_CONFIRM_MS = 3000
+
+/**
+ * Sabitlenmemiş tüm öğeleri silen düğme. Geçmiş penceresi odak almadığı için onay kutusu yerine iki tıklama ister:
+ * ilk tıklama düğmeyi kırmızı onay durumuna getirir, CLEAR_CONFIRM_MS içinde ikinci tıklama siler.
+ */
+export function ClearButton({
+  onClear,
+  resetKey,
+  t
+}: {
+  onClear: () => void
+  resetKey: number
+  t: T
+}): React.ReactNode {
+  // Onay yalnız kurulduğu açılışta geçerli; pencere yeniden açılınca kendiliğinden düşer.
+  const [armedFor, setArmedFor] = useState<number | null>(null)
+  const armed = armedFor === resetKey
+  useEffect(() => {
+    if (!armed) return
+    const timer = setTimeout(() => setArmedFor(null), CLEAR_CONFIRM_MS)
+    return () => clearTimeout(timer)
+  }, [armed])
+  return (
+    <IconButton
+      label={armed ? t('popup.clearConfirm') : t('popup.clearUnpinned')}
+      onClick={() => {
+        if (!armed) return setArmedFor(resetKey)
+        setArmedFor(null)
+        onClear()
+      }}
+      className={
+        armed
+          ? 'bg-destructive/10 text-destructive hover:bg-destructive/15 hover:text-destructive'
+          : undefined
+      }
+    >
+      {armed ? <CheckIcon /> : <ListXIcon />}
+    </IconButton>
   )
 }
 

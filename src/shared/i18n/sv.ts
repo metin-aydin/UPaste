@@ -19,6 +19,8 @@ export const sv: Messages = {
   'popup.paste': 'Klistra in',
   'popup.close': 'Stäng',
   'popup.settings': 'Inställningar',
+  'popup.clearUnpinned': 'Ta Bort Allt Utom Fästa',
+  'popup.clearConfirm': 'Klicka Igen för att Ta Bort',
 
   'notify.copiedTitle': 'Kopierat till urklipp',
   'notify.relogin': 'UPastes GNOME-tillägg har uppdaterats. Logga ut och in igen för att slutföra.',

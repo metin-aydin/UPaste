@@ -19,6 +19,8 @@ export const uk: Messages = {
   'popup.paste': 'Вставити',
   'popup.close': 'Закрити',
   'popup.settings': 'Налаштування',
+  'popup.clearUnpinned': 'Видалити Все, Крім Закріплених',
+  'popup.clearConfirm': 'Натисніть Ще Раз для Видалення',
 
   'notify.copiedTitle': 'Скопійовано в буфер обміну',
   'notify.relogin':

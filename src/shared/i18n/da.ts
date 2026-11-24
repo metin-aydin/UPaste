@@ -19,6 +19,8 @@ export const da: Messages = {
   'popup.paste': 'Indsæt',
   'popup.close': 'Luk',
   'popup.settings': 'Indstillinger',
+  'popup.clearUnpinned': 'Slet Alt Undtagen Fastgjorte',
+  'popup.clearConfirm': 'Klik Igen for at Slette',
 
   'notify.copiedTitle': 'Kopieret til udklipsholderen',
   'notify.relogin':

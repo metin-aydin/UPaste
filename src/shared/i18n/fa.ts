@@ -19,6 +19,8 @@ export const fa: Messages = {
   'popup.paste': 'جای‌گذاری',
   'popup.close': 'بستن',
   'popup.settings': 'تنظیمات',
+  'popup.clearUnpinned': 'حذف همه به‌جز سنجاق‌شده‌ها',
+  'popup.clearConfirm': 'برای حذف دوباره کلیک کنید',
 
   'notify.copiedTitle': 'در کلیپ‌بورد کپی شد',
   'notify.relogin':

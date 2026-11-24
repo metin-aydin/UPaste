@@ -19,6 +19,8 @@ export const zhCN: Messages = {
   'popup.paste': '粘贴',
   'popup.close': '关闭',
   'popup.settings': '设置',
+  'popup.clearUnpinned': '删除除已固定外的全部项目',
+  'popup.clearConfirm': '再次点击以删除',
 
   'notify.copiedTitle': '已复制到剪贴板',
   'notify.relogin': 'UPaste 的 GNOME 扩展已更新。请注销并重新登录以完成更新。',

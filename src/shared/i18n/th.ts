@@ -19,6 +19,8 @@ export const th: Messages = {
   'popup.paste': 'วาง',
   'popup.close': 'ปิด',
   'popup.settings': 'การตั้งค่า',
+  'popup.clearUnpinned': 'ลบทั้งหมดยกเว้นที่ปักหมุด',
+  'popup.clearConfirm': 'คลิกอีกครั้งเพื่อลบ',
 
   'notify.copiedTitle': 'คัดลอกไปยังคลิปบอร์ดแล้ว',
   'notify.relogin':

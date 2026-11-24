@@ -19,6 +19,8 @@ export const ms: Messages = {
   'popup.paste': 'Tampal',
   'popup.close': 'Tutup',
   'popup.settings': 'Tetapan',
+  'popup.clearUnpinned': 'Padam Semua Kecuali yang Disemat',
+  'popup.clearConfirm': 'Klik Lagi untuk Memadam',
 
   'notify.copiedTitle': 'Disalin ke papan keratan',
   'notify.relogin':
